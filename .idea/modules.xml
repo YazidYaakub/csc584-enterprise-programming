@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/csc584-enterprise-programming.iml" filepath="$PROJECT_DIR$/.idea/csc584-enterprise-programming.iml" />
+      <module fileurl="file://$PROJECT_DIR$/transtrack/transtrack.iml" filepath="$PROJECT_DIR$/transtrack/transtrack.iml" />
     </modules>
   </component>
 </project>
