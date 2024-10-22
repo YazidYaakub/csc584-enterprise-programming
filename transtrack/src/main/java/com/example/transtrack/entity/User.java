@@ -3,7 +3,7 @@ package com.example.transtrack.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users", schema = "TRANSTRACK")
+@Table(name = "USERS", schema = "TRANSTRACK")
 public class User {
   
   @Id
