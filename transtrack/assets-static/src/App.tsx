@@ -7,7 +7,7 @@ function App() {
   const [password, setPassword] = useState<string>('');
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/users/')
+    fetch('http://localhost:8081/api/users/')
       .then((response) => response.json())
       .then((data) => setUsers(data));
   }, [])
@@ -15,7 +15,7 @@ function App() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    await fetch('http://localhost:8080/api/users/register', {
+    await fetch('http://localhost:8081/api/users/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

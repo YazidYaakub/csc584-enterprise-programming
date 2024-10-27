@@ -1,13 +1,13 @@
-package com.example.transtrack;
+package uitm.interntrack;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TranstrackApplication {
+public class InterntrackApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TranstrackApplication.class, args);
+		SpringApplication.run(InterntrackApplication.class, args);
 	}
 
 }

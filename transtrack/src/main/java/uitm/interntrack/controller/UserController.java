@@ -1,10 +1,10 @@
-package com.example.transtrack.controller;
+package uitm.interntrack.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.transtrack.entity.User;
-import com.example.transtrack.service.UserService;
+import uitm.interntrack.entity.User;
+import uitm.interntrack.service.UserService;
 
 import java.util.List;
 

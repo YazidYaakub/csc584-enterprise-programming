@@ -1,4 +1,4 @@
-package com.example.transtrack.entity;
+package uitm.interntrack.entity;
 
 import jakarta.persistence.*;
 

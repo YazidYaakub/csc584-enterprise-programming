@@ -8,11 +8,11 @@
 		<version>3.3.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>transtrack</artifactId>
+	<groupId>uitm</groupId>
+	<artifactId>interntrack</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>transtrack</name>
-	<description>Transtrack System for manage booking of vehicle</description>
+	<name>interntrack</name>
+	<description>System for monitoring intern activity log book for advisor, supervisor and student.</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -62,10 +62,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-test</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
 		</dependency>
 	</dependencies>
 

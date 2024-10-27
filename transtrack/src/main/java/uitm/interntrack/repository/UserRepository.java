@@ -1,8 +1,8 @@
-package com.example.transtrack.repository;
+package uitm.interntrack.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.transtrack.entity.User;
+import uitm.interntrack.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 }

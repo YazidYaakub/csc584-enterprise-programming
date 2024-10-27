@@ -1,9 +1,9 @@
-package com.example.transtrack.service;
+package uitm.interntrack.service;
 
 import org.springframework.stereotype.Service;
 
-import com.example.transtrack.entity.User;
-import com.example.transtrack.repository.UserRepository;
+import uitm.interntrack.entity.User;
+import uitm.interntrack.repository.UserRepository;
 
 import java.util.List;
 
