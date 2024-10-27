@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/transtrack/interntrack.iml" filepath="$PROJECT_DIR$/transtrack/interntrack.iml" />
+      <module fileurl="file://$PROJECT_DIR$/interntrack/interntrack.iml" filepath="$PROJECT_DIR$/interntrack/interntrack.iml" />
     </modules>
   </component>
 </project>

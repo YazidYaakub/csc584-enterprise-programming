@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DiffGenerationConfig" isInitGenerateDdl="true">
+    <option name="initGenerateDdl" value="true" />
+    <option name="snapshotDbValue" value="9b201b4b-6039-42d2-b099-30051c11bf84" />
+    <option name="snapshotDirValue" value="$PROJECT_DIR$/interntrack/src/main/resources/db" />
+    <option name="sourceModelValue" value="interntrack:entityManagerFactory" />
+    <option name="targetDbValue" value="597fea5b-73c1-4cdb-ab9e-028e2a760421" />
+  </component>
+</project>

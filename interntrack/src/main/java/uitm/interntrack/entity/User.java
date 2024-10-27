@@ -3,23 +3,23 @@ package uitm.interntrack.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "USERS", schema = "TRANSTRACK")
+@Table(name = "USERS", schema = "INTERNTRACK")
 public class User {
   
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Long userId;
 
   private String name;
   private String email;
   private String password;
 
   public Long getId() {
-    return id;
+    return userId;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setId(Long userId) {
+    this.userId = userId;
   }
 
   public String getName() {

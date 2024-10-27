@@ -1,74 +1,53 @@
-To create schema for Oracle database, run the following commands:
+# InternTrack
 
-```sql
-CREATE USER INTERNTRACK IDENTIFIED BY oracle;
-GRANT CONNECT, RESOURCE TO INTERNTRACK;
-GRANT CREATE SESSION, CREATE TABLE, CREATE SEQUENCE, CREATE VIEW, CREATE PROCEDURE, CREATE TRIGGER TO INTERNTRACK;
-ALTER SESSION SET CURRENT_SCHEMA = INTERNTRACK;
-```
+#### This system is to solve problem where supervisor and advisor cannot keep track of student's activity throughout their internship. By digitalising the log book activity which is required during internship duration, advisors from university, supervisors from students' chosen companies and student itself no longer need to keep a physical paper to keep track.
 
-To create a table for users, run the following commands:
-```sql
-CREATE SEQUENCE user_seq
-START WITH 1
-INCREMENT BY 1;
+### Database
 
-CREATE TABLE USERS (
-  id          NUMBER PRIMARY KEY,
-  name        VARCHAR2(255) NOT NULL,
-  email       VARCHAR2(255) NOT NULL,
-  password    VARCHAR2(255) NOT NULL
-);
+1. Go to the directory `interntrack/src/main/resources/db` and open the file `schema.sql` and `migration.sql`
+2. Copy the content of it and run in oracle sql (`schema` first then `migration`)
+3. Only run this sql if there are database changes or initial setup
 
-CREATE TRIGGER before_insert_users
-BEFORE INSERT ON USERS
-FOR EACH ROW
-BEGIN
-    IF :new.id IS NULL THEN
-        SELECT user_seq.NEXTVAL INTO :new.id FROM dual;
-    END IF;
-END;
-```
+### Backend
 
-To check if the table was created successfully, run the following command:
-```sql
-SELECT * FROM USERS;
-```
+###### To run the app locally, make a clean installation using maven for java side app. If you intend to use .mvnw, make sure the current working directory is in interntrack and contains pom.xml
 
-To run the app locally, clean install
-Install
 ```bash
 mvn clean install
-# @ if run using ./mvnw, make sure to be in the same directory as the pom file
-
+# @
 ../mvnw clean install
 ```
 
 ```bash
 mvn spring-boot:run
-
-# @ if run using ./mvnw, make sure to be in the same directory as the pom file
-
+# @
 ../mvnw spring-boot:run
 ```
 
-Open http://localhost:8081 for viewing the website
+- Open http://localhost:8081 for viewing the website
 
-To build the front end, go to directory of assets static and install using node.js 20
+### Frontend
+
+###### To build the front end, go to directory of assets static and install using node.js
 
 ```bash
 npm install
 npm run build
 ```
 
-To develop front end with hot reload
+###### To develop front end with hot reload
+
 ```bash
 npm install # if not installed yet or new packages added
 npm run dev
 ```
 
-Open http://localhost:5173 to view the frontend app
+- Open http://localhost:5173 to view the frontend app
 
-InternTrack Overview
+### UI Overview
 
-![img.png](img.png)
+![UI Overview](ui-overview.png)
+
+### Database ERD
+
+![Database](database.png)
