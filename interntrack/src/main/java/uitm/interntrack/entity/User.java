@@ -14,7 +14,7 @@ public class User {
   
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  private Long userId;
+  private long userId;
 
   private String name;
   private String email;
@@ -22,8 +22,8 @@ public class User {
   private Role role;
   private Timestamp createdAt;
   private Timestamp updatedAt;
-  private String companyId;
-  private String universityId;
+  private long companyId;
+  private long universityId;
 
   public Long getId() {
     return userId;

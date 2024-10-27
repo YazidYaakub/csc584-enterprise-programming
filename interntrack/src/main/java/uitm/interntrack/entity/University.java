@@ -8,7 +8,7 @@ public class University {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    private long id;
 
     private String name;
     private String location;
