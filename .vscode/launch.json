@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-InterntrackApplication<interntrack>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "uitm.interntrack.InterntrackApplication",
+      "projectName": "interntrack",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
