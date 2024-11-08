@@ -1,6 +1,8 @@
 package uitm.interntrack.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import uitm.interntrack.entity.User;
 import uitm.interntrack.repository.UserRepository;
 
@@ -21,5 +23,10 @@ public class UserService {
 
   public List<User> getAllUsers() {
     return userRepository.findAll();
+  }
+
+  @Transactional(readOnly = true)
+  public User getUser(Long id) {
+    return userRepository.findByIdWithReference(id).orElse(null);
   }
 }

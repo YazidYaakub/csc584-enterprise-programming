@@ -1,7 +1,8 @@
 package uitm.interntrack.entity;
 
-import jakarta.persistence.*;
 import java.sql.Timestamp;
+
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -33,6 +34,10 @@ public class User {
 
   @Column(nullable = true)
   private Long universityId;
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "universityId", insertable = false, updatable = false)
+  private University university;
 
   @PrePersist
   protected void onCreate() {
@@ -109,5 +114,13 @@ public class User {
 
   public void setUniversityId(Long universityId) {
     this.universityId = universityId;
+  }
+
+  public University getUniversity() {
+    return university;
+  }
+
+  public void setUniversity(University university) {
+    this.university = university;
   }
 }

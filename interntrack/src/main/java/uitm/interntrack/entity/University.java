@@ -1,5 +1,7 @@
 package uitm.interntrack.entity;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -8,19 +10,22 @@ public class University {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    private Long universityId;
 
     @Column(nullable = false)
     private String name;
 
     private String location;
 
-    public Long getId() {
-        return id;
+    @OneToMany(mappedBy = "university")
+    private List<User> users;
+
+    public Long getUniversityId() {
+        return universityId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long universityId) {
+        this.universityId = universityId;
     }
 
     public String getName() {

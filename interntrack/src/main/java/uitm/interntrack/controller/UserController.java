@@ -1,15 +1,15 @@
 package uitm.interntrack.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import uitm.interntrack.entity.User;
 import uitm.interntrack.service.UserService;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/user")
 @CrossOrigin(origins = "*")
 public class UserController {
 
@@ -29,6 +29,12 @@ public class UserController {
   public ResponseEntity<List<User>> getAllUsers() {
     List<User> users = userService.getAllUsers();
     return ResponseEntity.ok(users);
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<User> getUser(@PathVariable Long id) {
+    User user = userService.getUser(id);
+    return ResponseEntity.ok(user);
   }
 
 }
