@@ -17,12 +17,14 @@ mvn clean install
 # @
 ../mvnw clean install
 ```
+also can use command> .\mvnw clean install
 
 ```bash
 mvn spring-boot:run
 # @
 ../mvnw spring-boot:run
 ```
+also can use command> ./mvnw spring-boot:run
 
 - Open http://localhost:8081 for viewing the website
 
