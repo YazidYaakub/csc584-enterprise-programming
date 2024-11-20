@@ -3,7 +3,7 @@ package uitm.interntrack.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "companies", schema = "INTERNTRACK")
+@Table(name = "COMPANIES", schema = "INTERNTRACK")
 public class Company {
 
     @Id

@@ -5,7 +5,6 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/transtrack/pom.xml" />
-        <option value="$PROJECT_DIR$/interntrack/pom.xml" />
       </list>
     </option>
   </component>

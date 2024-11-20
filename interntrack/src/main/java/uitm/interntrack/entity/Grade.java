@@ -7,21 +7,13 @@ import java.sql.Timestamp;
 @Table(name = "GRADES", schema = "INTERNTRACK")
 public class Grade {
 
-    public enum Month {
-        JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC;
-    }
-
-    public enum Grading {
-        A, B, C, D, E;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long gradesId;
 
     private String studentId;
-    private Month month;
-    private Grading grading;
+    private String month;
+    private char grading;
     private Timestamp timestamp;
 
     public Long getGradesId() {
@@ -40,19 +32,19 @@ public class Grade {
         this.studentId = studentId;
     }
 
-    public Month getMonth() {
+    public String getMonth() {
         return month;
     }
 
-    public void setMonth(Month month) {
+    public void setMonth(String month) {
         this.month = month;
     }
 
-    public Grading getGrading() {
+    public char getGrading() {
         return grading;
     }
 
-    public void setGrading(Grading grading) {
+    public void setGrading(char grading) {
         this.grading = grading;
     }
 
