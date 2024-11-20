@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { months } from '@/utils/months'
+import { months } from '@/lib/months'
 import { Briefcase, Edit, Plus, Trash } from 'lucide-react'
 import { useState } from 'react'
 

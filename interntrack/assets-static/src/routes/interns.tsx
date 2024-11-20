@@ -99,7 +99,6 @@ export function Intern() {
             <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>University</TableHead>
-            <TableHead>Course</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -108,7 +107,6 @@ export function Intern() {
               <TableCell>{intern.name}</TableCell>
               <TableCell>{intern.email}</TableCell>
               <TableCell>{intern.university}</TableCell>
-              <TableCell>{intern.course}</TableCell>
             </TableRow>
           ))}
         </TableBody>

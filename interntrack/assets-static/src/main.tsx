@@ -1,20 +1,23 @@
 import { Activity } from '@/routes/activity'
+import { Admin } from '@/routes/admin'
+import { Auth } from '@/routes/auth'
 import { Company } from '@/routes/company'
 import { Intern } from '@/routes/interns'
-import { Login } from '@/routes/login'
 import { Profile } from '@/routes/profile'
 import { Root } from '@/routes/root.tsx'
 import { Student } from '@/routes/students'
+import { University } from '@/routes/university'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { Toaster } from 'sonner'
 
 import './index.css'
 
 const router = createBrowserRouter([
   {
-    path: 'login',
-    element: <Login />
+    path: 'auth',
+    element: <Auth />
   },
   {
     path: '/',
@@ -25,7 +28,9 @@ const router = createBrowserRouter([
       { path: 'students', element: <Student /> },
       { path: 'interns', element: <Intern /> },
       { path: 'activity', element: <Activity /> },
-      { path: 'company/:id', element: <Company /> }
+      { path: 'company/:id', element: <Company /> },
+      { path: 'university/:id', element: <University /> },
+      { path: 'admin', element: <Admin /> }
     ]
   }
 ])
@@ -33,5 +38,6 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <RouterProvider router={router} />
+    <Toaster richColors />
   </StrictMode>
 )

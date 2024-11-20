@@ -8,7 +8,7 @@ import {
   SidebarMenuItem,
   SidebarTrigger
 } from '@/components/ui/sidebar'
-import { BookUser, Briefcase, ChevronUp, GraduationCap, Scroll, User } from 'lucide-react'
+import { BookUser, Briefcase, ChevronUp, GraduationCap, Scroll, Shield, User } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import {
   DropdownMenu,
@@ -16,6 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from './ui/dropdown-menu'
+import { toast } from 'sonner'
 
 export function AppSidebar() {
   const menus = [
@@ -27,12 +28,12 @@ export function AppSidebar() {
     {
       label: 'University',
       icon: GraduationCap,
-      link: '/university'
+      link: '/university/1'
     },
     {
       label: 'Company',
       icon: Briefcase,
-      link: '/company'
+      link: '/company/1'
     },
     {
       label: 'Interns',
@@ -43,8 +44,17 @@ export function AppSidebar() {
       label: 'Students',
       icon: BookUser,
       link: '/students'
+    },
+    {
+      label: 'Admin',
+      icon: Shield,
+      link: '/admin'
     }
   ]
+
+  function onLogout() {
+    toast.success('Logging out')
+  }
 
   return (
     <Sidebar collapsible='icon'>
@@ -75,8 +85,12 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent side='top' className='w-[--radix-popper-anchor-width]'>
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem className='focus:bg-red-100'>Log Out</DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to='/profile'>Profile</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem className='focus:bg-red-100' onSelect={onLogout}>
+                  Log Out
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
