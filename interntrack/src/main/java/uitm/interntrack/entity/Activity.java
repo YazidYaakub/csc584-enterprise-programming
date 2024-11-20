@@ -18,6 +18,13 @@ public class Activity {
     private Long approvedById;
     private Timestamp approvedAt;
 
+    @PrePersist
+    protected void onCreate() {
+        if (activityDate == null) {
+            activityDate = new Timestamp(System.currentTimeMillis());
+        }
+    }
+
     public Long getActivityId() {
         return activityId;
     }

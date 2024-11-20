@@ -41,7 +41,8 @@ public class User {
 
   @PrePersist
   protected void onCreate() {
-    role = "STUDENT";
+    if (role == null)
+      role = "STUDENT";
   }
 
   public Long getUserId() {
