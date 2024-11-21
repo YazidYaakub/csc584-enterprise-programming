@@ -1,6 +1,6 @@
 package uitm.interntrack.controller;
 
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,18 +28,24 @@ public class UserController {
 
   @PostMapping("/register")
   public ResponseEntity<User> registerUser(@RequestBody User user) {
+
     User savedUser = userService.createUser(user);
     return ResponseEntity.ok(savedUser);
   }
 
   @GetMapping("/")
-  public ResponseEntity<List<User>> getAllUsers(@RequestParam(required = false) String role) {
-    List<User> users = userService.getUsers(role);
+  public ResponseEntity<Map<String, Object>> getUsers(
+      @RequestParam(defaultValue = "0") Integer page,
+      @RequestParam(defaultValue = "10") Integer size,
+      @RequestParam(required = false) String role) {
+
+    Map<String, Object> users = userService.getUsers(page, size, role);
     return ResponseEntity.ok(users);
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<User> getUser(@PathVariable Long id) {
+
     User user = userService.getUser(id);
     return ResponseEntity.ok(user);
   }

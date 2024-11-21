@@ -17,18 +17,21 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   @Query(value = """
       SELECT * FROM (
-        SELECT u.*, ROW_NUMBER()
-        OVER (ORDER BY USER_ID) as row_num
-        FROM USERS u
-        WHERE u.role = 'STUDENT'
-      )
+        SELECT u.*, ROW_NUMBER() OVER (ORDER BY USER_ID) as ROW_NUM
+        FROM INTERNTRACK.USERS u
+        WHERE (:role IS NULL OR u.ROLE = :role)
+      ) sub
+      WHERE sub.ROW_NUM BETWEEN :start AND :end
+      """, nativeQuery = true)
+  List<User> getUsers(
+      @Param("start") Integer start,
+      @Param("end") Integer end,
+      @Param("role") String role);
 
-      """, countQuery = "SELECT COUNT(*) FROM users WHERE role = :role", nativeQuery = true)
-  List<User> getUsersPaginated(
-      @Param("role") String role,
-      @Param("start") int start,
-      @Param("end") int end);
-
-  @Query(value = "SELECT u FROM User u WHERE (:role IS NULL OR u.role = :role)")
-  List<User> getUsers(@Param("role") String role);
+  @Query(value = """
+      SELECT COUNT(*)
+      FROM INTERNTRACK.USERS u
+      WHERE (:role IS NULL OR u.ROLE = :role)
+      """, nativeQuery = true)
+  Long countUsers(@Param("role") String role);
 }
