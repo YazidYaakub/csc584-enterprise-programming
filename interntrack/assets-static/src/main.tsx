@@ -7,6 +7,7 @@ import { Profile } from '@/routes/profile'
 import { Root } from '@/routes/root.tsx'
 import { Student } from '@/routes/students'
 import { University } from '@/routes/university'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <div>Not Found</div>,
     children: [
-      { path: 'profile', element: <Profile /> },
+      { path: 'profile/:id', element: <Profile /> },
       { path: 'students', element: <Student /> },
       { path: 'interns', element: <Intern /> },
       { path: 'activity', element: <Activity /> },
@@ -35,9 +36,13 @@ const router = createBrowserRouter([
   }
 ])
 
+const queryClient = new QueryClient()
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
     <Toaster richColors />
   </StrictMode>
 )

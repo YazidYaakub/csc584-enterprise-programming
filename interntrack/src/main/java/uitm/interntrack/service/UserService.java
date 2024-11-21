@@ -1,12 +1,12 @@
 package uitm.interntrack.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import uitm.interntrack.entity.User;
 import uitm.interntrack.repository.UserRepository;
-
-import java.util.List;
 
 @Service
 public class UserService {
@@ -21,8 +21,8 @@ public class UserService {
     return userRepository.save(user);
   }
 
-  public List<User> getAllUsers() {
-    return userRepository.findAll();
+  public List<User> getUsers(String role) {
+    return userRepository.getUsers(role);
   }
 
   @Transactional(readOnly = true)

@@ -86,7 +86,7 @@ export function AppSidebar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent side='top' className='w-[--radix-popper-anchor-width]'>
                 <DropdownMenuItem asChild>
-                  <Link to='/profile'>Profile</Link>
+                  <Link to='/profile/1'>Profile</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className='focus:bg-red-100' onSelect={onLogout}>
                   Log Out
