@@ -39,6 +39,10 @@ public class User {
   @JoinColumn(name = "universityId", insertable = false, updatable = false)
   private University university;
 
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "companyId", insertable = false, updatable = false)
+  private Company company;
+
   @PrePersist
   protected void onCreate() {
     if (role == null)
@@ -123,5 +127,34 @@ public class User {
 
   public void setUniversity(University university) {
     this.university = university;
+  }
+
+  public Company getCompany() {
+    return company;
+  }
+
+  public void setCompany(Company company) {
+    this.company = company;
+  }
+
+  public static class UpdateUserDTO {
+    private String name;
+    private String password;
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    public String getPassword() {
+      return password;
+    }
+
+    public void setPassword(String password) {
+      this.password = password;
+    }
   }
 }

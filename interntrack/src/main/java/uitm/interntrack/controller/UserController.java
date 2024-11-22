@@ -2,6 +2,7 @@ package uitm.interntrack.controller;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,18 +14,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import uitm.interntrack.entity.User;
+import uitm.interntrack.entity.User.UpdateUserDTO;
 import uitm.interntrack.service.UserService;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/api/user")
 @CrossOrigin(origins = "*")
 public class UserController {
 
-  private final UserService userService;
-
-  public UserController(UserService userService) {
-    this.userService = userService;
-  }
+  @Autowired
+  private UserService userService;
 
   @PostMapping("/register")
   public ResponseEntity<User> registerUser(@RequestBody User user) {
@@ -44,10 +44,28 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<User> getUser(@PathVariable Long id) {
+  public ResponseEntity<?> getUser(@PathVariable Long id) {
 
     User user = userService.getUser(id);
+
+    if (user == null) {
+      return ResponseEntity.status(404).body(String.format("User with ID %d not found", id));
+    }
+
     return ResponseEntity.ok(user);
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UpdateUserDTO user) {
+
+    User targetUser = userService.getUser(id);
+
+    if (targetUser == null) {
+      return ResponseEntity.notFound().build();
+    }
+
+    User updatedUser = userService.updateUser(id, user);
+    return ResponseEntity.ok(updatedUser);
   }
 
 }

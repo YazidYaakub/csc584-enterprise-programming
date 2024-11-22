@@ -3,12 +3,14 @@ package uitm.interntrack.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import uitm.interntrack.entity.User;
+import uitm.interntrack.entity.User.UpdateUserDTO;
 import uitm.interntrack.repository.UserRepository;
 
 @Service
@@ -39,7 +41,27 @@ public class UserService {
 
   @Transactional(readOnly = true)
   public User getUser(Long id) {
-    return userRepository.findByIdWithReference(id).orElse(null);
+    return userRepository.getUser(id).orElseThrow(null);
+  }
+
+  public User updateUser(Long id, UpdateUserDTO updateUserDTO) {
+    Optional<User> user = userRepository.findById(id);
+
+    if (updateUserDTO.getName() != null) {
+      user.get().setName(updateUserDTO.getName());
+    }
+
+    if (updateUserDTO.getPassword() != null) {
+      user.get().setPassword(updateUserDTO.getPassword());
+    }
+
+    userRepository.updateUser(id, updateUserDTO.getName(), updateUserDTO.getPassword());
+
+    return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+  }
+
+  public void deleteUser(Long id) {
+    userRepository.deleteUser(id);
   }
 
 }
