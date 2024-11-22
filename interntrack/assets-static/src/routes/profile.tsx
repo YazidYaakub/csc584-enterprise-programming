@@ -1,12 +1,35 @@
 import { CompanyCardContent } from '@/components/company-card-content'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from '@/components/ui/dialog'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { UniversityCardContent } from '@/components/university-card-content'
 import { config } from '@/lib/config'
-import { useQuery } from '@tanstack/react-query'
+import { EditUserInput, EditUserSchema } from '@/schema/edit-user'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Edit } from 'lucide-react'
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
+import axios from 'axios'
 
 export function Profile() {
   const { id } = useParams()
@@ -20,6 +43,26 @@ export function Profile() {
     queryFn: () => fetch(`${config.apiUrl}/api/user/${id}`).then((res) => res.json())
   })
 
+  const updateUser = useMutation({
+    mutationFn: (data: EditUserInput) => {
+      return axios.put(`${config.apiUrl}/api/user/${id}`, data)
+    }
+  })
+
+  const form = useForm<EditUserInput>({
+    resolver: zodResolver(EditUserSchema),
+    defaultValues: { name: '' }
+  })
+
+  useEffect(() => {
+    if (user) form.reset({ name: user.name })
+  }, [user, form])
+
+  function onSubmit(data: EditUserInput) {
+    console.log(data)
+    updateUser.mutate(data)
+  }
+
   if (isPending) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
 
@@ -32,10 +75,55 @@ export function Profile() {
             : user.name.slice(0, 2).toUpperCase()}
         </span>
       </div>
-      <Button>
-        <Edit />
-        <span>Edit</span>
-      </Button>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button>
+            <Edit />
+            <span>Edit</span>
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Profile</DialogTitle>
+            <DialogDescription>
+              Make changes to your profile here. Click save when you're done.
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <FormField
+                control={form.control}
+                name='name'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input type='text' placeholder='John Doe' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='password'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input type='password' placeholder='********' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </form>
+          </Form>
+          <DialogFooter>
+            <Button type='submit'>Save</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       <Card className='min-w-96'>
         <Table>
           <TableBody>

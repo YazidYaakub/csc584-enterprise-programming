@@ -1,6 +1,6 @@
 import { config } from '@/lib/config'
 import { useQuery } from '@tanstack/react-query'
-import { MapPin } from 'lucide-react'
+import { LoaderCircle, MapPin } from 'lucide-react'
 
 type CompanyCardContentProps = {
   companyId: string
@@ -17,6 +17,9 @@ export function CompanyCardContent(props: CompanyCardContentProps) {
     queryKey: ['company', companyId],
     queryFn: () => fetch(`${config.apiUrl}/api/company/${companyId}`).then((res) => res.json())
   })
+
+  if (isPending) return <LoaderCircle className='animate-spin' />
+  if (error) return <div>Failed to load company</div>
 
   return (
     <div className='flex flex-col space-y-4'>
