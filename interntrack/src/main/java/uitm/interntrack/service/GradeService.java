@@ -23,4 +23,12 @@ public class GradeService {
   public List<Grade> getGrades() {
     return gradeRepository.findAll();
   }
+
+  public void deleteGrade(Long id) {
+    gradeRepository.deleteById(id);
+  }
+
+  public Grade updateGrade(Long id, Grade grade) {
+    return gradeRepository.save(grade);
+  }
 }

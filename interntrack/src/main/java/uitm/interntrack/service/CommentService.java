@@ -23,4 +23,12 @@ public class CommentService {
   public List<Comment> getComments() {
     return commentRepository.findAll();
   }
+
+  public void deleteComment(Long id) {
+    commentRepository.deleteById(id);
+  }
+
+  public Comment updateComment(Long id, Comment comment) {
+    return commentRepository.save(comment);
+  }
 }

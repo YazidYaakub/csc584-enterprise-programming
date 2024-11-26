@@ -23,4 +23,12 @@ public class ActivityService {
   public List<Activity> getActivities() {
     return activityRepository.findAll();
   }
+
+  public void deleteActivity(Long id) {
+    activityRepository.deleteById(id);
+  }
+
+  public Activity updateActivity(Long id, Activity activity) {
+    return activityRepository.save(activity);
+  }
 }

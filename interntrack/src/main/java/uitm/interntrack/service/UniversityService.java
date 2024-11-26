@@ -21,4 +21,14 @@ public class UniversityService {
   public List<University> getAllUniversities() {
     return universityRepository.findAll();
   }
+
+  public void deleteUniversity(Long id) {
+    universityRepository.deleteById(id);
+  }
+
+  public University updateUniversity(Long id, University university) {
+    return universityRepository.save(university);
+  }
+  
 }
+

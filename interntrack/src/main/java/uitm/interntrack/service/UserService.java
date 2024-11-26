@@ -24,9 +24,21 @@ public class UserService {
   public List<User> getAllUsers() {
     return userRepository.findAll();
   }
+  public User updateUser(Long id, User user) {
+    User existingUser = userRepository.findById(id).orElse(null);
+    if (existingUser == null) {
+      return null;
+    }
+    existingUser.setName(user.getName());
+    return userRepository.save(existingUser);
+  }
 
   @Transactional(readOnly = true)
   public User getUser(Long id) {
     return userRepository.findByIdWithReference(id).orElse(null);
+  }
+
+  public void deleteUser(Long id) {
+     userRepository.deleteById(id);
   }
 }

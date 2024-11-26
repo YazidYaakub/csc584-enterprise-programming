@@ -23,4 +23,13 @@ public class CompanyService {
   public List<Company> getCompanies() {
     return companyRepository.findAll();
   }
+
+  public void deleteCompany(Long id) {
+    companyRepository.deleteById(id);
+  }
+
+  public Company updateCompany(Long id, Company company) {
+    return companyRepository.save(company);
+  }
+  
 }
