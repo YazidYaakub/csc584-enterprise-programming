@@ -27,8 +27,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem
-  ;
+    --radius: 0.5rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -36,7 +35,8 @@
     --sidebar-accent: 240 4.8% 95.9%;
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%}
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -61,8 +61,7 @@
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%
-  ;
+    --chart-5: 340 75% 55%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -70,7 +69,8 @@
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%}
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
 }
 @layer base {
   * {
@@ -79,4 +79,91 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.tiptap {
+  @apply p-4;
+}
+
+.tiptap :first-child {
+  margin-top: 0;
+}
+
+.tiptap ul,
+.tiptap ol {
+  @apply pl-4 pr-4 mt-5 mb-5 ml-1;
+}
+
+.tiptap ul {
+  @apply list-disc;
+}
+
+.tiptap ol {
+  @apply list-decimal;
+}
+
+.tiptap li p {
+  @apply mt-1 mb-1;
+}
+
+.tiptap h1,
+.tiptap h2,
+.tiptap h3,
+.tiptap h4,
+.tiptap h5,
+.tiptap h6 {
+  @apply leading-tight mt-4 font-bold;
+}
+
+.tiptap h1,
+.tiptap h2 {
+  @apply mb-2;
+}
+
+.tiptap h1 {
+  @apply text-xl;
+}
+
+.tiptap h2 {
+  @apply text-lg;
+}
+
+.tiptap h3 {
+  @apply text-base;
+}
+
+.tiptap h4,
+.tiptap h5,
+.tiptap h6 {
+  @apply text-sm;
+}
+
+.tiptap code {
+  @apply bg-zinc-200 rounded text-blue-500 font-semibold text-xs px-1 py-0.5;
+}
+
+.tiptap pre {
+  @apply bg-zinc-700 text-white rounded font-mono mt-6 mb-6 p-4;
+}
+
+.tiptap pre code {
+  @apply bg-transparent text-inherit text-sm p-0;
+}
+
+.tiptap blockquote {
+  @apply border-l-4 border-gray-300 mt-6 mb-6 pl-4;
+}
+
+.tiptap hr {
+  @apply border-none border-t border-gray-200 mt-8 mb-8;
+}
+
+.tiptap p.is-editor-empty {
+  /* content: attr(data-placeholder);
+  @apply text-gray-400; */
+  color: black;
+  content: attr(data-placeholder);
+  float: left;
+  /* height: 0; */
+  pointer-events: none;
 }

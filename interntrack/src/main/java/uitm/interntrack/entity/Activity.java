@@ -12,7 +12,9 @@ public class Activity {
     private Long activityId;
 
     private Long studentId;
-    private String activityName;
+    private String activityTitle;
+
+    private String activityDescription;
     private Timestamp activityDate;
     private int isApproved;
     private Long approvedById;
@@ -41,12 +43,20 @@ public class Activity {
         this.studentId = studentId;
     }
 
-    public String getActivityName() {
-        return activityName;
+    public String getActivityTitle() {
+        return activityTitle;
     }
 
-    public void setActivityName(String activityName) {
-        this.activityName = activityName;
+    public void setActivityTitle(String activityTitle) {
+        this.activityTitle = activityTitle;
+    }
+
+    public String getActivityDescription() {
+        return activityDescription;
+    }
+
+    public void setActivityDescription(String activityDescription) {
+        this.activityDescription = activityDescription;
     }
 
     public Timestamp getActivityDate() {
@@ -79,5 +89,57 @@ public class Activity {
 
     public void setApprovedAt(Timestamp approvedAt) {
         this.approvedAt = approvedAt;
+    }
+
+    public static class UpdateActivityDTO {
+        private String activityTitle;
+        private String activityDescription;
+        private int isApproved;
+        private Long approvedById;
+        private Timestamp approvedAt;
+
+        public String getActivityTitle() {
+            return activityTitle;
+        }
+
+        public void setActivityTitle(String activityTitle) {
+            this.activityTitle = activityTitle;
+        }
+
+        public String getActivityDescription() {
+            return activityDescription;
+        }
+
+        public void setActivityDescription(String activityDescription) {
+            this.activityDescription = activityDescription;
+        }
+
+        public int getIsApproved() {
+            return isApproved;
+        }
+
+        public void setIsApproved(int isApproved) {
+            this.isApproved = isApproved;
+        }
+
+        public Long getApprovedById() {
+            return approvedById;
+        }
+
+        public void setApprovedById(Long approvedById) {
+            this.approvedById = approvedById;
+        }
+
+        public Timestamp getApprovedAt() {
+            return approvedAt;
+        }
+
+        public String getApprovedAtString() {
+            return approvedAt.toString();
+        }
+
+        public void setApprovedAt(Timestamp approvedAt) {
+            this.approvedAt = approvedAt;
+        }
     }
 }

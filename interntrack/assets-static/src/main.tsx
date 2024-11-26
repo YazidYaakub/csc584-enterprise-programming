@@ -1,4 +1,4 @@
-import { Activity } from '@/routes/activity'
+import { ActivityRoute } from '@/routes/activity'
 import { Admin } from '@/routes/admin'
 import { Auth } from '@/routes/auth'
 import { Company } from '@/routes/company'
@@ -12,6 +12,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Toaster } from 'sonner'
+import { ThemeProvider } from './components/theme-provider'
 
 import './index.css'
 
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
       { path: 'profile/:id', element: <Profile /> },
       { path: 'students', element: <Student /> },
       { path: 'interns', element: <Intern /> },
-      { path: 'activity', element: <Activity /> },
+      { path: 'activity', element: <ActivityRoute /> },
       { path: 'company/:id', element: <Company /> },
       { path: 'university/:id', element: <University /> },
       { path: 'admin', element: <Admin /> }
@@ -40,9 +41,11 @@ const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-    <Toaster richColors />
+    <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+      <Toaster richColors />
+    </ThemeProvider>
   </StrictMode>
 )

@@ -1,3 +1,3 @@
 export function Admin() {
-  return <div>Admin</div>
+  return <div className='p-4'>Admin</div>
 }

@@ -6,19 +6,30 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger
+  useSidebar
 } from '@/components/ui/sidebar'
-import { BookUser, Briefcase, ChevronUp, GraduationCap, Scroll, Shield, User } from 'lucide-react'
+import {
+  BookUser,
+  Briefcase,
+  ChevronUp,
+  GraduationCap,
+  PanelLeft,
+  Scroll,
+  Shield,
+  User
+} from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { toast } from 'sonner'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger
 } from './ui/dropdown-menu'
-import { toast } from 'sonner'
 
 export function AppSidebar() {
+  const { toggleSidebar } = useSidebar()
+
   const menus = [
     {
       label: 'Activity Log',
@@ -77,6 +88,11 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
+            <SidebarMenuButton onClick={toggleSidebar}>
+              <PanelLeft />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
@@ -95,7 +111,6 @@ export function AppSidebar() {
             </DropdownMenu>
           </SidebarMenuItem>
         </SidebarMenu>
-        <SidebarTrigger />
       </SidebarFooter>
     </Sidebar>
   )
