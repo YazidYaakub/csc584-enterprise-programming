@@ -61,4 +61,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
       WHERE USER_ID = :userId
       """, nativeQuery = true)
   void deleteUser(@Param("userId") Long userId);
+
+  @Query(value = """
+      SELECT u.* FROM INTERNTRACK.USERS u
+      WHERE u.EMAIL = :email
+      """, nativeQuery = true)
+  Optional<User> findByEmail(@Param("email") String email);
 }

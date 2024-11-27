@@ -11,7 +11,7 @@ public class Company {
     private Long companyId;
 
     private String name;
-    private String natureBusiness;
+    private String sector;
     private String location;
 
     public Long getCompanyId() {
@@ -30,12 +30,12 @@ public class Company {
         this.name = name;
     }
 
-    public String getNatureBusiness() {
-        return natureBusiness;
+    public String getSector() {
+        return sector;
     }
 
-    public void setNatureBusiness(String natureBusiness) {
-        this.natureBusiness = natureBusiness;
+    public void setSector(String sector) {
+        this.sector = sector;
     }
 
     public String getLocation() {

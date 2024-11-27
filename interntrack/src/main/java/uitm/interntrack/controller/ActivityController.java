@@ -2,6 +2,7 @@ package uitm.interntrack.controller;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,11 +23,8 @@ import uitm.interntrack.service.ActivityService;
 @CrossOrigin(origins = "*")
 public class ActivityController {
 
-  private final ActivityService activityService;
-
-  public ActivityController(ActivityService activityService) {
-    this.activityService = activityService;
-  }
+  @Autowired
+  private ActivityService activityService;
 
   @PostMapping("/create")
   public ResponseEntity<Activity> createActivity(@RequestBody Activity activity) {

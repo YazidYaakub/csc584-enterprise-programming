@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -7,20 +8,25 @@ import {
   FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { useLogin } from '@/hooks/use-auth'
 import { LoginInput, LoginSchema } from '@/schema/login'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { Button } from '@/components/ui/button'
-import { toast } from 'sonner'
+import { useNavigate } from 'react-router-dom'
 
 export function LoginForm() {
+  const navigate = useNavigate()
+
   const form = useForm<LoginInput>({
     resolver: zodResolver(LoginSchema)
   })
 
+  const loginMutation = useLogin('Login success', () => {
+    navigate('/')
+  })
+
   function onSubmit(data: LoginInput) {
-    toast.success('Login success')
-    console.log(data)
+    loginMutation.mutate(data)
   }
 
   return (

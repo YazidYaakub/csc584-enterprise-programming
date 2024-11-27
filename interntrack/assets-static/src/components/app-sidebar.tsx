@@ -18,7 +18,7 @@ import {
   Shield,
   User
 } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import {
   DropdownMenu,
@@ -26,9 +26,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from './ui/dropdown-menu'
+import { useAuthStore } from '@/store/auth'
 
 export function AppSidebar() {
   const { toggleSidebar } = useSidebar()
+  const navigate = useNavigate()
+
+  const { logout } = useAuthStore()
 
   const menus = [
     {
@@ -64,7 +68,13 @@ export function AppSidebar() {
   ]
 
   function onLogout() {
-    toast.success('Logging out')
+    const loadingLogOut = toast.loading('Logging out...')
+    setTimeout(() => {
+      logout()
+      navigate('/login')
+      toast.dismiss(loadingLogOut)
+      toast.success('Logged out successfully')
+    }, 1000)
   }
 
   return (

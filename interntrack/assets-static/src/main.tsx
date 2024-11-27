@@ -10,11 +10,20 @@ import { University } from '@/routes/university'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import { Toaster } from 'sonner'
 import { ThemeProvider } from './components/theme-provider'
 
 import './index.css'
+import { useAuthStore } from './store/auth'
+
+// const isAuthenticated = !!localStorage.getItem('interntrack-token')
+
+const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
+  const { isAuthenticated } = useAuthStore()
+
+  return isAuthenticated ? element : <Navigate to='/auth' />
+}
 
 const router = createBrowserRouter([
   {
@@ -23,13 +32,14 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <Root />,
+    element: <ProtectedRoute element={<Root />} />,
     errorElement: <div>Not Found</div>,
     children: [
+      { index: true, element: <ActivityRoute /> },
+      { path: 'activity', element: <ActivityRoute /> },
       { path: 'profile/:id', element: <Profile /> },
       { path: 'students', element: <Student /> },
       { path: 'interns', element: <Intern /> },
-      { path: 'activity', element: <ActivityRoute /> },
       { path: 'company/:id', element: <Company /> },
       { path: 'university/:id', element: <University /> },
       { path: 'admin', element: <Admin /> }

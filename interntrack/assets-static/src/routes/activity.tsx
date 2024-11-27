@@ -1,5 +1,15 @@
 import { ActivityUpdateDialog } from '@/components/activity-update-dialog'
 import { RichEditor } from '@/components/rich-editor'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -34,38 +44,35 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { useUpdateActivity } from '@/hooks/use-activity'
+import { useCreateActivity, useDeleteActivity, useUpdateActivity } from '@/hooks/use-activity'
 import { api } from '@/lib/axios'
 import { currentUser, supervisor } from '@/lib/dummy-data'
 import { months } from '@/lib/months'
-import { Activity, CreateActivity, UpdateActivitySchema } from '@/schema/activity'
+import { Activity, UpdateActivitySchema } from '@/schema/activity'
 import { Pagination } from '@/schema/pagination'
 import { useActivityStore } from '@/store/activity'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Briefcase, Edit, Eye, Loader2, MoreHorizontal, Plus, Trash } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
 export function ActivityRoute() {
-  const queryClient = useQueryClient()
   const { openUpdateActivity, selectedMonth, setOpenUpdateActivity, setSelectedMonth } =
     useActivityStore()
 
   const [openActivityLog, setOpenActivityLog] = useState(false)
+  const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false)
   const [activityContent, setActivityContent] = useState<string>()
   const [activityTitle, setActivityTitle] = useState<string>()
+  const [deleteActivityTarget, setDeleteActivityTarget] = useState<Activity>()
 
-  const createActivity = useMutation({
-    mutationFn: (activity: CreateActivity) => api().post('activity/create', activity),
-    onSuccess: () => {
-      toast.success('Activity log created successfully')
-      queryClient.invalidateQueries({ queryKey: ['activity', selectedMonth] })
-      setOpenActivityLog(false)
-    },
-    onError: (error) => toast.error(error.message)
-  })
+  const createActivity = useCreateActivity('Activity log successfully created', () =>
+    setOpenActivityLog(false)
+  )
 
   const updateActivity = useUpdateActivity('Activity successfully approved')
+
+  const deleteActivity = useDeleteActivity('Activity log successfully deleted')
 
   const {
     data: activities,
@@ -134,6 +141,20 @@ export function ActivityRoute() {
     }
 
     updateActivity.mutate(data)
+  }
+
+  function onConfirmationDelete(activity: Activity) {
+    setDeleteActivityTarget(activity)
+    setOpenDeleteConfirmation(true)
+  }
+
+  function onCloseConfirmation(confirmed: boolean) {
+    if (!deleteActivityTarget) return
+
+    if (confirmed) deleteActivity.mutate(deleteActivityTarget?.activityId)
+
+    setDeleteActivityTarget(undefined)
+    setOpenDeleteConfirmation(false)
   }
 
   if (error) {
@@ -233,7 +254,10 @@ export function ActivityRoute() {
                       >
                         <Edit /> Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem className='focus:text-red-500 focus:bg-red-100'>
+                      <DropdownMenuItem
+                        onSelect={() => onConfirmationDelete(activity)}
+                        className='focus:text-red-500 focus:bg-red-100'
+                      >
                         <Trash /> Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -293,6 +317,29 @@ export function ActivityRoute() {
           />
         )}
       </Dialog>
+      <AlertDialog
+        open={openDeleteConfirmation && deleteActivityTarget !== undefined}
+        onOpenChange={() => onCloseConfirmation(false)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Are you sure you want to delete this{' '}
+              <span className='font-semibold bg-red-200 px-1 rounded'>
+                {deleteActivityTarget?.activityTitle}
+              </span>{' '}
+              activity?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the activity log entry.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => onCloseConfirmation(false)}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={() => onCloseConfirmation(true)}>Confirm</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
