@@ -1,0 +1,15 @@
+{
+	"name": "My Java Project",
+	"dockerComposeFile": "compose.yml",
+	"service": "app",
+	"workspaceFolder": "/code",
+	"features": {
+		"ghcr.io/devcontainers/features/java:1": {
+			"version": "none",
+			"installMaven": "true",
+			"installGradle": "false"
+		},
+		"ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {}
+	},
+	"remoteUser": "root"
+}
