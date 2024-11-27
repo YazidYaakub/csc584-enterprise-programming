@@ -8,9 +8,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import uitm.interntrack.dto.UserDTO;
 import uitm.interntrack.entity.User;
 import uitm.interntrack.entity.User.UpdateUserDTO;
 import uitm.interntrack.repository.UserRepository;
@@ -20,6 +23,9 @@ public class UserService {
 
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private ObjectMapper objectMapper;
 
   public User createUser(User user) {
     return userRepository.save(user);
@@ -64,9 +70,44 @@ public class UserService {
     return response;
   }
 
-  @Transactional(readOnly = true)
   public User getUser(Long id) {
-    return userRepository.getUser(id).orElseThrow(null);
+    User user = userRepository.getUser(id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    UserDTO userDTO = new UserDTO(user);
+
+    // if role is STUDENT, get references by student, else get references by advisor
+    // else get references by supervisor
+    List<Object[]> references = userRepository.getReferencesByStudent(id);
+
+    if (!references.isEmpty()) {
+
+      Object[] reference = references.get(0);
+
+      String studentName = (String) reference[0];
+      String advisorName = (String) reference[1];
+      String supervisorName = (String) reference[2];
+
+      UserDTO.Student student = new UserDTO.Student();
+      student.setName(studentName);
+      userDTO.setStudent(student);
+
+      UserDTO.Advisor advisor = new UserDTO.Advisor();
+      advisor.setName(advisorName);
+      userDTO.setAdvisor(advisor);
+
+      UserDTO.Supervisor supervisor = new UserDTO.Supervisor();
+      supervisor.setName(supervisorName);
+      userDTO.setSupervisor(supervisor);
+
+      try {
+        String json = objectMapper.writeValueAsString(userDTO);
+        System.out.println(json);
+      } catch (JsonProcessingException e) {
+        e.printStackTrace();
+      }
+    }
+
+    return user;
   }
 
   public User updateUser(Long id, UpdateUserDTO updateUserDTO) {

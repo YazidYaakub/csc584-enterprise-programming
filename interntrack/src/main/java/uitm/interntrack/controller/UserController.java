@@ -68,10 +68,4 @@ public class UserController {
     return ResponseEntity.ok(updatedUser);
   }
 
-  @PostMapping("/login")
-  public ResponseEntity<Map<String, Object>> loginUser(@RequestBody User user) {
-
-    var loginResponse = userService.loginUser(user.getEmail(), user.getPassword());
-    return ResponseEntity.ok(loginResponse);
-  }
 }

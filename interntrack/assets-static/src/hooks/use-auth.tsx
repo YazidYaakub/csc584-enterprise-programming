@@ -15,7 +15,7 @@ export const useLogin = (
     mutationFn: (loginInput: LoginInput) => api().post('auth/login', loginInput),
     onSuccess: (res) => {
       localStorage.setItem('interntrack-token', res.data.token)
-      setAuthenticated()
+      setAuthenticated(res.data.user)
       toast.success(message)
       if (callback) callback()
     },

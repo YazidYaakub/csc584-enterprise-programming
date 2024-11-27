@@ -13,6 +13,13 @@ public class Company {
     private String name;
     private String sector;
     private String location;
+    private Double latitude;
+    private Double longitude;
+    private String code;
+    private String email;
+    private String website;
+    private String contactNumber;
+    private String logoLink;
 
     public Long getCompanyId() {
         return companyId;
@@ -44,5 +51,61 @@ public class Company {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
+    public String getLogoLink() {
+        return logoLink;
+    }
+
+    public void setLogoLink(String logoLink) {
+        this.logoLink = logoLink;
     }
 }

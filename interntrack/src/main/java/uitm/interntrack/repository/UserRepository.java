@@ -67,4 +67,43 @@ public interface UserRepository extends JpaRepository<User, Long> {
       WHERE u.EMAIL = :email
       """, nativeQuery = true)
   Optional<User> findByEmail(@Param("email") String email);
+
+  @Query(value = """
+      SELECT
+        student.name AS STUDENT_NAME,
+        advisor.name AS ADVISOR_NAME,
+        supervisor.name AS SUPERVISOR_NAME
+      FROM INTERNTRACK.STUDENT_CONSULTANTS sc
+      LEFT JOIN INTERNTRACK.USERS student ON student.USER_ID = sc.STUDENT_ID
+      LEFT JOIN INTERNTRACK.USERS advisor ON advisor.USER_ID = sc.ADVISOR_ID
+      LEFT JOIN INTERNTRACK.USERS supervisor ON supervisor.USER_ID = sc.SUPERVISOR_ID
+      WHERE sc.STUDENT_ID = :studentId
+      """, nativeQuery = true)
+  List<Object[]> getReferencesByStudent(@Param("studentId") Long studentId);
+
+  @Query(value = """
+      SELECT
+        student.name AS STUDENT_NAME,
+        advisor.name AS ADVISOR_NAME,
+        supervisor.name AS SUPERVISOR_NAME
+      FROM INTERNTRACK.STUDENT_CONSULTANTS sc
+      LEFT JOIN INTERNTRACK.USERS student ON student.USER_ID = sc.STUDENT_ID
+      LEFT JOIN INTERNTRACK.USERS advisor ON advisor.USER_ID = sc.ADVISOR_ID
+      LEFT JOIN INTERNTRACK.USERS supervisor ON supervisor.USER_ID = sc.SUPERVISOR_ID
+      WHERE sc.ADVISOR_ID = :advisorId
+      """, nativeQuery = true)
+  List<Object[]> getReferencesByAdvisor(@Param("advisorId") Long advisorId);
+
+  @Query(value = """
+      SELECT
+        student.name AS STUDENT_NAME,
+        advisor.name AS ADVISOR_NAME,
+        supervisor.name AS SUPERVISOR_NAME
+      FROM INTERNTRACK.STUDENT_CONSULTANTS sc
+      LEFT JOIN INTERNTRACK.USERS student ON student.USER_ID = sc.STUDENT_ID
+      LEFT JOIN INTERNTRACK.USERS advisor ON advisor.USER_ID = sc.ADVISOR_ID
+      LEFT JOIN INTERNTRACK.USERS supervisor ON supervisor.USER_ID = sc.SUPERVISOR_ID
+      WHERE sc.SUPERVISOR_ID = :supervisorId
+      """, nativeQuery = true)
+  List<Object[]> getReferencesBySupervisor(@Param("supervisorId") Long supervisorId);
 }

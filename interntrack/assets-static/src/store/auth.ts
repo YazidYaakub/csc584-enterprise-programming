@@ -3,10 +3,9 @@ import { create } from 'zustand'
 
 type AuthStore = {
   isAuthenticated: boolean
-  setAuthenticated: () => void
+  setAuthenticated: (user: User) => void
 
   user: User | undefined
-  setUser: (user: User) => void
 
   advisor: User | undefined
   setAdvisor: (advisor: User) => void
@@ -19,10 +18,9 @@ type AuthStore = {
 
 export const useAuthStore = create<AuthStore>((set) => ({
   isAuthenticated: !!localStorage.getItem('interntrack-token'),
-  setAuthenticated: () => set({ isAuthenticated: true }),
+  setAuthenticated: (user) => set({ isAuthenticated: true, user }),
 
   user: undefined,
-  setUser: (user) => set({ user }),
 
   advisor: undefined,
   setAdvisor: (advisor) => set({ advisor }),
