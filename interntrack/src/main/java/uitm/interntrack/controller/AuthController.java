@@ -5,11 +5,15 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import uitm.interntrack.entity.User;
 import uitm.interntrack.service.AuthService;
+import uitm.interntrack.service.UserService;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -21,10 +25,25 @@ public class AuthController {
   @Autowired
   private AuthService authService;
 
+  @Autowired
+  private UserService userService;
+
   @PostMapping("/login")
   public ResponseEntity<Map<String, Object>> login(@RequestBody User user) {
     Map<String, Object> loginResponse = authService.loginUser(user.getEmail(), user.getPassword());
     return ResponseEntity.ok(loginResponse);
+  }
+
+  @GetMapping("/")
+  public ResponseEntity<Map<String, Object>> getUsers(
+      @RequestParam(defaultValue = "0") Integer page,
+      @RequestParam(defaultValue = "10") Integer size,
+      @RequestParam(required = false) String role,
+      @RequestParam(required = false) String universityId,
+      @RequestParam(required = false) String companyId) {
+
+    Map<String, Object> users = userService.getUsers(page, size, role, universityId, companyId);
+    return ResponseEntity.ok(users);
   }
 
 }

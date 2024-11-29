@@ -8,16 +8,20 @@ import {
   SidebarMenuItem,
   useSidebar
 } from '@/components/ui/sidebar'
+import { useAuthStore } from '@/store/auth'
 import {
   BookUser,
   Briefcase,
+  ChevronsLeft,
+  ChevronsRight,
   ChevronUp,
   GraduationCap,
-  PanelLeft,
+  LucideProps,
   Scroll,
   Shield,
   User
 } from 'lucide-react'
+import { ForwardRefExoticComponent, RefAttributes } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import {
@@ -26,52 +30,89 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from './ui/dropdown-menu'
-import { useAuthStore } from '@/store/auth'
 
 export function AppSidebar() {
-  const { toggleSidebar } = useSidebar()
+  const { toggleSidebar, open } = useSidebar()
   const navigate = useNavigate()
 
-  const { logout } = useAuthStore()
+  const { logout, user } = useAuthStore()
 
-  const menus = [
-    {
-      label: 'Activity Log',
-      icon: Scroll,
-      link: '/activity'
-    },
-    {
-      label: 'University',
-      icon: GraduationCap,
-      link: '/university/1'
-    },
-    {
-      label: 'Company',
-      icon: Briefcase,
-      link: '/company/1'
-    },
-    {
-      label: 'Interns',
-      icon: BookUser,
-      link: '/interns'
-    },
-    {
-      label: 'Students',
-      icon: BookUser,
-      link: '/students'
-    },
-    {
+  if (!user) {
+    onLogout()
+    return null
+  }
+
+  const menus: {
+    label: string
+    icon: ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>>
+    link: string
+  }[] = []
+
+  if (user.role === 'ADMIN') {
+    menus.push({
       label: 'Admin',
       icon: Shield,
-      link: '/admin'
-    }
-  ]
+      link: 'admin'
+    })
+  }
+
+  if (user.role === 'STUDENT') {
+    menus.push(
+      {
+        label: 'Activity Log',
+        icon: Scroll,
+        link: `activity/${user.userId}`
+      },
+      {
+        label: 'University',
+        icon: GraduationCap,
+        link: `university/${user.universityId}`
+      },
+      {
+        label: 'Company',
+        icon: Briefcase,
+        link: `company/${user.companyId}`
+      }
+    )
+  }
+
+  if (user.role === 'ADVISOR') {
+    menus.push(
+      {
+        label: 'Students',
+        icon: BookUser,
+        link: 'students'
+      },
+      {
+        label: 'University',
+        icon: GraduationCap,
+        link: `university/${user.universityId}`
+      }
+    )
+  }
+
+  if (user.role === 'SUPERVISOR') {
+    menus.push(
+      {
+        label: 'Company',
+        icon: Briefcase,
+        link: `company/${user.companyId}`
+      },
+      {
+        label: 'Interns',
+        icon: BookUser,
+        link: 'interns'
+      }
+    )
+  }
 
   function onLogout() {
+    console.error('Logging out...')
+
     const loadingLogOut = toast.loading('Logging out...')
     setTimeout(() => {
       logout()
-      navigate('/login')
+      navigate('/auth')
       toast.dismiss(loadingLogOut)
       toast.success('Logged out successfully')
     }, 1000)
@@ -82,11 +123,19 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link to=''>
+                  <img src='/edutech-solutions.svg' alt='edutech-logo' className='size-6' />
+                  <span className='font-medium text-lg'>Interntrack System</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
             {menus.map((menu) => (
               <SidebarMenuItem key={menu.label}>
                 <SidebarMenuButton asChild>
                   <Link to={menu.link}>
-                    <menu.icon />
+                    <menu.icon className='text-primary' />
                     <span>{menu.label}</span>
                   </Link>
                 </SidebarMenuButton>
@@ -99,20 +148,27 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton onClick={toggleSidebar}>
-              <PanelLeft />
+              {open ? (
+                <>
+                  <ChevronsLeft className='text-primary' />
+                  Collapse
+                </>
+              ) : (
+                <ChevronsRight className='text-primary' />
+              )}
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User /> Harith
-                  <ChevronUp className='ml-auto' />
+                  <User className='text-primary' /> {user.name}
+                  <ChevronUp className='ml-auto text-primary' />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent side='top' className='w-[--radix-popper-anchor-width]'>
                 <DropdownMenuItem asChild>
-                  <Link to='/profile/1'>Profile</Link>
+                  <Link to={`profile/${user.userId}`}>Profile</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className='focus:bg-red-100' onSelect={onLogout}>
                   Log Out

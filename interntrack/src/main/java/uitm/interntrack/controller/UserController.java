@@ -20,7 +20,7 @@ import uitm.interntrack.service.UserService;
 
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "*")
 public class UserController {
 
   @Autowired
@@ -37,9 +37,11 @@ public class UserController {
   public ResponseEntity<Map<String, Object>> getUsers(
       @RequestParam(defaultValue = "0") Integer page,
       @RequestParam(defaultValue = "10") Integer size,
-      @RequestParam(required = false) String role) {
+      @RequestParam(required = false) String role,
+      @RequestParam(required = false) String universityId,
+      @RequestParam(required = false) String companyId) {
 
-    Map<String, Object> users = userService.getUsers(page, size, role);
+    Map<String, Object> users = userService.getUsers(page, size, role, universityId, companyId);
     return ResponseEntity.ok(users);
   }
 

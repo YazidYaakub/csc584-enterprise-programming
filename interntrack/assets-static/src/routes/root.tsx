@@ -6,7 +6,7 @@ export function Root() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className='size-full'>
+      <main className='h-screen w-full'>
         <Outlet />
       </main>
     </SidebarProvider>

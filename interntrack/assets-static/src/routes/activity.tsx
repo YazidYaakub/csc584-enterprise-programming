@@ -1,4 +1,6 @@
 import { ActivityUpdateDialog } from '@/components/activity-update-dialog'
+import { ErrorFull } from '@/components/error-full'
+import { LoadingFull } from '@/components/loading-full'
 import { RichEditor } from '@/components/rich-editor'
 import {
   AlertDialog,
@@ -44,21 +46,40 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { useCreateActivity, useDeleteActivity, useUpdateActivity } from '@/hooks/use-activity'
-import { api } from '@/lib/axios'
-import { currentUser, supervisor } from '@/lib/dummy-data'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import {
+  useCreateActivity,
+  useDeleteActivity,
+  usePaginatedActivity,
+  useUpdateActivity
+} from '@/hooks/use-activity'
+import { supervisor } from '@/lib/dummy-data'
 import { months } from '@/lib/months'
 import { Activity, UpdateActivitySchema } from '@/schema/activity'
-import { Pagination } from '@/schema/pagination'
 import { useActivityStore } from '@/store/activity'
-import { useQuery } from '@tanstack/react-query'
-import { Briefcase, Edit, Eye, Loader2, MoreHorizontal, Plus, Trash } from 'lucide-react'
+import { useAuthStore } from '@/store/auth'
+import {
+  Briefcase,
+  Edit,
+  Eye,
+  GraduationCap,
+  Loader2,
+  MoreHorizontal,
+  Plus,
+  Trash
+} from 'lucide-react'
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { toast } from 'sonner'
+
+// TODO: check if user is supervisor then can check the checkbox
+// TODO: check if user is advisor then can approve the activity month
 
 export function ActivityRoute() {
   const { openUpdateActivity, selectedMonth, setOpenUpdateActivity, setSelectedMonth } =
     useActivityStore()
+  const { user } = useAuthStore()
+  const { userId } = useParams()
 
   const [openActivityLog, setOpenActivityLog] = useState(false)
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false)
@@ -66,27 +87,12 @@ export function ActivityRoute() {
   const [activityTitle, setActivityTitle] = useState<string>()
   const [deleteActivityTarget, setDeleteActivityTarget] = useState<Activity>()
 
+  const { data: activities, error, isPending } = usePaginatedActivity()
+  const updateActivity = useUpdateActivity('Activity successfully approved')
+  const deleteActivity = useDeleteActivity('Activity log successfully deleted')
   const createActivity = useCreateActivity('Activity log successfully created', () =>
     setOpenActivityLog(false)
   )
-
-  const updateActivity = useUpdateActivity('Activity successfully approved')
-
-  const deleteActivity = useDeleteActivity('Activity log successfully deleted')
-
-  const {
-    data: activities,
-    error,
-    isPending
-  } = useQuery<Pagination<Activity>>({
-    queryKey: ['activity', selectedMonth],
-    queryFn: async () => {
-      const { data } = await api().get('activity/', {
-        params: { month: selectedMonth, studentId: currentUser.id }
-      })
-      return data
-    }
-  })
 
   function onOpenActivityLog() {
     setOpenActivityLog(true)
@@ -101,6 +107,11 @@ export function ActivityRoute() {
   }
 
   function onCreateActivity() {
+    if (!user) {
+      toast.error('Not authorized to create activity log')
+      return
+    }
+
     if (!activityTitle || activityTitle.trim() === '') {
       toast.error('Activity title is required')
       return
@@ -114,7 +125,7 @@ export function ActivityRoute() {
     createActivity.mutate({
       activityTitle: activityTitle,
       activityDescription: activityContent,
-      studentId: currentUser.id,
+      studentId: user.userId,
       approvedById: supervisor.id
     })
   }
@@ -157,20 +168,15 @@ export function ActivityRoute() {
     setOpenDeleteConfirmation(false)
   }
 
-  if (error) {
-    return <div>Error: {error.message}</div>
-  }
-
-  if (isPending) {
-    return <div>Loading...</div>
-  }
+  if (error) return <ErrorFull message={error?.message} />
+  if (isPending) return <LoadingFull message='Loading activities...' />
 
   return (
     <div className='h-screen p-4 items-center flex flex-col space-y-4'>
-      <h1 className='font-bold text-2xl'>Activity</h1>
-      <div className='w-full flex justify-between'>
+      <h1 className='font-bold text-2xl'>{user?.name} Activity</h1>
+      <div className='w-full flex justify-between items-center'>
         <div className='flex flex-col space-y-2'>
-          {activities.data.length > 0 && (
+          {activities.data.length > 0 && user?.userId.toString() === userId && (
             <Button size='sm' onClick={onOpenActivityLog}>
               <Plus /> Activity Log
             </Button>
@@ -189,14 +195,37 @@ export function ActivityRoute() {
           </Select>
         </div>
         <div>
-          <Card className='p-2'>
-            <div className='flex space-x-2 items-center'>
-              <Briefcase className='size-4' />
-              <div className='flex flex-col text-sm'>
-                <span className='font-semibold'>Abdul Hakim</span>
-                <span className='text-muted-foreground font-semibold'>Software Manager</span>
-              </div>
-            </div>
+          <Card className='p-2 space-y-2'>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className='flex space-x-2 items-center cursor-pointer'>
+                    <Briefcase className='size-4' />
+                    <div className='flex flex-col text-sm'>
+                      <span className='font-semibold'>Abdul Hakim</span>
+                    </div>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Supervisor</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className='flex space-x-2 items-center cursor-pointer'>
+                    <GraduationCap className='size-4' />
+                    <div className='flex flex-col text-sm'>
+                      <span className='font-semibold'>Abdul Hakim</span>
+                    </div>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Advisor</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </Card>
         </div>
       </div>
@@ -207,7 +236,9 @@ export function ActivityRoute() {
               <TableHead>Activity Title</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Approval Status</TableHead>
-              <TableHead className='text-center'>Supervisor Approval</TableHead>
+              {user?.role === 'SUPERVISOR' && (
+                <TableHead className='text-center'>Supervisor Approval</TableHead>
+              )}
               <TableHead />
             </TableRow>
           </TableHeader>
@@ -231,12 +262,15 @@ export function ActivityRoute() {
                     </span>
                   )}
                 </TableCell>
-                <TableCell className='text-center'>
-                  <Checkbox
-                    checked={activity.isApproved === 1}
-                    onCheckedChange={() => onApproveActivity(activity)}
-                  />
-                </TableCell>
+                {user?.role === 'SUPERVISOR' && (
+                  <TableCell className='text-center'>
+                    <Checkbox
+                      disabled={user?.role !== 'SUPERVISOR'}
+                      checked={activity.isApproved === 1}
+                      onCheckedChange={() => onApproveActivity(activity)}
+                    />
+                  </TableCell>
+                )}
                 <TableCell className='text-right'>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -272,10 +306,12 @@ export function ActivityRoute() {
                     <span className='text-muted-foreground font-semibold'>
                       No activity found. Add your activity log now!
                     </span>
-                    <Button size='sm'>
-                      <Plus />
-                      <span>Activity Log</span>
-                    </Button>
+                    {user?.userId.toString() === userId && (
+                      <Button size='sm'>
+                        <Plus />
+                        <span>Activity Log</span>
+                      </Button>
+                    )}
                   </div>
                 </TableCell>
               </TableRow>

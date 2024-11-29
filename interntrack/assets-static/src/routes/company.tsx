@@ -8,112 +8,30 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
+import { usePaginatedUsers } from '@/hooks/use-user'
 import { center } from '@/lib/google-map'
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
 import { useCallback, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 export function Company() {
+  const { companyId } = useParams()
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_API ?? ''
   })
 
-  const supervisors = [
+  const { data: supervisors } = usePaginatedUsers(
+    ['supervisor', companyId ?? 'company', 'company-supervisor-table'],
     {
-      id: 1,
-      name: 'John Doe',
-      email: 'john@mail',
-      position: 'Software Engineer'
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      email: 'jane@mail',
-      position: 'Hardware Engineer'
-    },
-    {
-      id: 3,
-      name: 'Alice Johnson',
-      email: 'alice@mail',
-      position: 'Product Manager'
-    },
-    {
-      id: 4,
-      name: 'Bob Brown',
-      email: 'bob@mail',
-      position: 'Marketing Manager'
-    },
-    {
-      id: 5,
-      name: 'Charlie Davis',
-      email: 'charlie@mail',
-      position: 'Business Development Manager'
-    },
-    {
-      id: 6,
-      name: 'Diana Evans',
-      email: 'diana@mail',
-      position: 'Human Resources Manager'
-    },
-    {
-      id: 7,
-      name: 'Ethan Harris',
-      email: 'ethan@mail',
-      position: 'Finance Manager'
+      companyId: Number(companyId),
+      role: 'SUPERVISOR'
     }
-  ]
-
-  const students = [
-    {
-      id: 1,
-      name: 'John Doe',
-      email: 'john@mail',
-      university: 'University of California, Los Angeles',
-      course: 'Computer Science (BSc)'
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      email: 'jane@mail',
-      university: 'Massachusetts Institute of Technology',
-      course: 'Electrical Engineering (BSc)'
-    },
-    {
-      id: 3,
-      name: 'Alice Johnson',
-      email: 'alice@mail',
-      university: 'Stanford University',
-      course: 'Mechanical Engineering (BSc)'
-    },
-    {
-      id: 4,
-      name: 'Bob Brown',
-      email: 'bob@mail',
-      university: 'Harvard University',
-      course: 'Business Administration (BBA)'
-    },
-    {
-      id: 5,
-      name: 'Charlie Davis',
-      email: 'charlie@mail',
-      university: 'University of Oxford',
-      course: 'Physics (BSc)'
-    },
-    {
-      id: 6,
-      name: 'Diana Evans',
-      email: 'diana@mail',
-      university: 'University of Cambridge',
-      course: 'Mathematics (BSc)'
-    },
-    {
-      id: 7,
-      name: 'Ethan Harris',
-      email: 'ethan@mail',
-      university: 'California Institute of Technology',
-      course: 'Chemical Engineering (BSc)'
-    }
-  ]
+  )
+  const { data: students } = usePaginatedUsers(
+    ['student', companyId ?? 'company', 'company-student-table'],
+    { companyId: Number(companyId), role: 'STUDENT' }
+  )
 
   const [map, setMap] = useState<google.maps.Map | null>(null)
 
@@ -197,11 +115,11 @@ export function Company() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {supervisors.map((supervisor) => (
-                <TableRow className='cursor-pointer' key={supervisor.id}>
+              {supervisors?.data?.map((supervisor) => (
+                <TableRow className='cursor-pointer' key={supervisor.userId}>
                   <TableCell>{supervisor.name}</TableCell>
                   <TableCell>{supervisor.email}</TableCell>
-                  <TableCell>{supervisor.position}</TableCell>
+                  <TableCell>{supervisor.role}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -218,11 +136,11 @@ export function Company() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {students.map((student) => (
-                <TableRow className='cursor-pointer' key={student.id}>
+              {students?.data.map((student) => (
+                <TableRow className='cursor-pointer' key={student.userId}>
                   <TableCell>{student.name}</TableCell>
                   <TableCell>{student.email}</TableCell>
-                  <TableCell>{student.university}</TableCell>
+                  <TableCell>{student.role}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

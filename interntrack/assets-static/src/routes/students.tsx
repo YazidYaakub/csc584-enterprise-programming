@@ -7,87 +7,25 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
+import { Unauthorized } from '@/components/unauthorized'
+import { usePaginatedUsers } from '@/hooks/use-user'
+import { useAuthStore } from '@/store/auth'
+import { useParams } from 'react-router-dom'
 
 export function Student() {
-  const students = [
+  const { user } = useAuthStore()
+  const { universityId } = useParams()
+  const { data: students } = usePaginatedUsers(
+    ['student', universityId ?? 'university', 'student-table'],
     {
-      id: 1,
-      name: 'John Doe',
-      email: 'john@mail',
-      university: 'University of California, Los Angeles',
-      course: 'Computer Science (BSc)'
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      email: 'jane@mail',
-      university: 'Massachusetts Institute of Technology',
-      course: 'Electrical Engineering (BSc)'
-    },
-    {
-      id: 3,
-      name: 'Alice Johnson',
-      email: 'alice@mail',
-      university: 'Stanford University',
-      course: 'Mechanical Engineering (BSc)'
-    },
-    {
-      id: 4,
-      name: 'Bob Brown',
-      email: 'bob@mail',
-      university: 'Harvard University',
-      course: 'Business Administration (BBA)'
-    },
-    {
-      id: 5,
-      name: 'Charlie Davis',
-      email: 'charlie@mail',
-      university: 'University of Oxford',
-      course: 'Physics (BSc)'
-    },
-    {
-      id: 6,
-      name: 'Diana Evans',
-      email: 'diana@mail',
-      university: 'University of Cambridge',
-      course: 'Mathematics (BSc)'
-    },
-    {
-      id: 7,
-      name: 'Ethan Harris',
-      email: 'ethan@mail',
-      university: 'California Institute of Technology',
-      course: 'Chemical Engineering (BSc)'
-    },
-    {
-      id: 8,
-      name: 'Fiona Green',
-      email: 'fiona@mail',
-      university: 'Princeton University',
-      course: 'Biology (BSc)'
-    },
-    {
-      id: 9,
-      name: 'George Hill',
-      email: 'george@mail',
-      university: 'Yale University',
-      course: 'Economics (BSc)'
-    },
-    {
-      id: 10,
-      name: 'Hannah King',
-      email: 'hannah@mail',
-      university: 'Columbia University',
-      course: 'Political Science (BSc)'
-    },
-    {
-      id: 11,
-      name: 'Ian Lee',
-      email: 'ian@mail',
-      university: 'University of Chicago',
-      course: 'Sociology (BSc)'
+      role: 'STUDENT',
+      universityId: user?.universityId
     }
-  ]
+  )
+
+  if (user?.role !== 'ADVISOR') {
+    return <Unauthorized />
+  }
 
   return (
     <div className='p-4 flex flex-col items-center space-y-4'>
@@ -102,11 +40,11 @@ export function Student() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {students.map((student) => (
-            <TableRow className='cursor-pointer' key={student.id}>
+          {students?.data?.map((student) => (
+            <TableRow className='cursor-pointer' key={student.userId}>
               <TableCell>{student.name}</TableCell>
               <TableCell>{student.email}</TableCell>
-              <TableCell>{student.university}</TableCell>
+              <TableCell>{student.university?.name}</TableCell>
             </TableRow>
           ))}
         </TableBody>

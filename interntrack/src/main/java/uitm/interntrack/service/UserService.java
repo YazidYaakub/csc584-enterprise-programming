@@ -54,15 +54,15 @@ public class UserService {
     return response;
   }
 
-  public Map<String, Object> getUsers(Integer page, Integer size, String role) {
+  public Map<String, Object> getUsers(Integer page, Integer size, String role, String universityId, String companyId) {
     Integer start = page * size + 1;
     Integer end = start + size - 1;
 
-    List<User> users = userRepository.getUsers(start, end, role);
+    List<User> users = userRepository.getUsers(start, end, role, universityId, companyId);
     Long totalCount = userRepository.countUsers(role);
 
     Map<String, Object> response = new HashMap<>();
-    response.put("users", users);
+    response.put("data", users);
     response.put("total", totalCount);
     response.put("page", page);
     response.put("size", size);

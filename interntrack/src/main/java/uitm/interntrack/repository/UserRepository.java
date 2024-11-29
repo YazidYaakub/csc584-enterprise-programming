@@ -33,13 +33,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
         SELECT u.*, ROW_NUMBER() OVER (ORDER BY USER_ID) as ROW_NUM
         FROM INTERNTRACK.USERS u
         WHERE (:role IS NULL OR u.ROLE = :role)
+        AND (:universityId IS NULL OR u.UNIVERSITY_ID = :universityId)
+        AND (:companyId IS NULL OR u.COMPANY_ID = :companyId)
       ) sub
       WHERE sub.ROW_NUM BETWEEN :start AND :end
       """, nativeQuery = true)
   List<User> getUsers(
       @Param("start") Integer start,
       @Param("end") Integer end,
-      @Param("role") String role);
+      @Param("role") String role,
+      @Param("universityId") String universityId,
+      @Param("companyId") String companyId);
 
   @Modifying
   @Query(value = """

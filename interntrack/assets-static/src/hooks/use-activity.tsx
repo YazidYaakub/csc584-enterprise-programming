@@ -34,7 +34,7 @@ export const usePaginatedActivity = () => {
     queryKey: ['activity', selectedMonth],
     queryFn: async () => {
       const { data } = await api().get('activity/', {
-        params: { month: selectedMonth, studentId: user?.id }
+        params: { month: selectedMonth, studentId: user?.userId }
       })
       return data
     }
