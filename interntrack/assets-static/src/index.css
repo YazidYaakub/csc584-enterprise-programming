@@ -91,7 +91,7 @@
 
 .tiptap ul,
 .tiptap ol {
-  @apply pl-4 pr-4 mt-5 mb-5 ml-1;
+  @apply mb-5 ml-1 mt-5 pl-4 pr-4;
 }
 
 .tiptap ul {
@@ -103,7 +103,7 @@
 }
 
 .tiptap li p {
-  @apply mt-1 mb-1;
+  @apply mb-1 mt-1;
 }
 
 .tiptap h1,
@@ -112,7 +112,7 @@
 .tiptap h4,
 .tiptap h5,
 .tiptap h6 {
-  @apply leading-tight mt-4 font-bold;
+  @apply mt-4 font-bold leading-tight;
 }
 
 .tiptap h1,
@@ -139,23 +139,23 @@
 }
 
 .tiptap code {
-  @apply bg-zinc-200 rounded text-blue-500 font-semibold text-xs px-1 py-0.5;
+  @apply rounded bg-zinc-200 px-1 py-0.5 text-xs font-semibold text-blue-500;
 }
 
 .tiptap pre {
-  @apply bg-zinc-700 text-white rounded font-mono mt-6 mb-6 p-4;
+  @apply mb-6 mt-6 rounded bg-zinc-700 p-4 font-mono text-white;
 }
 
 .tiptap pre code {
-  @apply bg-transparent text-inherit text-sm p-0;
+  @apply bg-transparent p-0 text-sm text-inherit;
 }
 
 .tiptap blockquote {
-  @apply border-l-4 border-gray-300 mt-6 mb-6 pl-4;
+  @apply mb-6 mt-6 border-l-4 border-gray-300 pl-4;
 }
 
 .tiptap hr {
-  @apply border-none border-t border-gray-200 mt-8 mb-8;
+  @apply mb-8 mt-8 border-t border-none border-gray-200;
 }
 
 .tiptap p.is-editor-empty {

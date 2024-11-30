@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
+
 import { api } from '@/lib/axios'
 import { University } from '@/schema/entity'
-import { useQuery } from '@tanstack/react-query'
 
 export const useUniversity = (queryKey: string[], universityId: number | undefined) => {
   return useQuery<University>({

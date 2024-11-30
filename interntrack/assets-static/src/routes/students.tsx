@@ -1,3 +1,5 @@
+import { useParams } from 'react-router-dom'
+
 import {
   Table,
   TableBody,
@@ -10,7 +12,6 @@ import {
 import { Unauthorized } from '@/components/unauthorized'
 import { usePaginatedUsers } from '@/hooks/use-user'
 import { useAuthStore } from '@/store/auth'
-import { useParams } from 'react-router-dom'
 
 export function Student() {
   const { token } = useAuthStore()
@@ -28,8 +29,8 @@ export function Student() {
   }
 
   return (
-    <div className='p-4 flex flex-col items-center space-y-4'>
-      <h1 className='text-2xl font-bold'>Students</h1>
+    <div className="p-4 flex flex-col items-center space-y-4">
+      <h1 className="text-2xl font-bold">Students</h1>
       <Table>
         <TableCaption>List of Students at University Technology MARA Shah Alam</TableCaption>
         <TableHeader>
@@ -40,8 +41,8 @@ export function Student() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {students?.data?.map((student) => (
-            <TableRow className='cursor-pointer' key={student.userId}>
+          {students?.data?.map(student => (
+            <TableRow className="cursor-pointer" key={student.userId}>
               <TableCell>{student.name}</TableCell>
               <TableCell>{student.email}</TableCell>
               <TableCell>{student.university?.name}</TableCell>

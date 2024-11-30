@@ -1,9 +1,10 @@
 import { Color } from '@tiptap/extension-color'
-import { Placeholder } from '@tiptap/extension-placeholder'
 import ListItem from '@tiptap/extension-list-item'
+import { Placeholder } from '@tiptap/extension-placeholder'
 import TextStyle from '@tiptap/extension-text-style'
 import { EditorProvider } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
+
 import { MenuBar } from '@/components/menu-bar'
 
 const extensions = [
@@ -34,7 +35,7 @@ export function RichEditor(props: RichEditorProps) {
   const { content, onUpdate, mode } = props
 
   return (
-    <div className='border border-gray-200 space-y-2 p-2 rounded'>
+    <div className="border border-gray-200 space-y-2 p-2 rounded">
       <span>tf {mode}</span>
       <EditorProvider
         editable={mode === 'edit'}

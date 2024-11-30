@@ -1,3 +1,7 @@
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import { zodResolver } from '@hookform/resolvers/zod'
+
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -10,9 +14,6 @@ import {
 import { Input } from '@/components/ui/input'
 import { useLogin } from '@/hooks/use-auth'
 import { LoginInput, LoginSchema } from '@/schema/login'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 
 export function LoginForm() {
   const navigate = useNavigate()
@@ -31,15 +32,15 @@ export function LoginForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-2'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
         <FormField
           control={form.control}
-          name='email'
+          name="email"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type='email' placeholder='user@mail.com' {...field} />
+                <Input type="email" placeholder="user@mail.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -48,20 +49,20 @@ export function LoginForm() {
 
         <FormField
           control={form.control}
-          name='password'
+          name="password"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type='password' placeholder='********' {...field} />
+                <Input type="password" placeholder="********" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className='flex justify-center pt-8'>
-          <Button type='submit'>Login</Button>
+        <div className="flex justify-center pt-8">
+          <Button type="submit">Login</Button>
         </div>
       </form>
     </Form>

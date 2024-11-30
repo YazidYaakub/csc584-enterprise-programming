@@ -1,3 +1,8 @@
+import { useCallback, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
+import { GraduationCap } from 'lucide-react'
+
 import { ErrorFull } from '@/components/error-full'
 import { LoadingFull } from '@/components/loading-full'
 import { Card } from '@/components/ui/card'
@@ -12,10 +17,6 @@ import {
 } from '@/components/ui/table'
 import { useUniversity } from '@/hooks/use-university'
 import { usePaginatedUsers } from '@/hooks/use-user'
-import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
-import { GraduationCap } from 'lucide-react'
-import { useCallback, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
 
 export function University() {
   const { universityId } = useParams()
@@ -56,26 +57,26 @@ export function University() {
 
   const nonDisplay = ['universityId', 'latitude', 'longitude', 'logoLink']
 
-  if (isPending) return <LoadingFull message='Loading university...' />
+  if (isPending) return <LoadingFull message="Loading university..." />
   if (error) return <ErrorFull message={error.message} />
 
   return (
-    <div className='p-4 flex flex-col space-y-4'>
-      <div className='flex space-x-4 items-center justify-center'>
+    <div className="p-4 flex flex-col space-y-4">
+      <div className="flex space-x-4 items-center justify-center">
         {university.logoLink ? (
-          <img src={university.logoLink} alt={`${university.name} logo`} className='h-12' />
+          <img src={university.logoLink} alt={`${university.name} logo`} className="h-12" />
         ) : (
-          <GraduationCap className='size-8 text-primary' />
+          <GraduationCap className="size-8 text-primary" />
         )}
       </div>
       <Table>
         <TableBody>
           {(Object.keys(university) as (keyof typeof university)[])
-            .filter((key) => !nonDisplay.includes(key))
-            .map((key) => (
+            .filter(key => !nonDisplay.includes(key))
+            .map(key => (
               <TableRow key={key}>
                 <TableCell>
-                  {key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
+                  {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
                 </TableCell>
                 <TableCell>{university[key] ?? '-'}</TableCell>
               </TableRow>
@@ -83,7 +84,7 @@ export function University() {
         </TableBody>
       </Table>
       {isLoaded && university.latitude && university.longitude && (
-        <div className='flex items-center justify-center'>
+        <div className="flex items-center justify-center">
           <GoogleMap
             mapContainerStyle={{ width: '600px', height: '400px' }}
             center={{
@@ -119,8 +120,8 @@ export function University() {
           </GoogleMap>
         </div>
       )}
-      <div className='flex space-x-4'>
-        <Card className='flex-1 p-4'>
+      <div className="flex space-x-4">
+        <Card className="flex-1 p-4">
           <Table>
             <TableCaption>List of advisors registered in {university.name}</TableCaption>
             <TableHeader>
@@ -131,9 +132,9 @@ export function University() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {advisors?.data?.map((advisor) => (
+              {advisors?.data?.map(advisor => (
                 <TableRow
-                  className='cursor-pointer'
+                  className="cursor-pointer"
                   key={advisor.userId}
                   onClick={() => navigate(`/profile/${advisor.userId}`)}
                 >
@@ -145,7 +146,7 @@ export function University() {
             </TableBody>
           </Table>
         </Card>
-        <Card className='flex-1 p-4'>
+        <Card className="flex-1 p-4">
           <Table>
             <TableCaption>List of students taking courses in {university.name}</TableCaption>
             <TableHeader>
@@ -156,9 +157,9 @@ export function University() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {students?.data?.map((student) => (
+              {students?.data?.map(student => (
                 <TableRow
-                  className='cursor-pointer'
+                  className="cursor-pointer"
                   key={student.userId}
                   onClick={() => navigate(`/profile/${student.userId}`)}
                 >

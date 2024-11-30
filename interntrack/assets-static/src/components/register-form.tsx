@@ -1,3 +1,7 @@
+import { Fragment } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -17,9 +21,6 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { RegisterInput, RegisterSchema } from '@/schema/register'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Fragment } from 'react'
-import { useForm } from 'react-hook-form'
 
 export function RegisterForm() {
   const universities = ['Stanford University', 'Harvard University', 'MIT', 'UiTM']
@@ -38,23 +39,23 @@ export function RegisterForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-2'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
         <FormField
           control={form.control}
-          name='role'
+          name="role"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Role</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder='Role for using the system' />
+                    <SelectValue placeholder="Role for using the system" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value='ADVISOR'>Advisor</SelectItem>
-                  <SelectItem value='SUPERVISOR'>Supervisor</SelectItem>
-                  <SelectItem value='STUDENT'>Student</SelectItem>
+                  <SelectItem value="ADVISOR">Advisor</SelectItem>
+                  <SelectItem value="SUPERVISOR">Supervisor</SelectItem>
+                  <SelectItem value="STUDENT">Student</SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription>
@@ -66,7 +67,7 @@ export function RegisterForm() {
           )}
         />
 
-        {['STUDENT', 'ADVISOR', 'SUPERVISOR'].map((role) => {
+        {['STUDENT', 'ADVISOR', 'SUPERVISOR'].map(role => {
           if (form.watch('role') === role) {
             const isStudent = role === 'STUDENT'
             const isAdvisor = role === 'ADVISOR'
@@ -77,18 +78,18 @@ export function RegisterForm() {
                 {(isStudent || isAdvisor) && (
                   <FormField
                     control={form.control}
-                    name='university'
+                    name="university"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>University</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder='Choose your institute' />
+                              <SelectValue placeholder="Choose your institute" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {universities.map((university) => (
+                            {universities.map(university => (
                               <SelectItem key={university} value={university}>
                                 {university}
                               </SelectItem>
@@ -102,18 +103,18 @@ export function RegisterForm() {
                 {(isStudent || isSupervisor) && (
                   <FormField
                     control={form.control}
-                    name='company'
+                    name="company"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Company</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder='Choose your work place' />
+                              <SelectValue placeholder="Choose your work place" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {companies.map((company) => (
+                            {companies.map(company => (
                               <SelectItem key={company} value={company}>
                                 {company}
                               </SelectItem>
@@ -132,12 +133,12 @@ export function RegisterForm() {
 
         <FormField
           control={form.control}
-          name='email'
+          name="email"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type='email' placeholder='user@mail.com' {...field} />
+                <Input type="email" placeholder="user@mail.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -146,12 +147,12 @@ export function RegisterForm() {
 
         <FormField
           control={form.control}
-          name='password'
+          name="password"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type='password' placeholder='********' {...field} />
+                <Input type="password" placeholder="********" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -160,20 +161,20 @@ export function RegisterForm() {
 
         <FormField
           control={form.control}
-          name='name'
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder='John Doe' {...field} />
+                <Input placeholder="John Doe" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className='flex justify-center pt-8'>
-          <Button type='submit'>Register</Button>
+        <div className="flex justify-center pt-8">
+          <Button type="submit">Register</Button>
         </div>
       </form>
     </Form>

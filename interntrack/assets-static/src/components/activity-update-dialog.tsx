@@ -1,3 +1,7 @@
+import { useState } from 'react'
+import { Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
+
 import { RichEditor } from '@/components/rich-editor'
 import { Button } from '@/components/ui/button'
 import { DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -5,9 +9,6 @@ import { Input } from '@/components/ui/input'
 import { useUpdateActivity } from '@/hooks/use-activity'
 import { Activity, UpdateActivitySchema } from '@/schema/activity'
 import { useActivityStore } from '@/store/activity'
-import { Loader2 } from 'lucide-react'
-import { useState } from 'react'
-import { toast } from 'sonner'
 
 type ActivityUpdateDialogProps = {
   activity: Activity
@@ -43,22 +44,22 @@ export function ActivityUpdateDialog(props: ActivityUpdateDialogProps) {
   }
 
   return (
-    <DialogContent className='max-w-[900px] w-[900px]'>
+    <DialogContent className="max-w-[900px] w-[900px]">
       <DialogHeader>
         <DialogTitle>
           {mode === 'edit' ? 'Update activity log entry' : activity.activityTitle}
         </DialogTitle>
       </DialogHeader>
-      <div className='space-y-4'>
-        {mode === 'edit' && <Input value={title} onChange={(e) => setTitle(e.target.value)} />}
+      <div className="space-y-4">
+        {mode === 'edit' && <Input value={title} onChange={e => setTitle(e.target.value)} />}
         <RichEditor mode={mode} content={content} onUpdate={setContent} />
       </div>
       <DialogFooter>
-        <Button variant='outline' onClick={onCloseUpdateActivity}>
+        <Button variant="outline" onClick={onCloseUpdateActivity}>
           Cancel
         </Button>
         <Button onClick={onUpdateActivity} disabled={updateActivity.isPending}>
-          {updateActivity.isPending && <Loader2 className='animate-spin' />}
+          {updateActivity.isPending && <Loader2 className="animate-spin" />}
           Save
         </Button>
       </DialogFooter>

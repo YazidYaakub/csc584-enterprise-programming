@@ -1,3 +1,8 @@
+import { useCallback, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
+import { Briefcase } from 'lucide-react'
+
 import { ErrorFull } from '@/components/error-full'
 import { LoadingFull } from '@/components/loading-full'
 import { Card } from '@/components/ui/card'
@@ -12,10 +17,6 @@ import {
 } from '@/components/ui/table'
 import { useCompany } from '@/hooks/use-company'
 import { usePaginatedUsers } from '@/hooks/use-user'
-import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
-import { Briefcase } from 'lucide-react'
-import { useCallback, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
 
 export function Company() {
   const { companyId } = useParams()
@@ -59,26 +60,26 @@ export function Company() {
 
   const nonDisplay = ['companyId', 'latitude', 'longitude', 'logoLink']
 
-  if (isPending) return <LoadingFull message='Loading company...' />
+  if (isPending) return <LoadingFull message="Loading company..." />
   if (error) return <ErrorFull message={error.message} />
 
   return (
-    <div className='p-4 flex flex-col space-y-4'>
-      <div className='flex space-x-4 items-center justify-center'>
+    <div className="p-4 flex flex-col space-y-4">
+      <div className="flex space-x-4 items-center justify-center">
         {company.logoLink ? (
-          <img src={company.logoLink} alt={`${company.name} logo`} className='h-8' />
+          <img src={company.logoLink} alt={`${company.name} logo`} className="h-8" />
         ) : (
-          <Briefcase className='size-8 text-primary' />
+          <Briefcase className="size-8 text-primary" />
         )}
       </div>
       <Table>
         <TableBody>
           {(Object.keys(company) as (keyof typeof company)[])
-            .filter((key) => !nonDisplay.includes(key))
-            .map((key) => (
+            .filter(key => !nonDisplay.includes(key))
+            .map(key => (
               <TableRow key={key}>
                 <TableCell>
-                  {key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
+                  {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
                 </TableCell>
                 <TableCell>{company[key] ?? '-'}</TableCell>
               </TableRow>
@@ -86,7 +87,7 @@ export function Company() {
         </TableBody>
       </Table>
       {isLoaded && company.latitude && company.longitude && (
-        <div className='flex items-center justify-center'>
+        <div className="flex items-center justify-center">
           <GoogleMap
             mapContainerStyle={{ width: '600px', height: '400px' }}
             center={{ lat: company.latitude, lng: company.longitude }}
@@ -113,8 +114,8 @@ export function Company() {
           </GoogleMap>
         </div>
       )}
-      <div className='flex space-x-4'>
-        <Card className='flex-1 p-4'>
+      <div className="flex space-x-4">
+        <Card className="flex-1 p-4">
           <Table>
             <TableCaption>List of supervisors registered in {company.name}</TableCaption>
             <TableHeader>
@@ -125,9 +126,9 @@ export function Company() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {supervisors?.data?.map((supervisor) => (
+              {supervisors?.data?.map(supervisor => (
                 <TableRow
-                  className='cursor-pointer'
+                  className="cursor-pointer"
                   key={supervisor.userId}
                   onClick={() => navigate(`/profile/${supervisor.userId}`)}
                 >
@@ -139,7 +140,7 @@ export function Company() {
             </TableBody>
           </Table>
         </Card>
-        <Card className='flex-1 p-4'>
+        <Card className="flex-1 p-4">
           <Table>
             <TableCaption>List of students doing internship in {company.name}</TableCaption>
             <TableHeader>
@@ -150,9 +151,9 @@ export function Company() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {students?.data.map((student) => (
+              {students?.data.map(student => (
                 <TableRow
-                  className='cursor-pointer'
+                  className="cursor-pointer"
                   key={student.userId}
                   onClick={() => navigate(`/profile/${student.userId}`)}
                 >

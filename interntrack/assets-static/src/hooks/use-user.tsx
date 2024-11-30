@@ -1,9 +1,10 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
+
 import { api } from '@/lib/axios'
 import { EditUserInput } from '@/schema/edit-user'
 import { User } from '@/schema/entity'
 import { Pagination } from '@/schema/pagination'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 
 export const usePaginatedUsers = (
   queryKey: string[],
@@ -48,6 +49,6 @@ export const useUpdateUser = (userId: number, message: string, callback?: () => 
       queryClient.invalidateQueries({ queryKey: ['user', userId] })
       if (callback) callback()
     },
-    onError: (error) => toast.error(error.message)
+    onError: error => toast.error(error.message)
   })
 }

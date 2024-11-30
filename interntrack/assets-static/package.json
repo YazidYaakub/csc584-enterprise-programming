@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build && rm -rf ../src/main/resources/static/* && cp -r dist/* ../src/main/resources/static/ ",
     "build:windows": "tsc -b && vite build && rd /s /q ..\\src\\main\\resources\\static && mkdir ..\\src\\main\\resources\\static && xcopy /e /i /y dist ..\\src\\main\\resources\\static",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -49,6 +50,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
+    "@ianvs/prettier-plugin-sort-imports": "^4.4.0",
     "@types/node": "^22.9.1",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
@@ -60,6 +62,7 @@
     "globals": "^15.9.0",
     "postcss": "^8.4.49",
     "prettier": "^3.4.1",
+    "prettier-plugin-tailwindcss": "^0.6.9",
     "tailwindcss": "^3.4.15",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.7.0",

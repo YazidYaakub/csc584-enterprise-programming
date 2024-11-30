@@ -1,3 +1,19 @@
+import { ForwardRefExoticComponent, RefAttributes, useCallback, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import {
+  BookUser,
+  Briefcase,
+  ChevronsLeft,
+  ChevronsRight,
+  ChevronUp,
+  GraduationCap,
+  LucideProps,
+  Scroll,
+  Shield,
+  User
+} from 'lucide-react'
+import { toast } from 'sonner'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,21 +32,6 @@ import {
   useSidebar
 } from '@/components/ui/sidebar'
 import { useAuthStore } from '@/store/auth'
-import {
-  BookUser,
-  Briefcase,
-  ChevronsLeft,
-  ChevronsRight,
-  ChevronUp,
-  GraduationCap,
-  LucideProps,
-  Scroll,
-  Shield,
-  User
-} from 'lucide-react'
-import { ForwardRefExoticComponent, RefAttributes, useCallback, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'sonner'
 
 export function AppSidebar() {
   const { toggleSidebar, open } = useSidebar()
@@ -122,17 +123,17 @@ export function AppSidebar() {
   }
 
   return (
-    <Sidebar collapsible='icon'>
+    <Sidebar collapsible="icon">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton onClick={() => navigate('')}>
               <img
-                src='/edutech-solutions.png'
-                alt='edutech-logo'
-                className='[[data-state=expanded]_&]:h-8'
+                src="/edutech-solutions.png"
+                alt="edutech-logo"
+                className="[[data-state=expanded]_&]:h-8"
               />
-              <span className='font-medium text-lg'>Interntrack System</span>
+              <span className="font-medium text-lg">Interntrack System</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -141,11 +142,11 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem></SidebarMenuItem>
-            {menus.map((menu) => (
+            {menus.map(menu => (
               <SidebarMenuItem key={menu.label}>
                 <SidebarMenuButton asChild>
                   <Link to={menu.link}>
-                    <menu.icon className='text-primary' />
+                    <menu.icon className="text-primary" />
                     <span>{menu.label}</span>
                   </Link>
                 </SidebarMenuButton>
@@ -160,11 +161,11 @@ export function AppSidebar() {
             <SidebarMenuButton onClick={toggleSidebar}>
               {open ? (
                 <>
-                  <ChevronsLeft className='text-primary' />
+                  <ChevronsLeft className="text-primary" />
                   Collapse
                 </>
               ) : (
-                <ChevronsRight className='text-primary' />
+                <ChevronsRight className="text-primary" />
               )}
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -172,15 +173,15 @@ export function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User className='text-primary' /> {token?.name}
-                  <ChevronUp className='ml-auto text-primary' />
+                  <User className="text-primary" /> {token?.name}
+                  <ChevronUp className="ml-auto text-primary" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
-              <DropdownMenuContent side='top' className='w-[--radix-popper-anchor-width]'>
+              <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
                 <DropdownMenuItem asChild>
                   <Link to={`profile/${token?.userId}`}>Profile</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem className='focus:bg-red-100' onSelect={onLogout}>
+                <DropdownMenuItem className="focus:bg-red-100" onSelect={onLogout}>
                   Log Out
                 </DropdownMenuItem>
               </DropdownMenuContent>

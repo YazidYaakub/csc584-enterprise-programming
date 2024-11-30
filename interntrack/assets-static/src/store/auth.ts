@@ -1,6 +1,7 @@
-import { User } from '@/schema/entity'
 import { z } from 'zod'
 import { create } from 'zustand'
+
+import { User } from '@/schema/entity'
 
 const TokenSchema = z.object({
   userId: z.number(),
@@ -31,9 +32,9 @@ type AuthStore = {
   logout: () => void
 }
 
-export const useAuthStore = create<AuthStore>((set) => ({
+export const useAuthStore = create<AuthStore>(set => ({
   isAuthenticated: !!localStorage.getItem('interntrack-token'),
-  setAuthenticated: (token) => set({ isAuthenticated: true, token }),
+  setAuthenticated: token => set({ isAuthenticated: true, token }),
 
   token: undefined,
   getToken: () => {
@@ -64,10 +65,10 @@ export const useAuthStore = create<AuthStore>((set) => ({
   },
 
   advisor: undefined,
-  setAdvisor: (advisor) => set({ advisor }),
+  setAdvisor: advisor => set({ advisor }),
 
   supervisor: undefined,
-  setSupervisor: (supervisor) => set({ supervisor }),
+  setSupervisor: supervisor => set({ supervisor }),
 
   logout: () => {
     localStorage.removeItem('interntrack-token')

@@ -1,5 +1,6 @@
-import { Activity } from '@/schema/activity'
 import { create } from 'zustand'
+
+import { Activity } from '@/schema/activity'
 
 type useActivityStore = {
   selectedMonth: string
@@ -17,9 +18,9 @@ type useActivityStore = {
   }) => void
 }
 
-export const useActivityStore = create<useActivityStore>((set) => ({
+export const useActivityStore = create<useActivityStore>(set => ({
   selectedMonth: (new Date().getMonth() + 1).toString(),
-  setSelectedMonth: (selectedMonth) => set({ selectedMonth }),
+  setSelectedMonth: selectedMonth => set({ selectedMonth }),
 
   openUpdateActivity: {
     open: false,

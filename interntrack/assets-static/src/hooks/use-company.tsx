@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
+
 import { api } from '@/lib/axios'
 import { Company } from '@/schema/entity'
-import { useQuery } from '@tanstack/react-query'
 
 export const useCompany = (queryKey: string[], companyId: number | undefined) => {
   return useQuery<Company>({

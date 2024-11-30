@@ -1,3 +1,5 @@
+import { createBrowserRouter, Navigate } from 'react-router-dom'
+
 import { About } from '@/routes/about'
 import { ActivityRoute } from '@/routes/activity'
 import { Admin } from '@/routes/admin'
@@ -10,12 +12,11 @@ import { Root } from '@/routes/root.tsx'
 import { Student } from '@/routes/students'
 import { University } from '@/routes/university'
 import { useAuthStore } from '@/store/auth'
-import { createBrowserRouter, Navigate } from 'react-router-dom'
 
 const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
   const { isAuthenticated } = useAuthStore()
 
-  return isAuthenticated ? element : <Navigate to='/auth' />
+  return isAuthenticated ? element : <Navigate to="/auth" />
 }
 
 export const router = createBrowserRouter([

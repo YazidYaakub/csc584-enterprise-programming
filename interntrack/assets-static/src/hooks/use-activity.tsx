@@ -1,10 +1,11 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
+
 import { api } from '@/lib/axios'
 import { Activity, CreateActivity, UpdateActivity } from '@/schema/activity'
 import { Pagination } from '@/schema/pagination'
 import { useActivityStore } from '@/store/activity'
 import { useAuthStore } from '@/store/auth'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 
 export const useCreateActivity = (
   message: string = 'Activity log successfully created',
@@ -22,7 +23,7 @@ export const useCreateActivity = (
       // setOpenActivityLog(false)
       if (callback) callback()
     },
-    onError: (error) => toast.error(error.message)
+    onError: error => toast.error(error.message)
   })
 }
 
@@ -54,7 +55,7 @@ export const useUpdateActivity = (message: string, callback?: () => object | voi
       queryClient.invalidateQueries({ queryKey: ['activity', selectedMonth] })
       if (callback) callback()
     },
-    onError: (error) => toast.error(error.message)
+    onError: error => toast.error(error.message)
   })
 }
 
@@ -73,6 +74,6 @@ export const useDeleteActivity = (
       queryClient.invalidateQueries({ queryKey: ['activity', selectedMonth] })
       if (callback) callback()
     },
-    onError: (error) => toast.error(error.message)
+    onError: error => toast.error(error.message)
   })
 }
