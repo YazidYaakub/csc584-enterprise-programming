@@ -12,12 +12,12 @@ import { useAuthStore } from '@/store/auth'
 import { useParams } from 'react-router-dom'
 
 export function Intern() {
-  const { user } = useAuthStore()
+  const { token } = useAuthStore()
   const { companyId } = useParams()
 
   const { data: interns } = usePaginatedUsers(['student', companyId ?? 'company', 'intern-table'], {
     role: 'STUDENT',
-    companyId: user?.companyId
+    companyId: token?.companyId
   })
 
   return (

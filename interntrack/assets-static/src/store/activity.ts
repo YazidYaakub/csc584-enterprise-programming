@@ -8,8 +8,13 @@ type useActivityStore = {
   openUpdateActivity: {
     open: boolean
     activity: Activity | undefined
+    mode: 'view' | 'edit'
   }
-  setOpenUpdateActivity: (args: { open: boolean; activity: Activity | undefined }) => void
+  setOpenUpdateActivity: (args: {
+    open: boolean
+    activity: Activity | undefined
+    mode: 'view' | 'edit'
+  }) => void
 }
 
 export const useActivityStore = create<useActivityStore>((set) => ({
@@ -18,7 +23,11 @@ export const useActivityStore = create<useActivityStore>((set) => ({
 
   openUpdateActivity: {
     open: false,
-    activity: undefined
+    activity: undefined,
+    mode: 'view'
   },
-  setOpenUpdateActivity: ({ open, activity }) => set({ openUpdateActivity: { open, activity } })
+  setOpenUpdateActivity: ({ open, activity, mode }) => {
+    console.log('mode', mode)
+    set({ openUpdateActivity: { open, activity, mode } })
+  }
 }))

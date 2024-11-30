@@ -10,12 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import uitm.interntrack.dto.UserDTO;
 import uitm.interntrack.entity.User;
 import uitm.interntrack.entity.User.UpdateUserDTO;
+import uitm.interntrack.entity.User.UserDTO;
 import uitm.interntrack.repository.UserRepository;
 
 @Service
@@ -23,9 +20,6 @@ public class UserService {
 
   @Autowired
   private UserRepository userRepository;
-
-  @Autowired
-  private ObjectMapper objectMapper;
 
   public User createUser(User user) {
     return userRepository.save(user);
@@ -42,10 +36,7 @@ public class UserService {
       throw new RuntimeException("Invalid password");
     }
 
-    String token = JwtTokenGenerator.generateToken(
-        user.get().getEmail(),
-        user.get().getName(),
-        user.get().getRole());
+    String token = JwtTokenGenerator.generateToken(new UserDTO(user.get()));
 
     Map<String, Object> response = new HashMap<>();
     response.put("token", token);
@@ -59,10 +50,11 @@ public class UserService {
     Integer end = start + size - 1;
 
     List<User> users = userRepository.getUsers(start, end, role, universityId, companyId);
+    List<UserDTO> userDTOs = users.stream().map(UserDTO::new).toList();
     Long totalCount = userRepository.countUsers(role);
 
     Map<String, Object> response = new HashMap<>();
-    response.put("data", users);
+    response.put("data", userDTOs);
     response.put("total", totalCount);
     response.put("page", page);
     response.put("size", size);
@@ -73,39 +65,39 @@ public class UserService {
   public User getUser(Long id) {
     User user = userRepository.getUser(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-    UserDTO userDTO = new UserDTO(user);
+    // UserDTO userDTO = new UserDTO(user);
 
     // if role is STUDENT, get references by student, else get references by advisor
     // else get references by supervisor
-    List<Object[]> references = userRepository.getReferencesByStudent(id);
+    // List<Object[]> references = userRepository.getReferencesByStudent(id);
 
-    if (!references.isEmpty()) {
+    // if (!references.isEmpty()) {
 
-      Object[] reference = references.get(0);
+    // Object[] reference = references.get(0);
 
-      String studentName = (String) reference[0];
-      String advisorName = (String) reference[1];
-      String supervisorName = (String) reference[2];
+    // String studentName = (String) reference[0];
+    // String advisorName = (String) reference[1];
+    // String supervisorName = (String) reference[2];
 
-      UserDTO.Student student = new UserDTO.Student();
-      student.setName(studentName);
-      userDTO.setStudent(student);
+    // UserDTO.Student student = new UserDTO.Student();
+    // student.setName(studentName);
+    // userDTO.setStudent(student);
 
-      UserDTO.Advisor advisor = new UserDTO.Advisor();
-      advisor.setName(advisorName);
-      userDTO.setAdvisor(advisor);
+    // UserDTO.Advisor advisor = new UserDTO.Advisor();
+    // advisor.setName(advisorName);
+    // userDTO.setAdvisor(advisor);
 
-      UserDTO.Supervisor supervisor = new UserDTO.Supervisor();
-      supervisor.setName(supervisorName);
-      userDTO.setSupervisor(supervisor);
+    // UserDTO.Supervisor supervisor = new UserDTO.Supervisor();
+    // supervisor.setName(supervisorName);
+    // userDTO.setSupervisor(supervisor);
 
-      try {
-        String json = objectMapper.writeValueAsString(userDTO);
-        System.out.println(json);
-      } catch (JsonProcessingException e) {
-        e.printStackTrace();
-      }
-    }
+    // try {
+    // String json = objectMapper.writeValueAsString(userDTO);
+    // System.out.println(json);
+    // } catch (JsonProcessingException e) {
+    // e.printStackTrace();
+    // }
+    // }
 
     return user;
   }

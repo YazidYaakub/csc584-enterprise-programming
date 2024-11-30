@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { MapPin } from 'lucide-react'
 
 type UniversityCardContentProps = {
-  universityId: string
+  universityId: number
 }
 
 export function UniversityCardContent(props: UniversityCardContentProps) {

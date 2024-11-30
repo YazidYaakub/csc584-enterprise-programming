@@ -6,7 +6,7 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 import { Toaster } from 'sonner'
 
-import './index.css'
+import '@/index.css'
 
 const queryClient = new QueryClient()
 

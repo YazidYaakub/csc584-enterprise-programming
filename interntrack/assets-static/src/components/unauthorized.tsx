@@ -1,19 +1,19 @@
+import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/store/auth'
 import { TriangleAlert } from 'lucide-react'
-import { Button } from './ui/button'
 import { Link } from 'react-router-dom'
 
 export function Unauthorized() {
-  const { user } = useAuthStore()
+  const { token } = useAuthStore()
 
   let path = '/'
 
-  if (user) {
-    if (user.role === 'STUDENT') {
+  if (token) {
+    if (token.role === 'STUDENT') {
       path = '/activity-log'
-    } else if (user.role === 'ADVISOR') {
+    } else if (token.role === 'ADVISOR') {
       path = '/students'
-    } else if (user.role === 'SUPERVISOR') {
+    } else if (token.role === 'SUPERVISOR') {
       path = '/activity'
     }
   }

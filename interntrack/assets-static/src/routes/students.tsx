@@ -13,17 +13,17 @@ import { useAuthStore } from '@/store/auth'
 import { useParams } from 'react-router-dom'
 
 export function Student() {
-  const { user } = useAuthStore()
+  const { token } = useAuthStore()
   const { universityId } = useParams()
   const { data: students } = usePaginatedUsers(
     ['student', universityId ?? 'university', 'student-table'],
     {
       role: 'STUDENT',
-      universityId: user?.universityId
+      universityId: token?.universityId
     }
   )
 
-  if (user?.role !== 'ADVISOR') {
+  if (token?.role !== 'ADVISOR') {
     return <Unauthorized />
   }
 

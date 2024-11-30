@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import uitm.interntrack.entity.User;
 import uitm.interntrack.repository.UserRepository;
+import uitm.interntrack.entity.User.UserDTO;
 
 @Service
 public class AuthService {
@@ -29,10 +30,7 @@ public class AuthService {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid password");
     }
 
-    String token = JwtTokenGenerator.generateToken(
-        user.get().getEmail(),
-        user.get().getName(),
-        user.get().getRole());
+    String token = JwtTokenGenerator.generateToken(new UserDTO(user.get()));
 
     Map<String, Object> response = new HashMap<>();
     response.put("token", token);

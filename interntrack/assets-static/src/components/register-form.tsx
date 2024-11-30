@@ -1,8 +1,3 @@
-import { Fragment } from 'react'
-import { Input } from '@/components/ui/input'
-import { RegisterInput, RegisterSchema } from '@/schema/register'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -13,7 +8,18 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
+import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
+import { RegisterInput, RegisterSchema } from '@/schema/register'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Fragment } from 'react'
+import { useForm } from 'react-hook-form'
 
 export function RegisterForm() {
   const universities = ['Stanford University', 'Harvard University', 'MIT', 'UiTM']

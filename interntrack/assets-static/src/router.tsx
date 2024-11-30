@@ -29,9 +29,13 @@ export const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       { index: true, element: <About /> },
+      // TODO: should protected by student consultant
       { path: 'activity/:userId', element: <ActivityRoute /> },
-      { path: 'profile/:id', element: <Profile /> },
+      // TODO: should protected by token
+      { path: 'profile/:userId', element: <Profile /> },
+      // TODO: should have protected with current user universityId (consultant) (table for related only)
       { path: 'students', element: <Student /> },
+      // TODO: should have protected with current user companyId (consultant)
       { path: 'interns', element: <Intern /> },
       {
         path: 'company',

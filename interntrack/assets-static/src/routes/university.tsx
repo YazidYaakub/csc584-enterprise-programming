@@ -1,3 +1,5 @@
+import { ErrorFull } from '@/components/error-full'
+import { LoadingFull } from '@/components/loading-full'
 import { Card } from '@/components/ui/card'
 import {
   Table,
@@ -8,14 +10,16 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
+import { useUniversity } from '@/hooks/use-university'
 import { usePaginatedUsers } from '@/hooks/use-user'
-import { center } from '@/lib/google-map'
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
+import { GraduationCap } from 'lucide-react'
 import { useCallback, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 export function University() {
   const { universityId } = useParams()
+  const navigate = useNavigate()
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_API ?? ''
@@ -25,68 +29,88 @@ export function University() {
     ['advisor', universityId ?? 'university', 'advisor-table'],
     { role: 'ADVISOR', universityId: Number(universityId) }
   )
-
   const { data: students } = usePaginatedUsers(
     ['student', universityId ?? 'university', 'student-table'],
     { role: 'STUDENT', universityId: Number(universityId) }
   )
+  const { data: university, isPending, error } = useUniversity(['university'], Number(universityId))
 
   const [map, setMap] = useState<google.maps.Map | null>(null)
 
-  const onLoad = useCallback(function callback(map: google.maps.Map) {
-    const bounds = new window.google.maps.LatLngBounds(center)
-    map.fitBounds(bounds)
+  const onLoad = useCallback(
+    function callback(map: google.maps.Map) {
+      const bounds = new window.google.maps.LatLngBounds({
+        lat: university?.latitude ?? 0,
+        lng: university?.longitude ?? 0
+      })
+      map.fitBounds(bounds)
 
-    setMap(map)
-  }, [])
+      setMap(map)
+    },
+    [university?.latitude, university?.longitude]
+  )
 
   const onUnmount = useCallback(function callback() {
     setMap(null)
   }, [])
 
-  const university = {
-    name: 'UiTM Shah Alam',
-    location: 'Shah Alam, Selangor, Malaysia'
-  }
+  const nonDisplay = ['universityId', 'latitude', 'longitude', 'logoLink']
+
+  if (isPending) return <LoadingFull message='Loading university...' />
+  if (error) return <ErrorFull message={error.message} />
 
   return (
     <div className='p-4 flex flex-col space-y-4'>
       <div className='flex space-x-4 items-center justify-center'>
-        <img
-          src='https://static.wixstatic.com/media/b2f731_d7732210aabb493295a23edb6cf59335~mv2.png/v1/fill/w_560,h_658,al_c,q_90,usm_0.66_1.00_0.01,enc_auto/b2f731_d7732210aabb493295a23edb6cf59335~mv2.png'
-          alt={`${university.name} logo`}
-          className='h-12'
-        />
+        {university.logoLink ? (
+          <img src={university.logoLink} alt={`${university.name} logo`} className='h-12' />
+        ) : (
+          <GraduationCap className='size-8 text-primary' />
+        )}
       </div>
       <Table>
         <TableBody>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>{university.name}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Location</TableCell>
-            <TableCell>{university.location}</TableCell>
-          </TableRow>
+          {(Object.keys(university) as (keyof typeof university)[])
+            .filter((key) => !nonDisplay.includes(key))
+            .map((key) => (
+              <TableRow key={key}>
+                <TableCell>
+                  {key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
+                </TableCell>
+                <TableCell>{university[key] ?? '-'}</TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
-      {isLoaded && (
+      {isLoaded && university.latitude && university.longitude && (
         <div className='flex items-center justify-center'>
           <GoogleMap
             mapContainerStyle={{ width: '600px', height: '400px' }}
-            center={center}
+            center={{
+              lat: university.latitude,
+              lng: university.longitude
+            }}
             zoom={10}
             onLoad={onLoad}
             onUnmount={onUnmount}
           >
             <Marker
-              position={center}
+              position={{
+                lat: university.latitude,
+                lng: university.longitude
+              }}
               onClick={() => {
                 const infowindow = new google.maps.InfoWindow({
                   content: 'Hello World'
                 })
                 infowindow.open({
-                  anchor: new google.maps.Marker({ position: center, map }),
+                  anchor: new google.maps.Marker({
+                    position: {
+                      lat: university.latitude ?? 0,
+                      lng: university.longitude ?? 0
+                    },
+                    map
+                  }),
                   map,
                   shouldFocus: false
                 })
@@ -96,7 +120,7 @@ export function University() {
         </div>
       )}
       <div className='flex space-x-4'>
-        <Card className='flex-1'>
+        <Card className='flex-1 p-4'>
           <Table>
             <TableCaption>List of advisors registered in {university.name}</TableCaption>
             <TableHeader>
@@ -108,7 +132,11 @@ export function University() {
             </TableHeader>
             <TableBody>
               {advisors?.data?.map((advisor) => (
-                <TableRow className='cursor-pointer' key={advisor.userId}>
+                <TableRow
+                  className='cursor-pointer'
+                  key={advisor.userId}
+                  onClick={() => navigate(`/profile/${advisor.userId}`)}
+                >
                   <TableCell>{advisor.name}</TableCell>
                   <TableCell>{advisor.email}</TableCell>
                   <TableCell>{advisor.role}</TableCell>
@@ -117,22 +145,26 @@ export function University() {
             </TableBody>
           </Table>
         </Card>
-        <Card className='flex-1'>
+        <Card className='flex-1 p-4'>
           <Table>
             <TableCaption>List of students taking courses in {university.name}</TableCaption>
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
                 <TableHead>Email</TableHead>
-                <TableHead>University</TableHead>
+                <TableHead>Company</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {students?.data?.map((student) => (
-                <TableRow className='cursor-pointer' key={student.userId}>
+                <TableRow
+                  className='cursor-pointer'
+                  key={student.userId}
+                  onClick={() => navigate(`/profile/${student.userId}`)}
+                >
                   <TableCell>{student.name}</TableCell>
                   <TableCell>{student.email}</TableCell>
-                  <TableCell>{student.role}</TableCell>
+                  <TableCell>{student.company?.name ?? '-'}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

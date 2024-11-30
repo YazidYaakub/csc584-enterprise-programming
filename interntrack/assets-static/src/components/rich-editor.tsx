@@ -4,7 +4,7 @@ import ListItem from '@tiptap/extension-list-item'
 import TextStyle from '@tiptap/extension-text-style'
 import { EditorProvider } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { MenuBar } from './menu-bar'
+import { MenuBar } from '@/components/menu-bar'
 
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -27,15 +27,18 @@ const extensions = [
 type RichEditorProps = {
   content: string | undefined
   onUpdate: (content: string) => void
+  mode: 'view' | 'edit'
 }
 
 export function RichEditor(props: RichEditorProps) {
-  const { content, onUpdate } = props
+  const { content, onUpdate, mode } = props
 
   return (
     <div className='border border-gray-200 space-y-2 p-2 rounded'>
+      <span>tf {mode}</span>
       <EditorProvider
-        slotBefore={<MenuBar />}
+        editable={mode === 'edit'}
+        slotBefore={mode === 'edit' ? <MenuBar /> : null}
         extensions={extensions}
         content={content}
         onUpdate={({ editor }) => onUpdate(editor.getHTML())}

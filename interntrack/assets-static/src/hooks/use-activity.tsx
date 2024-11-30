@@ -28,13 +28,13 @@ export const useCreateActivity = (
 
 export const usePaginatedActivity = () => {
   const { selectedMonth } = useActivityStore()
-  const { user } = useAuthStore()
+  const { token } = useAuthStore()
 
   return useQuery<Pagination<Activity>>({
     queryKey: ['activity', selectedMonth],
     queryFn: async () => {
       const { data } = await api().get('activity/', {
-        params: { month: selectedMonth, studentId: user?.userId }
+        params: { month: selectedMonth, studentId: token?.userId }
       })
       return data
     }

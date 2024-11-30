@@ -12,10 +12,11 @@ import { toast } from 'sonner'
 type ActivityUpdateDialogProps = {
   activity: Activity
   onCloseUpdateActivity: () => void
+  mode: 'view' | 'edit'
 }
 
 export function ActivityUpdateDialog(props: ActivityUpdateDialogProps) {
-  const { activity, onCloseUpdateActivity } = props
+  const { activity, onCloseUpdateActivity, mode } = props
 
   const { setOpenUpdateActivity } = useActivityStore()
 
@@ -23,7 +24,7 @@ export function ActivityUpdateDialog(props: ActivityUpdateDialogProps) {
   const [title, setTitle] = useState(activity.activityTitle)
 
   const updateActivity = useUpdateActivity('Activity successfully update', () =>
-    setOpenUpdateActivity({ open: false, activity: undefined })
+    setOpenUpdateActivity({ open: false, activity: undefined, mode: 'view' })
   )
 
   function onUpdateActivity() {
@@ -44,11 +45,13 @@ export function ActivityUpdateDialog(props: ActivityUpdateDialogProps) {
   return (
     <DialogContent className='max-w-[900px] w-[900px]'>
       <DialogHeader>
-        <DialogTitle>Update activity log entry</DialogTitle>
+        <DialogTitle>
+          {mode === 'edit' ? 'Update activity log entry' : activity.activityTitle}
+        </DialogTitle>
       </DialogHeader>
       <div className='space-y-4'>
-        <Input value={title} onChange={(e) => setTitle(e.target.value)} />
-        <RichEditor content={content} onUpdate={setContent} />
+        {mode === 'edit' && <Input value={title} onChange={(e) => setTitle(e.target.value)} />}
+        <RichEditor mode={mode} content={content} onUpdate={setContent} />
       </div>
       <DialogFooter>
         <Button variant='outline' onClick={onCloseUpdateActivity}>

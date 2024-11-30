@@ -1,8 +1,15 @@
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
+import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -21,26 +28,34 @@ import {
   Shield,
   User
 } from 'lucide-react'
-import { ForwardRefExoticComponent, RefAttributes } from 'react'
+import { ForwardRefExoticComponent, RefAttributes, useCallback, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from './ui/dropdown-menu'
 
 export function AppSidebar() {
   const { toggleSidebar, open } = useSidebar()
   const navigate = useNavigate()
 
-  const { logout, user } = useAuthStore()
+  const { logout, token, getToken } = useAuthStore()
 
-  if (!user) {
-    onLogout()
-    return null
-  }
+  const onLogout = useCallback(() => {
+    const loadingLogOut = toast.loading('Logging out...')
+    setTimeout(() => {
+      logout()
+      navigate('/auth')
+      toast.dismiss(loadingLogOut)
+      toast.success('Logged out successfully')
+    }, 1000)
+  }, [logout, navigate])
+
+  useEffect(() => {
+    if (token) return
+
+    if (!getToken()) {
+      onLogout()
+      return
+    }
+  }, [token, getToken, onLogout])
 
   const menus: {
     label: string
@@ -48,7 +63,7 @@ export function AppSidebar() {
     link: string
   }[] = []
 
-  if (user.role === 'ADMIN') {
+  if (token?.role === 'ADMIN') {
     menus.push({
       label: 'Admin',
       icon: Shield,
@@ -56,27 +71,27 @@ export function AppSidebar() {
     })
   }
 
-  if (user.role === 'STUDENT') {
+  if (token?.role === 'STUDENT') {
     menus.push(
       {
         label: 'Activity Log',
         icon: Scroll,
-        link: `activity/${user.userId}`
+        link: `activity/${token?.userId}`
       },
       {
         label: 'University',
         icon: GraduationCap,
-        link: `university/${user.universityId}`
+        link: `university/${token?.universityId}`
       },
       {
         label: 'Company',
         icon: Briefcase,
-        link: `company/${user.companyId}`
+        link: `company/${token?.companyId}`
       }
     )
   }
 
-  if (user.role === 'ADVISOR') {
+  if (token?.role === 'ADVISOR') {
     menus.push(
       {
         label: 'Students',
@@ -86,17 +101,17 @@ export function AppSidebar() {
       {
         label: 'University',
         icon: GraduationCap,
-        link: `university/${user.universityId}`
+        link: `university/${token?.universityId}`
       }
     )
   }
 
-  if (user.role === 'SUPERVISOR') {
+  if (token?.role === 'SUPERVISOR') {
     menus.push(
       {
         label: 'Company',
         icon: Briefcase,
-        link: `company/${user.companyId}`
+        link: `company/${token?.companyId}`
       },
       {
         label: 'Interns',
@@ -106,31 +121,26 @@ export function AppSidebar() {
     )
   }
 
-  function onLogout() {
-    console.error('Logging out...')
-
-    const loadingLogOut = toast.loading('Logging out...')
-    setTimeout(() => {
-      logout()
-      navigate('/auth')
-      toast.dismiss(loadingLogOut)
-      toast.success('Logged out successfully')
-    }, 1000)
-  }
-
   return (
     <Sidebar collapsible='icon'>
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton onClick={() => navigate('')}>
+              <img
+                src='/edutech-solutions.png'
+                alt='edutech-logo'
+                className='[[data-state=expanded]_&]:h-8'
+              />
+              <span className='font-medium text-lg'>Interntrack System</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link to=''>
-                  <img src='/edutech-solutions.svg' alt='edutech-logo' className='size-6' />
-                  <span className='font-medium text-lg'>Interntrack System</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            <SidebarMenuItem></SidebarMenuItem>
             {menus.map((menu) => (
               <SidebarMenuItem key={menu.label}>
                 <SidebarMenuButton asChild>
@@ -162,13 +172,13 @@ export function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User className='text-primary' /> {user.name}
+                  <User className='text-primary' /> {token?.name}
                   <ChevronUp className='ml-auto text-primary' />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent side='top' className='w-[--radix-popper-anchor-width]'>
                 <DropdownMenuItem asChild>
-                  <Link to={`profile/${user.userId}`}>Profile</Link>
+                  <Link to={`profile/${token?.userId}`}>Profile</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className='focus:bg-red-100' onSelect={onLogout}>
                   Log Out

@@ -1,11 +1,26 @@
 import { User } from '@/schema/entity'
+import { z } from 'zod'
 import { create } from 'zustand'
+
+const TokenSchema = z.object({
+  userId: z.number(),
+  name: z.string(),
+  role: z.string(),
+  companyId: z.number(),
+  universityId: z.number(),
+  exp: z.number(),
+  iat: z.number(),
+  iss: z.string()
+})
+
+type Token = z.infer<typeof TokenSchema>
 
 type AuthStore = {
   isAuthenticated: boolean
-  setAuthenticated: (user: User) => void
+  setAuthenticated: (token: Token) => void
 
-  user: User | undefined
+  token: Token | undefined
+  getToken: () => boolean
 
   advisor: User | undefined
   setAdvisor: (advisor: User) => void
@@ -18,9 +33,35 @@ type AuthStore = {
 
 export const useAuthStore = create<AuthStore>((set) => ({
   isAuthenticated: !!localStorage.getItem('interntrack-token'),
-  setAuthenticated: (user) => set({ isAuthenticated: true, user }),
+  setAuthenticated: (token) => set({ isAuthenticated: true, token }),
 
-  user: undefined,
+  token: undefined,
+  getToken: () => {
+    const token = localStorage.getItem('interntrack-token')
+
+    if (token) {
+      const parsedToken = JSON.parse(atob(token.split('.')[1]))
+      const { success, data, error } = TokenSchema.safeParse(parsedToken)
+
+      if (!success) {
+        console.error(error)
+        return false
+      }
+
+      const isValid = data.exp * 1000 > Date.now()
+      if (!isValid) {
+        console.error('Token expired')
+        set({ isAuthenticated: false, token: undefined })
+        return false
+      }
+
+      set({ isAuthenticated: true, token: data })
+      return true
+    } else {
+      console.error('Token not found')
+      return false
+    }
+  },
 
   advisor: undefined,
   setAdvisor: (advisor) => set({ advisor }),
@@ -30,6 +71,6 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   logout: () => {
     localStorage.removeItem('interntrack-token')
-    set({ user: undefined, advisor: undefined, supervisor: undefined, isAuthenticated: false })
+    set({ token: undefined, advisor: undefined, supervisor: undefined, isAuthenticated: false })
   }
 }))
