@@ -36,7 +36,6 @@ export function RichEditor(props: RichEditorProps) {
 
   return (
     <div className="border border-gray-200 space-y-2 p-2 rounded">
-      <span>tf {mode}</span>
       <EditorProvider
         editable={mode === 'edit'}
         slotBefore={mode === 'edit' ? <MenuBar /> : null}

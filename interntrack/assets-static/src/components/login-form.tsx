@@ -27,6 +27,7 @@ export function LoginForm() {
   })
 
   function onSubmit(data: LoginInput) {
+    // TODO: Check if user is approved else redirect to approval page
     loginMutation.mutate(data)
   }
 

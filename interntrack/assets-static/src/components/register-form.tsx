@@ -1,12 +1,10 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,11 +18,48 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
+import { useCreateUser } from '@/hooks/use-user'
 import { RegisterInput, RegisterSchema } from '@/schema/register'
 
 export function RegisterForm() {
-  const universities = ['Stanford University', 'Harvard University', 'MIT', 'UiTM']
-  const companies = ['Google', 'Facebook', 'Amazon', 'Microsoft']
+  // TODO: Replace with actual data
+  const universities = [
+    {
+      id: '1',
+      name: 'Stanford University'
+    },
+    {
+      id: '2',
+      name: 'Harvard University'
+    },
+    {
+      id: '3',
+      name: 'MIT'
+    },
+    {
+      id: '4',
+      name: 'UiTM'
+    }
+  ]
+
+  const companies = [
+    {
+      id: '1',
+      name: 'Google'
+    },
+    {
+      id: '2',
+      name: 'Facebook'
+    },
+    {
+      id: '3',
+      name: 'Amazon'
+    },
+    {
+      id: '4',
+      name: 'Microsoft'
+    }
+  ]
 
   const form = useForm<RegisterInput>({
     resolver: zodResolver(RegisterSchema),
@@ -33,13 +68,68 @@ export function RegisterForm() {
     }
   })
 
+  const createUser = useCreateUser('Registration succesful', () => {
+    form.reset()
+  })
+
+  useEffect(() => {
+    form.setValue('companyId', '')
+    form.setValue('universityId', '')
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.watch('role')])
+
   function onSubmit(data: RegisterInput) {
     console.log(data)
+    createUser.mutate(data)
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+      <form
+        id="register-form"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="grid grid-cols-2 gap-4"
+      >
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="John Doe" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="user@mail.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="********" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="role"
@@ -58,15 +148,10 @@ export function RegisterForm() {
                   <SelectItem value="STUDENT">Student</SelectItem>
                 </SelectContent>
               </Select>
-              <FormDescription>
-                The selected role will be approve by system admin to ensure you have the correct
-                access. Make sure to choose the correct role.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-
         {['STUDENT', 'ADVISOR', 'SUPERVISOR'].map(role => {
           if (form.watch('role') === role) {
             const isStudent = role === 'STUDENT'
@@ -78,7 +163,7 @@ export function RegisterForm() {
                 {(isStudent || isAdvisor) && (
                   <FormField
                     control={form.control}
-                    name="university"
+                    name="universityId"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>University</FormLabel>
@@ -90,8 +175,8 @@ export function RegisterForm() {
                           </FormControl>
                           <SelectContent>
                             {universities.map(university => (
-                              <SelectItem key={university} value={university}>
-                                {university}
+                              <SelectItem key={university.id} value={university.id}>
+                                {university.name} - {university.id}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -103,7 +188,7 @@ export function RegisterForm() {
                 {(isStudent || isSupervisor) && (
                   <FormField
                     control={form.control}
-                    name="company"
+                    name="companyId"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Company</FormLabel>
@@ -115,8 +200,8 @@ export function RegisterForm() {
                           </FormControl>
                           <SelectContent>
                             {companies.map(company => (
-                              <SelectItem key={company} value={company}>
-                                {company}
+                              <SelectItem key={company.id} value={company.id}>
+                                {company.name} - {company.id}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -130,52 +215,6 @@ export function RegisterForm() {
           }
           return null
         })}
-
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input type="email" placeholder="user@mail.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="********" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="John Doe" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <div className="flex justify-center pt-8">
-          <Button type="submit">Register</Button>
-        </div>
       </form>
     </Form>
   )

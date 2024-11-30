@@ -45,6 +45,7 @@ public class User {
   private String contactNumber;
   private String imageLink;
   private String address;
+  private Integer isApproved;
 
   @CreationTimestamp
   @Column(nullable = false, updatable = false)
@@ -91,6 +92,7 @@ public class User {
     private String address;
     private Long companyId;
     private Long universityId;
+    private Long isApproved;
     private Company company;
     private University university;
 

@@ -35,6 +35,13 @@ public class AuthController {
     return ResponseEntity.ok(loginResponse);
   }
 
+  @PostMapping("/register")
+  public ResponseEntity<User> registerUser(@RequestBody User user) {
+
+    User savedUser = userService.createUser(user);
+    return ResponseEntity.ok(savedUser);
+  }
+
   @GetMapping("/")
   public ResponseEntity<Map<String, Object>> getUsers(
       @RequestParam(defaultValue = "0") Integer page,

@@ -22,6 +22,8 @@ public class UserService {
   private UserRepository userRepository;
 
   public User createUser(User user) {
+    user.setIsApproved(0);
+
     return userRepository.save(user);
   }
 

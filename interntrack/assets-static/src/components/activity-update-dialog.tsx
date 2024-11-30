@@ -54,15 +54,17 @@ export function ActivityUpdateDialog(props: ActivityUpdateDialogProps) {
         {mode === 'edit' && <Input value={title} onChange={e => setTitle(e.target.value)} />}
         <RichEditor mode={mode} content={content} onUpdate={setContent} />
       </div>
-      <DialogFooter>
-        <Button variant="outline" onClick={onCloseUpdateActivity}>
-          Cancel
-        </Button>
-        <Button onClick={onUpdateActivity} disabled={updateActivity.isPending}>
-          {updateActivity.isPending && <Loader2 className="animate-spin" />}
-          Save
-        </Button>
-      </DialogFooter>
+      {mode === 'edit' && (
+        <DialogFooter>
+          <Button variant="outline" onClick={onCloseUpdateActivity}>
+            Cancel
+          </Button>
+          <Button onClick={onUpdateActivity} disabled={updateActivity.isPending}>
+            {updateActivity.isPending && <Loader2 className="animate-spin" />}
+            Save
+          </Button>
+        </DialogFooter>
+      )}
     </DialogContent>
   )
 }

@@ -303,7 +303,7 @@ export function ActivityRoute() {
                       No activity found. Add your activity log now!
                     </span>
                     {token?.userId.toString() === userId && (
-                      <Button size="sm">
+                      <Button size="sm" onClick={onOpenActivityLog}>
                         <Plus />
                         <span>Activity Log</span>
                       </Button>

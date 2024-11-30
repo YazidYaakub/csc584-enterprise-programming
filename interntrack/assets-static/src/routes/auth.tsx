@@ -1,13 +1,21 @@
 import { LoginForm } from '@/components/login-form'
 import { RegisterForm } from '@/components/register-form'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export function Auth() {
   return (
-    <div className="w-screen h-screen flex flex-col items-center justify-center">
-      <img src="edutech-solutions.png" alt="Edutech Solutions Logo" className="size-36" />
-      <Tabs defaultValue="login" className="w-96">
+    <div className="w-screen h-screen flex flex-col items-center justify-center space-y-4">
+      <img src="edutech-solutions.png" alt="Edutech Solutions Logo" className="h-36" />
+      <Tabs defaultValue="login" className="sm:w-[1000px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="login">Login</TabsTrigger>
           <TabsTrigger value="register">Register</TabsTrigger>
@@ -26,7 +34,7 @@ export function Auth() {
           </Card>
         </TabsContent>
         <TabsContent value="register">
-          <Card>
+          <Card className="w-96 sm:w-[1000px]">
             <CardHeader>
               <CardTitle>Register</CardTitle>
               <CardDescription>
@@ -36,6 +44,11 @@ export function Auth() {
             <CardContent>
               <RegisterForm />
             </CardContent>
+            <CardFooter className="justify-end">
+              <Button form="register-form" type="submit">
+                Register
+              </Button>
+            </CardFooter>
           </Card>
         </TabsContent>
       </Tabs>

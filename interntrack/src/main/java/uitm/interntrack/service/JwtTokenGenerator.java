@@ -20,6 +20,7 @@ public class JwtTokenGenerator {
     claims.put("role", user.getRole());
     claims.put("companyId", user.getCompanyId());
     claims.put("universityId", user.getUniversityId());
+    claims.put("isApproved", user.getIsApproved());
 
     Instant now = Instant.now();
     Instant expiration = now.plus(1, ChronoUnit.HOURS);
