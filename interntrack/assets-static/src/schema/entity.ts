@@ -42,6 +42,7 @@ export const User = z.object({
   university: University.nullable(),
   semester: z.number().nullable(),
   position: z.string().nullable(),
+  subject: z.string().nullable(),
   imageLink: z.string().nullable(),
   contactNumber: z.string().nullable(),
   address: z.string().nullable()

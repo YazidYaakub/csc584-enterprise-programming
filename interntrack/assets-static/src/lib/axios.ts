@@ -5,7 +5,7 @@ export const api = () =>
     baseURL: `${import.meta.env.VITE_API_URL}/api/`,
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `JWT ${localStorage.getItem('token')}`,
+      Authorization: `${localStorage.getItem('interntrack-token')}`,
       'Access-Control-Allow-Origin': '*'
     }
   })

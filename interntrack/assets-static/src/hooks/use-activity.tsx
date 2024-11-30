@@ -20,7 +20,6 @@ export const useCreateActivity = (
     onSuccess: () => {
       toast.success(message)
       queryClient.invalidateQueries({ queryKey: ['activity', selectedMonth] })
-      // setOpenActivityLog(false)
       if (callback) callback()
     },
     onError: error => toast.error(error.message)

@@ -48,10 +48,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Modifying
   @Query(value = """
       UPDATE INTERNTRACK.USERS
-      SET NAME = :name, PASSWORD = :password
+      SET NAME = :name, ADDRESS = :address, CONTACT_NUMBER = :contactNumber, IMAGE_LINK = :imageLink, SEMESTER = :semester, POSITION = :position, SUBJECT = :subject, PASSWORD = :password
       WHERE USER_ID = :userId
       """, nativeQuery = true)
-  void updateUser(@Param("userId") Long userId, @Param("name") String name, @Param("password") String password);
+  void updateUser(@Param("userId") Long userId, @Param("name") String name, @Param("address") String address,
+      @Param("contactNumber") String contactNumber, @Param("imageLink") String imageLink,
+      @Param("semester") Long semester, @Param("position") String position, @Param("subject") String subject,
+      @Param("password") String password);
 
   @Query(value = """
             SELECT COUNT(*)

@@ -7,17 +7,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
+import jakarta.servlet.http.HttpServletRequest;
 import uitm.interntrack.entity.User;
+import uitm.interntrack.entity.User.UpdateUserDTO;
+import uitm.interntrack.entity.User.UserDTO;
 import uitm.interntrack.service.AuthService;
 import uitm.interntrack.service.UserService;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
+// TODO: migrate name to user controller
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
@@ -36,9 +41,9 @@ public class AuthController {
   }
 
   @PostMapping("/register")
-  public ResponseEntity<User> registerUser(@RequestBody User user) {
+  public ResponseEntity<UserDTO> registerUser(@RequestBody User user) {
 
-    User savedUser = userService.createUser(user);
+    UserDTO savedUser = userService.createUser(user);
     return ResponseEntity.ok(savedUser);
   }
 
@@ -56,14 +61,23 @@ public class AuthController {
 
   @GetMapping("/{id}")
   public ResponseEntity<?> getUser(@PathVariable Long id) {
-
-    User user = userService.getUser(id);
-
-    if (user == null) {
-      return ResponseEntity.status(404).body(String.format("User with ID %d not found", id));
+    try {
+      return ResponseEntity.ok(userService.getUser(id));
+    } catch (ResponseStatusException e) {
+      return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
     }
-
-    return ResponseEntity.ok(user);
   }
 
+  @PutMapping("/{id}")
+  public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UpdateUserDTO user,
+      HttpServletRequest request) {
+    String token = request.getHeader("Authorization");
+
+    try {
+      UserDTO updatedUser = userService.updateUser(id, user, token);
+      return ResponseEntity.ok(updatedUser);
+    } catch (ResponseStatusException e) {
+      return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+    }
+  }
 }

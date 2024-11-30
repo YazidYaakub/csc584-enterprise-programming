@@ -190,7 +190,7 @@ export function ActivityRoute() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="link">
+                <Button variant="link" className="dark:text-white">
                   <FaUserTie />
                   <span className="flex items-center space-x-1">
                     <span className="font-semibold text-sm">Abdul Hakim</span>
@@ -207,7 +207,7 @@ export function ActivityRoute() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="link">
+                <Button variant="link" className="dark:text-white">
                   <FaUserGraduate />
                   <div className="flex items-center space-x-1">
                     <span className="font-semibold text-sm">Abdul Hakim</span>

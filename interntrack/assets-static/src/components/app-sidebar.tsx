@@ -8,8 +8,10 @@ import {
   ChevronUp,
   GraduationCap,
   LucideProps,
+  Moon,
   Scroll,
   Shield,
+  Sun,
   User
 } from 'lucide-react'
 import { toast } from 'sonner'
@@ -32,9 +34,11 @@ import {
   useSidebar
 } from '@/components/ui/sidebar'
 import { useAuthStore } from '@/store/auth'
+import { useTheme } from './theme-provider'
 
 export function AppSidebar() {
   const { toggleSidebar, open } = useSidebar()
+  const { setTheme, theme } = useTheme()
   const navigate = useNavigate()
 
   const { logout, token, getToken } = useAuthStore()
@@ -131,7 +135,7 @@ export function AppSidebar() {
               <img
                 src="/edutech-solutions.png"
                 alt="edutech-logo"
-                className="[[data-state=expanded]_&]:h-8"
+                className="[[data-state=expanded]_&]:h-8 dark:bg-white dark:rounded"
               />
               <span className="font-medium text-lg">Interntrack System</span>
             </SidebarMenuButton>
@@ -157,6 +161,21 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+              {theme === 'light' ? (
+                <>
+                  <Moon className="text-primary" />
+                  Dark Mode
+                </>
+              ) : (
+                <>
+                  <Sun className="text-primary" />
+                  Light Mode
+                </>
+              )}
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton onClick={toggleSidebar}>
               {open ? (

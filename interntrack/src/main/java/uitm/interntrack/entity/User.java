@@ -121,5 +121,11 @@ public class User {
   public static class UpdateUserDTO {
     private String name;
     private String password;
+    private String address;
+    private String contactNumber;
+    private String imageLink;
+    private Long semester;
+    private String position;
+    private String subject;
   }
 }

@@ -21,30 +21,13 @@ public class UserService {
   @Autowired
   private UserRepository userRepository;
 
-  public User createUser(User user) {
+  @Autowired
+  private AuthService authService;
+
+  public UserDTO createUser(User user) {
     user.setIsApproved(0);
 
-    return userRepository.save(user);
-  }
-
-  public Map<String, Object> loginUser(String email, String password) {
-    Optional<User> user = userRepository.findByEmail(email);
-
-    if (user.isEmpty()) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User %s not found", email));
-    }
-
-    if (!user.get().getPassword().equals(password)) {
-      throw new RuntimeException("Invalid password");
-    }
-
-    String token = JwtTokenGenerator.generateToken(new UserDTO(user.get()));
-
-    Map<String, Object> response = new HashMap<>();
-    response.put("token", token);
-    response.put("user", user.get());
-
-    return response;
+    return new UserDTO(userRepository.save(user));
   }
 
   public Map<String, Object> getUsers(Integer page, Integer size, String role, String universityId, String companyId) {
@@ -64,60 +47,42 @@ public class UserService {
     return response;
   }
 
-  public User getUser(Long id) {
-    User user = userRepository.getUser(id)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-    // UserDTO userDTO = new UserDTO(user);
+  public UserDTO getUser(Long id) {
+    Optional<User> userOptional = userRepository.findById(id);
+    if (userOptional.isEmpty())
+      throw new ResponseStatusException(HttpStatus.NO_CONTENT, "User not found");
 
-    // if role is STUDENT, get references by student, else get references by advisor
-    // else get references by supervisor
-    // List<Object[]> references = userRepository.getReferencesByStudent(id);
-
-    // if (!references.isEmpty()) {
-
-    // Object[] reference = references.get(0);
-
-    // String studentName = (String) reference[0];
-    // String advisorName = (String) reference[1];
-    // String supervisorName = (String) reference[2];
-
-    // UserDTO.Student student = new UserDTO.Student();
-    // student.setName(studentName);
-    // userDTO.setStudent(student);
-
-    // UserDTO.Advisor advisor = new UserDTO.Advisor();
-    // advisor.setName(advisorName);
-    // userDTO.setAdvisor(advisor);
-
-    // UserDTO.Supervisor supervisor = new UserDTO.Supervisor();
-    // supervisor.setName(supervisorName);
-    // userDTO.setSupervisor(supervisor);
-
-    // try {
-    // String json = objectMapper.writeValueAsString(userDTO);
-    // System.out.println(json);
-    // } catch (JsonProcessingException e) {
-    // e.printStackTrace();
-    // }
-    // }
-
-    return user;
+    return new UserDTO(userOptional.get());
   }
 
-  public User updateUser(Long id, UpdateUserDTO updateUserDTO) {
-    Optional<User> user = userRepository.findById(id);
-
-    if (updateUserDTO.getName() != null) {
-      user.get().setName(updateUserDTO.getName());
+  public UserDTO updateUser(Long id, UpdateUserDTO updateUserDTO, String token) {
+    if (!authService.isAuthorised(token) || token == null) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
     }
 
-    if (updateUserDTO.getPassword() != null) {
-      user.get().setPassword(updateUserDTO.getPassword());
-    }
+    Optional<User> userOptional = userRepository.findById(id);
+    if (userOptional.isEmpty())
+      throw new ResponseStatusException(HttpStatus.NO_CONTENT, "User not found");
 
-    userRepository.updateUser(id, updateUserDTO.getName(), updateUserDTO.getPassword());
+    User user = userOptional.get();
+    System.out.println(user.getPassword());
 
-    return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    user.setName(updateUserDTO.getName());
+    user.setAddress(updateUserDTO.getAddress());
+    user.setContactNumber(updateUserDTO.getContactNumber());
+    user.setImageLink(updateUserDTO.getImageLink());
+    user.setSemester(updateUserDTO.getSemester());
+    user.setPosition(updateUserDTO.getPosition());
+    user.setSubject(updateUserDTO.getSubject());
+
+    if (updateUserDTO.getPassword() != null)
+      user.setPassword(updateUserDTO.getPassword());
+
+    userRepository.updateUser(id, updateUserDTO.getName(), updateUserDTO.getAddress(), updateUserDTO.getContactNumber(),
+        updateUserDTO.getImageLink(), updateUserDTO.getSemester(), updateUserDTO.getPosition(),
+        updateUserDTO.getSubject(), user.getPassword());
+
+    return new UserDTO(user);
   }
 
   public void deleteUser(Long id) {

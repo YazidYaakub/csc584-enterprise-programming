@@ -1,10 +1,8 @@
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
 import { Link, useParams } from 'react-router-dom'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Edit } from 'lucide-react'
 
 import { CompanyCardContent } from '@/components/company-card-content'
+import { ErrorFull } from '@/components/error-full'
 import { LoadingFull } from '@/components/loading-full'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -17,40 +15,17 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { UniversityCardContent } from '@/components/university-card-content'
-import { useUpdateUser, useUser } from '@/hooks/use-user'
-import { EditUserInput, EditUserSchema } from '@/schema/edit-user'
+import { UpdateUserForm } from '@/components/update-user-form'
+import { useUser } from '@/hooks/use-user'
 import { useAuthStore } from '@/store/auth'
 
 export function Profile() {
   const { userId } = useParams()
   const { token } = useAuthStore()
 
-  const { data: user, error, isPending } = useUser(userId)
-  const updateUser = useUpdateUser(Number(userId), 'Profile updated successfully')
-
-  const form = useForm<EditUserInput>({
-    resolver: zodResolver(EditUserSchema),
-    defaultValues: { name: '' }
-  })
-
-  useEffect(() => {
-    if (user) form.reset({ name: user.name })
-  }, [user, form])
-
-  function onSubmit(data: EditUserInput) {
-    updateUser.mutate(data)
-  }
+  const { data: user, error, isPending } = useUser(['user', userId], userId)
 
   const nonDisplay = [
     'userId',
@@ -60,13 +35,14 @@ export function Profile() {
     'companyId',
     'university',
     'company',
+    'isApproved',
     user?.role !== 'SUPERVISOR' && 'position',
     user?.role !== 'ADVISOR' && 'subject',
     user?.role !== 'STUDENT' && 'semester'
   ]
 
   if (isPending) return <LoadingFull message="Loading profile..." />
-  if (error) return <LoadingFull message={error.message} />
+  if (error) return <ErrorFull message={error.message} />
 
   return (
     <div className="flex flex-col items-center w-full space-y-4 p-4">
@@ -100,23 +76,7 @@ export function Profile() {
                 Make changes to your profile here. Click save when you're done.
               </DialogDescription>
             </DialogHeader>
-            <Form {...form}>
-              <form id="update-profile-form" onSubmit={form.handleSubmit(onSubmit)}>
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Name</FormLabel>
-                      <FormControl>
-                        <Input type="text" placeholder="John Doe" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </form>
-            </Form>
+            <UpdateUserForm user={user} />
             <DialogFooter>
               <Button type="submit" form="update-profile-form">
                 Save

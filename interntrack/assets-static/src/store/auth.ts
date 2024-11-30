@@ -6,7 +6,7 @@ import { User } from '@/schema/entity'
 const TokenSchema = z.object({
   userId: z.number(),
   name: z.string(),
-  role: z.string(),
+  role: z.enum(['STUDENT', 'ADVISOR', 'SUPERVISOR', 'ADMIN']),
   companyId: z.number(),
   universityId: z.number(),
   exp: z.number(),
