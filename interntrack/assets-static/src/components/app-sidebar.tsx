@@ -135,7 +135,7 @@ export function AppSidebar() {
               <img
                 src="/edutech-solutions.png"
                 alt="edutech-logo"
-                className="[[data-state=expanded]_&]:h-8 dark:bg-white dark:rounded"
+                className="[[data-state=expanded]_&]:h-8 dark:bg-white dark:rounded dark:p-1"
               />
               <span className="font-medium text-lg">Interntrack System</span>
             </SidebarMenuButton>
@@ -200,7 +200,10 @@ export function AppSidebar() {
                 <DropdownMenuItem asChild>
                   <Link to={`profile/${token?.userId}`}>Profile</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="focus:bg-red-100" onSelect={onLogout}>
+                <DropdownMenuItem
+                  className="focus:bg-red-100 focus:text-red-500"
+                  onSelect={onLogout}
+                >
                   Log Out
                 </DropdownMenuItem>
               </DropdownMenuContent>
