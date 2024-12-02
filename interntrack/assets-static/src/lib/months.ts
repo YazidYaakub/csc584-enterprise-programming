@@ -12,3 +12,12 @@ export const months = [
   'November',
   'December'
 ]
+
+export const grades = [
+  { value: 'A', label: 'A - Excellent' },
+  { value: 'B', label: 'B - Good' },
+  { value: 'C', label: 'C - Fair' },
+  { value: 'D', label: 'D - Needs Improvement' },
+  { value: 'E', label: 'E - Poor' },
+  { value: 'F', label: 'F - Fail' }
+]

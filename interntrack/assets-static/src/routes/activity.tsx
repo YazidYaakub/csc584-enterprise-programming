@@ -1,11 +1,23 @@
 import { useState } from 'react'
 import { FaUserGraduate, FaUserTie } from 'react-icons/fa'
 import { useParams } from 'react-router-dom'
-import { Edit, Loader2, MoreHorizontal, Plus, Trash } from 'lucide-react'
+import {
+  ArchiveX,
+  Edit,
+  Eye,
+  FilePen,
+  Loader2,
+  MessageCircle,
+  MoreHorizontal,
+  Plus,
+  Trash
+} from 'lucide-react'
 import { toast } from 'sonner'
 
+import { ActivityComment } from '@/components/activity-comment'
 import { ActivityUpdateDialog } from '@/components/activity-update-dialog'
 import { ErrorFull } from '@/components/error-full'
+import { GradeUser } from '@/components/grade-user'
 import { LoadingFull } from '@/components/loading-full'
 import { RichEditor } from '@/components/rich-editor'
 import {
@@ -21,6 +33,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import {
   Dialog,
   DialogContent,
@@ -59,6 +72,7 @@ import {
   usePaginatedActivity,
   useUpdateActivity
 } from '@/hooks/use-activity'
+import { useUser } from '@/hooks/use-user'
 import { supervisor } from '@/lib/dummy-data'
 import { months } from '@/lib/months'
 import { Activity, UpdateActivitySchema } from '@/schema/activity'
@@ -78,8 +92,14 @@ export function ActivityRoute() {
   const [activityContent, setActivityContent] = useState<string>()
   const [activityTitle, setActivityTitle] = useState<string>()
   const [deleteActivityTarget, setDeleteActivityTarget] = useState<Activity>()
+  const [openGrading, setOpenGrading] = useState(false)
 
-  const { data: activities, error, isPending } = usePaginatedActivity()
+  const { data: user } = useUser(['user', 'student', userId], userId)
+  const {
+    data: activities,
+    error,
+    isPending
+  } = usePaginatedActivity(['activity', selectedMonth], userId!)
   const updateActivity = useUpdateActivity('Activity successfully approved')
   const deleteActivity = useDeleteActivity('Activity log successfully deleted')
   const createActivity = useCreateActivity('Activity log successfully created', () =>
@@ -99,7 +119,9 @@ export function ActivityRoute() {
   }
 
   function onCreateActivity() {
-    if (!token) {
+    if (!user || !token) return
+
+    if (!(user.userId !== token.userId)) {
       toast.error('Not authorized to create activity log')
       return
     }
@@ -117,7 +139,7 @@ export function ActivityRoute() {
     createActivity.mutate({
       activityTitle: activityTitle,
       activityDescription: activityContent,
-      studentId: token.userId,
+      studentId: user.userId,
       approvedById: supervisor.id
     })
   }
@@ -164,9 +186,9 @@ export function ActivityRoute() {
   if (isPending) return <LoadingFull message="Loading activities..." />
 
   return (
-    <div className="h-screen p-4 items-center flex flex-col space-y-4">
-      <h1 className="font-bold text-2xl">{token?.name} Activity</h1>
-      <div className="w-full flex justify-between items-center">
+    <div className="flex h-screen flex-col items-center space-y-4 p-4">
+      <h1 className="text-2xl font-bold">{user?.name} Activity</h1>
+      <div className="flex w-full items-center justify-between">
         <div className="flex flex-col space-y-2">
           {activities.data.length > 0 && token?.userId.toString() === userId && (
             <Button size="sm" onClick={onOpenActivityLog}>
@@ -193,7 +215,7 @@ export function ActivityRoute() {
                 <Button variant="link" className="dark:text-white">
                   <FaUserTie />
                   <span className="flex items-center space-x-1">
-                    <span className="font-semibold text-sm">Abdul Hakim</span>
+                    <span className="text-sm font-semibold">Abdul Hakim</span>
                     <span>-</span>
                     <span className="text-xs">Recogine Technology</span>
                   </span>
@@ -210,7 +232,7 @@ export function ActivityRoute() {
                 <Button variant="link" className="dark:text-white">
                   <FaUserGraduate />
                   <div className="flex items-center space-x-1">
-                    <span className="font-semibold text-sm">Abdul Hakim</span>
+                    <span className="text-sm font-semibold">Abdul Hakim</span>
                     <span>-</span>
                     <span className="text-xs">UiTM Shah Alam</span>
                   </div>{' '}
@@ -227,6 +249,7 @@ export function ActivityRoute() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead />
               <TableHead>Activity Title</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Approval Status</TableHead>
@@ -238,70 +261,86 @@ export function ActivityRoute() {
           </TableHeader>
           <TableBody>
             {activities.data.map(activity => (
-              <TableRow
-                key={activity.activityId}
-                onClick={() => onOpenActivity(activity, 'view')}
-                className="cursor-pointer"
-              >
-                <TableCell>{activity.activityTitle}</TableCell>
-                <TableCell>
-                  {new Intl.DateTimeFormat('en-MY').format(new Date(activity.activityDate))}
-                </TableCell>
-                <TableCell>
-                  {activity.isApproved === 1 ? (
-                    <span className="text-green-500 bg-green-100 px-2 rounded font-semibold">
-                      {activity.approvedAt
-                        ? new Intl.DateTimeFormat('en-MY').format(new Date(activity.approvedAt))
-                        : 'N/A'}
-                    </span>
-                  ) : (
-                    <span className="text-orange-500 bg-orange-100 px-2 rounded font-semibold">
-                      Pending
-                    </span>
-                  )}
-                </TableCell>
-                {token?.role === 'SUPERVISOR' && (
-                  <TableCell className="text-center">
-                    <Checkbox
-                      disabled={token?.role !== 'SUPERVISOR'}
-                      checked={activity.isApproved === 1}
-                      onCheckedChange={() => onApproveActivity(activity)}
-                    />
-                  </TableCell>
-                )}
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button size="icon" variant="ghost">
-                        <MoreHorizontal />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem
-                        onClick={e => e.stopPropagation()}
-                        onSelect={() => onOpenActivity(activity, 'edit')}
-                        className="focus:bg-yellow-50 focus:text-yellow-500"
-                      >
-                        <Edit /> Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onSelect={() => onConfirmationDelete(activity)}
-                        className="focus:text-red-500 focus:bg-red-100"
-                      >
-                        <Trash /> Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
+              <Collapsible key={activity.activityId} asChild>
+                <>
+                  <TableRow className="cursor-pointer">
+                    <TableCell>
+                      <CollapsibleTrigger asChild>
+                        <Button variant="outline" size="icon">
+                          <MessageCircle />
+                        </Button>
+                      </CollapsibleTrigger>
+                    </TableCell>
+                    <TableCell>{activity.activityTitle}</TableCell>
+                    <TableCell>
+                      {new Intl.DateTimeFormat('en-MY').format(new Date(activity.activityDate))}
+                    </TableCell>
+                    <TableCell>
+                      {activity.isApproved === 1 ? (
+                        <span className="rounded bg-green-100 px-2 font-semibold text-green-500">
+                          {activity.approvedAt
+                            ? new Intl.DateTimeFormat('en-MY').format(new Date(activity.approvedAt))
+                            : 'N/A'}
+                        </span>
+                      ) : (
+                        <span className="rounded bg-orange-100 px-2 font-semibold text-orange-500">
+                          Pending
+                        </span>
+                      )}
+                    </TableCell>
+                    {token?.role === 'SUPERVISOR' && (
+                      <TableCell className="text-center">
+                        <Checkbox
+                          checked={activity.isApproved === 1}
+                          onCheckedChange={() => onApproveActivity(activity)}
+                        />
+                      </TableCell>
+                    )}
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button size="icon" variant="ghost">
+                            <MoreHorizontal />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={e => e.stopPropagation()}
+                            onSelect={() => onOpenActivity(activity, 'view')}
+                            className="focus:bg-blue-50 focus:text-blue-500"
+                          >
+                            <Eye /> View
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={e => e.stopPropagation()}
+                            onSelect={() => onOpenActivity(activity, 'edit')}
+                            className="focus:bg-yellow-50 focus:text-yellow-500"
+                          >
+                            <Edit /> Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={e => e.stopPropagation()}
+                            onSelect={() => onConfirmationDelete(activity)}
+                            className="focus:bg-red-100 focus:text-red-500"
+                          >
+                            <Trash /> Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                  <CollapsibleContent asChild>
+                    <ActivityComment activityId={activity.activityId} />
+                  </CollapsibleContent>
+                </>
+              </Collapsible>
             ))}
             {activities.data.length === 0 && (
               <TableRow>
                 <TableCell colSpan={5} className="text-center">
-                  <div className="items-center justify-center flex flex-col space-y-4 p-4 pt-60">
-                    <span className="text-muted-foreground font-semibold">
-                      No activity found. Add your activity log now!
-                    </span>
+                  <div className="flex flex-col items-center justify-center space-y-4 p-4 py-28">
+                    <ArchiveX />
+                    <span className="font-semibold text-muted-foreground">No activity found</span>
                     {token?.userId.toString() === userId && (
                       <Button size="sm" onClick={onOpenActivityLog}>
                         <Plus />
@@ -315,8 +354,57 @@ export function ActivityRoute() {
           </TableBody>
         </Table>
       </div>
+      {/* <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="font-medium">Name</TableHead>
+            <TableHead className="font-medium">Link</TableHead>
+            <TableHead className="font-medium">Views</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {activities
+            ? activities.data.map(link => (
+                <Collapsible key={link.activityDate} asChild>
+                  <>
+                    <TableRow>
+                      <TableCell>{link.activityTitle}</TableCell>
+                      <TableCell>{link.activityTitle}</TableCell>
+                      <TableCell>
+                        {link.activityTitle}
+                        <CollapsibleTrigger asChild>
+                          <Eye />
+                        </CollapsibleTrigger>
+                      </TableCell>
+                    </TableRow>
+                    <CollapsibleContent asChild>
+                      <TableRow key={link.activityTitle}>
+                        <TableCell>{link.activityTitle}</TableCell>
+                        <TableCell>{link.activityTitle}</TableCell>
+                        <TableCell>
+                          <Eye />
+                        </TableCell>
+                      </TableRow>
+                    </CollapsibleContent>
+                  </>
+                </Collapsible>
+              ))
+            : null}
+        </TableBody>
+      </Table> */}
+      {/* TODO: only shows if this month is not graded yet and only if its the student consultant */}
+      {token?.role === 'ADVISOR' && (
+        <div className="flex w-full flex-1 items-end justify-end">
+          <div className="bottom-4 right-4">
+            <Button onClick={() => setOpenGrading(true)}>
+              <FilePen /> Grade {user?.name}
+            </Button>
+          </div>
+        </div>
+      )}
+      {user && <GradeUser open={openGrading} onOpenChange={setOpenGrading} user={user} />}
       <Dialog open={openActivityLog} onOpenChange={setOpenActivityLog}>
-        <DialogContent className="max-w-[900px] w-[900px]">
+        <DialogContent className="w-[900px] max-w-[900px]">
           <DialogHeader>
             <DialogTitle>Create activity log entry</DialogTitle>
             <DialogDescription>
@@ -358,7 +446,7 @@ export function ActivityRoute() {
           <AlertDialogHeader>
             <AlertDialogTitle>
               Are you sure you want to delete this{' '}
-              <span className="font-semibold bg-red-200 px-1 rounded">
+              <span className="rounded bg-red-200 px-1 font-semibold">
                 {deleteActivityTarget?.activityTitle}
               </span>{' '}
               activity?

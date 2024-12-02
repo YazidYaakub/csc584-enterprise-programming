@@ -5,7 +5,6 @@ import { api } from '@/lib/axios'
 import { Activity, CreateActivity, UpdateActivity } from '@/schema/activity'
 import { Pagination } from '@/schema/pagination'
 import { useActivityStore } from '@/store/activity'
-import { useAuthStore } from '@/store/auth'
 
 export const useCreateActivity = (
   message: string = 'Activity log successfully created',
@@ -26,15 +25,14 @@ export const useCreateActivity = (
   })
 }
 
-export const usePaginatedActivity = () => {
+export const usePaginatedActivity = (queryKey: string[], userId: string) => {
   const { selectedMonth } = useActivityStore()
-  const { token } = useAuthStore()
 
   return useQuery<Pagination<Activity>>({
-    queryKey: ['activity', selectedMonth],
+    queryKey,
     queryFn: async () => {
       const { data } = await api().get('activity/', {
-        params: { month: selectedMonth, studentId: token?.userId }
+        params: { month: selectedMonth, studentId: userId }
       })
       return data
     }
