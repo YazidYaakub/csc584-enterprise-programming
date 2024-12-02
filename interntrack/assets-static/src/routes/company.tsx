@@ -64,8 +64,8 @@ export function Company() {
   if (error) return <ErrorFull message={error.message} />
 
   return (
-    <div className="p-4 flex flex-col space-y-4">
-      <div className="flex space-x-4 items-center justify-center">
+    <div className="flex flex-col space-y-4 p-4">
+      <div className="flex items-center justify-center space-x-4">
         {company.logoLink ? (
           <img src={company.logoLink} alt={`${company.name} logo`} className="h-8" />
         ) : (

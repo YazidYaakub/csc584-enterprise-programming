@@ -20,9 +20,9 @@ export function Unauthorized() {
   }
 
   return (
-    <div className="p-4 space-y-4 h-full flex flex-col items-center justify-center">
+    <div className="flex h-full flex-col items-center justify-center space-y-4 p-4">
       <TriangleAlert className="size-16 text-red-500" />
-      <h1 className="text-2xl font-bold bg-red-100 px-2 rounded text-red-800">Unauthorized</h1>
+      <h1 className="rounded bg-red-100 px-2 text-2xl font-bold text-red-800">Unauthorized</h1>
       <p>You are not authorized to view this page.</p>
       <Button variant="link" asChild>
         <Link to={path}>Go Home</Link>

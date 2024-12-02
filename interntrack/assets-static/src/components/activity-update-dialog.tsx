@@ -44,7 +44,7 @@ export function ActivityUpdateDialog(props: ActivityUpdateDialogProps) {
   }
 
   return (
-    <DialogContent className="max-w-[900px] w-[900px]">
+    <DialogContent className="w-[900px] max-w-[900px]">
       <DialogHeader>
         <DialogTitle>
           {mode === 'edit' ? 'Update activity log entry' : activity.activityTitle}

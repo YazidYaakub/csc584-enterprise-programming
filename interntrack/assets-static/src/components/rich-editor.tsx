@@ -35,7 +35,7 @@ export function RichEditor(props: RichEditorProps) {
   const { content, onUpdate, mode } = props
 
   return (
-    <div className="border border-gray-200 space-y-2 p-2 rounded">
+    <div className="space-y-2 rounded border border-gray-200 p-2">
       <EditorProvider
         editable={mode === 'edit'}
         slotBefore={mode === 'edit' ? <MenuBar /> : null}

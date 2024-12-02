@@ -6,9 +6,9 @@ type LoadingFullProps = {
 
 export function LoadingFull({ message = 'Loading...' }: LoadingFullProps) {
   return (
-    <div className="flex flex-col space-y-4 justify-center items-center h-full">
+    <div className="flex h-full flex-col items-center justify-center space-y-4">
       <Loader2 className="animate-spin text-primary" />
-      <span className="font-semibold bg-accent px-2 rounded text-purple-800">{message}</span>
+      <span className="rounded bg-accent px-2 font-semibold text-purple-800">{message}</span>
     </div>
   )
 }

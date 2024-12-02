@@ -13,11 +13,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export function Auth() {
   return (
-    <div className="w-screen h-screen flex flex-col items-center justify-center space-y-4">
+    <div className="flex h-screen w-screen flex-col items-center justify-center space-y-4">
       <img
         src="edutech-solutions.png"
         alt="Edutech Solutions Logo"
-        className="h-36 dark:bg-white p-4 dark:rounded"
+        className="h-36 p-4 dark:rounded dark:bg-white"
       />
       <Tabs defaultValue="login" className="sm:w-[1000px]">
         <TabsList className="grid w-full grid-cols-2">

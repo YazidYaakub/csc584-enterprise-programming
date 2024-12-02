@@ -179,7 +179,7 @@ export function MenuBar() {
         variant={editor.isActive('textStyle', { color: '#958DF1' }) ? 'default' : 'outline'}
         size="icon"
       >
-        <Circle className="text-purple-400 fill-current" />
+        <Circle className="fill-current text-purple-400" />
       </Button>
     </div>
   )
