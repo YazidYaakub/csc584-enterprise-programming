@@ -14,3 +14,14 @@ export const useUniversity = (queryKey: string[], universityId: number | undefin
     enabled: Boolean(universityId)
   })
 }
+
+export const useUniversityList = (queryKey: string[]) => {
+  return useQuery<University[]>({
+    queryKey,
+    queryFn: async () => {
+      const { data } = await api().get('university/list')
+
+      return data
+    }
+  })
+}

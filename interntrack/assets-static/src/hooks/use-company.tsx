@@ -14,3 +14,14 @@ export const useCompany = (queryKey: string[], companyId: number | undefined) =>
     enabled: Boolean(companyId)
   })
 }
+
+export const useCompanyList = (queryKey: string[]) => {
+  return useQuery<Company[]>({
+    queryKey,
+    queryFn: async () => {
+      const { data } = await api().get('company/list')
+
+      return data
+    }
+  })
+}

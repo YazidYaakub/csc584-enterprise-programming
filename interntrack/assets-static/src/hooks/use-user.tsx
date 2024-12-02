@@ -34,6 +34,7 @@ export const usePaginatedUsers = (
     role?: 'STUDENT' | 'ADVISOR' | 'SUPERVISOR'
     universityId?: number | null
     companyId?: number | null
+    isApproved?: 1 | 0
   }
 ) => {
   return useQuery<Pagination<User>>({
@@ -46,7 +47,7 @@ export const usePaginatedUsers = (
   })
 }
 
-export const useUser = (queryKey: unknown[], id: string | undefined) => {
+export const useUser = (queryKey: unknown[], id: string | number | undefined) => {
   return useQuery<User>({
     queryKey,
     queryFn: async () => {

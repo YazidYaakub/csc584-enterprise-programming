@@ -2,8 +2,6 @@ package uitm.interntrack.service;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import uitm.interntrack.entity.Company;
@@ -22,11 +20,8 @@ public class CompanyService {
     return companyRepository.save(company);
   }
 
-  public List<Company> getCompanies(Integer pageNumber, Integer pageSize, String role) {
-    Pageable pageable = Pageable.ofSize(pageSize).withPage(pageNumber);
-
-    Page<Company> companyPage = companyRepository.getCompanies(role, pageable);
-    return companyPage.getContent();
+  public List<Company> getCompanies() {
+    return companyRepository.findAll();
   }
 
   public Company getCompanyById(Long id) {

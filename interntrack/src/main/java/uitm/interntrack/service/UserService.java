@@ -30,11 +30,12 @@ public class UserService {
     return new UserDTO(userRepository.save(user));
   }
 
-  public Map<String, Object> getUsers(Integer page, Integer size, String role, String universityId, String companyId) {
+  public Map<String, Object> getUsers(Integer page, Integer size, String role, Integer isApproved, String universityId,
+      String companyId) {
     Integer start = page * size + 1;
     Integer end = start + size - 1;
 
-    List<User> users = userRepository.getUsers(start, end, role, universityId, companyId);
+    List<User> users = userRepository.getUsers(start, end, role, isApproved, universityId, companyId);
     List<UserDTO> userDTOs = users.stream().map(UserDTO::new).toList();
     Long totalCount = userRepository.countUsers(role);
 

@@ -29,10 +29,12 @@ import {
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar
 } from '@/components/ui/sidebar'
+import { usePaginatedUsers, useUser } from '@/hooks/use-user'
 import { useAuthStore } from '@/store/auth'
 import { useTheme } from './theme-provider'
 
@@ -40,8 +42,13 @@ export function AppSidebar() {
   const { toggleSidebar, open } = useSidebar()
   const { setTheme, theme } = useTheme()
   const navigate = useNavigate()
-
   const { logout, token, getToken } = useAuthStore()
+
+  const { data: user } = useUser(['user', token?.userId], token?.userId)
+  const { data: unapprovedUsers } = usePaginatedUsers(['users', 'unapproved'], {
+    isApproved: 0,
+    size: 100
+  })
 
   const onLogout = useCallback(() => {
     const loadingLogOut = toast.loading('Logging out...')
@@ -54,11 +61,24 @@ export function AppSidebar() {
   }, [logout, navigate])
 
   useEffect(() => {
-    if (token) return
+    if (!token) {
+      const success = getToken()
+      if (!success) {
+        onLogout()
+        return
+      }
+    }
 
-    if (!getToken()) {
-      onLogout()
-      return
+    if (token) {
+      const currentTime = Date.now()
+      const expirationTime = token.exp * 1000
+      const timeUntilExpiration = expirationTime - currentTime
+
+      const timeout = setTimeout(() => {
+        onLogout()
+      }, timeUntilExpiration)
+
+      return () => clearTimeout(timeout)
     }
   }, [token, getToken, onLogout])
 
@@ -68,7 +88,7 @@ export function AppSidebar() {
     link: string
   }[] = []
 
-  if (token?.role === 'ADMIN') {
+  if (user?.role === 'ADMIN') {
     menus.push({
       label: 'Admin',
       icon: Shield,
@@ -76,27 +96,27 @@ export function AppSidebar() {
     })
   }
 
-  if (token?.role === 'STUDENT') {
+  if (user?.role === 'STUDENT') {
     menus.push(
       {
         label: 'Activity Log',
         icon: Scroll,
-        link: `activity/${token?.userId}`
+        link: `activity/${user?.userId}`
       },
       {
         label: 'University',
         icon: GraduationCap,
-        link: `university/${token?.universityId}`
+        link: `university/${user?.universityId}`
       },
       {
         label: 'Company',
         icon: Briefcase,
-        link: `company/${token?.companyId}`
+        link: `company/${user?.companyId}`
       }
     )
   }
 
-  if (token?.role === 'ADVISOR') {
+  if (user?.role === 'ADVISOR') {
     menus.push(
       {
         label: 'Students',
@@ -106,17 +126,17 @@ export function AppSidebar() {
       {
         label: 'University',
         icon: GraduationCap,
-        link: `university/${token?.universityId}`
+        link: `university/${user?.universityId}`
       }
     )
   }
 
-  if (token?.role === 'SUPERVISOR') {
+  if (user?.role === 'SUPERVISOR') {
     menus.push(
       {
         label: 'Company',
         icon: Briefcase,
-        link: `company/${token?.companyId}`
+        link: `company/${user?.companyId}`
       },
       {
         label: 'Interns',
@@ -135,9 +155,9 @@ export function AppSidebar() {
               <img
                 src="/edutech-solutions.png"
                 alt="edutech-logo"
-                className="[[data-state=expanded]_&]:h-8 dark:bg-white dark:rounded dark:p-1"
+                className="dark:rounded dark:bg-white dark:p-1 [[data-state=expanded]_&]:h-8"
               />
-              <span className="font-medium text-lg">Interntrack System</span>
+              <span className="text-lg font-medium">Interntrack System</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -145,15 +165,27 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            <SidebarMenuItem></SidebarMenuItem>
             {menus.map(menu => (
               <SidebarMenuItem key={menu.label}>
                 <SidebarMenuButton asChild>
                   <Link to={menu.link}>
                     <menu.icon className="text-primary" />
                     <span>{menu.label}</span>
+                    {menu.label === 'Admin' && !open && (
+                      <div className="absolute right-0 top-0 mr-[-2px] mt-[-2px] size-1 animate-ping rounded-full bg-red-500" />
+                    )}
                   </Link>
                 </SidebarMenuButton>
+                {menu.label === 'Admin' && (
+                  <SidebarMenuBadge>
+                    {(unapprovedUsers?.data.length ?? 0) > 0 && (
+                      <>
+                        {unapprovedUsers?.data.length}
+                        <div className="absolute right-0 top-0 mr-[-2px] mt-[-2px] size-1 animate-ping rounded-full bg-red-500" />
+                      </>
+                    )}
+                  </SidebarMenuBadge>
+                )}
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
@@ -192,13 +224,14 @@ export function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User className="text-primary" /> {token?.name}
+                  <User className="text-primary" />
+                  {user?.name}
                   <ChevronUp className="ml-auto text-primary" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
                 <DropdownMenuItem asChild>
-                  <Link to={`profile/${token?.userId}`}>Profile</Link>
+                  <Link to={`profile/${user?.userId}`}>Profile</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="focus:bg-red-100 focus:text-red-500"

@@ -32,7 +32,7 @@ public class UniversityController {
     return ResponseEntity.ok(savedUniversity);
   }
 
-  @GetMapping("/")
+  @GetMapping("/list")
   public ResponseEntity<List<University>> getAllUniversities() {
     List<University> universities = universityService.getAllUniversities();
     return ResponseEntity.ok(universities);

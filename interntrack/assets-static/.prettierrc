@@ -10,6 +10,15 @@
   "bracketSpacing": true,
   "arrowParens": "avoid",
   "endOfLine": "lf",
-  "plugins": ["prettier-plugin-tailwindcss", "@ianvs/prettier-plugin-sort-imports"],
-  "importOrder": ["^react", "<THIRD_PARTY_MODULES>", "", "^@/(.*)$", "^[./]"]
+  "plugins": [
+    "@ianvs/prettier-plugin-sort-imports",
+    "prettier-plugin-tailwindcss"
+  ],
+  "importOrder": [
+    "^react",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^@/(.*)$",
+    "^[./]"
+  ]
 }

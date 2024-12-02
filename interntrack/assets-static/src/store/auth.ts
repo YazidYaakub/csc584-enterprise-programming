@@ -7,8 +7,8 @@ const TokenSchema = z.object({
   userId: z.number(),
   name: z.string(),
   role: z.enum(['STUDENT', 'ADVISOR', 'SUPERVISOR', 'ADMIN']),
-  companyId: z.number(),
-  universityId: z.number(),
+  companyId: z.number().optional(),
+  universityId: z.number().optional(),
   exp: z.number(),
   iat: z.number(),
   iss: z.string()
@@ -18,7 +18,7 @@ type Token = z.infer<typeof TokenSchema>
 
 type AuthStore = {
   isAuthenticated: boolean
-  setAuthenticated: (token: Token) => void
+  setAuthenticated: () => void
 
   token: Token | undefined
   getToken: () => boolean
@@ -34,7 +34,7 @@ type AuthStore = {
 
 export const useAuthStore = create<AuthStore>(set => ({
   isAuthenticated: !!localStorage.getItem('interntrack-token'),
-  setAuthenticated: token => set({ isAuthenticated: true, token }),
+  setAuthenticated: () => set({ isAuthenticated: true }),
 
   token: undefined,
   getToken: () => {

@@ -10,13 +10,13 @@ export const useLogin = (
   message: string = 'Successfully authenticated!',
   callback?: () => object | void
 ) => {
-  const { setAuthenticated } = useAuthStore()
+  const { getToken, token, setAuthenticated } = useAuthStore()
 
   return useMutation({
     mutationFn: (loginInput: LoginInput) => api().post('auth/login', loginInput),
     onSuccess: res => {
       localStorage.setItem('interntrack-token', res.data.token)
-      setAuthenticated(res.data.user)
+      if (getToken() && token) setAuthenticated()
       toast.success(message)
       if (callback) callback()
     },

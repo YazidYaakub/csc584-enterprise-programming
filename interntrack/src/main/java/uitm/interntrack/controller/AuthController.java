@@ -52,10 +52,11 @@ public class AuthController {
       @RequestParam(defaultValue = "0") Integer page,
       @RequestParam(defaultValue = "10") Integer size,
       @RequestParam(required = false) String role,
+      @RequestParam(required = false) Integer isApproved,
       @RequestParam(required = false) String universityId,
       @RequestParam(required = false) String companyId) {
 
-    Map<String, Object> users = userService.getUsers(page, size, role, universityId, companyId);
+    Map<String, Object> users = userService.getUsers(page, size, role, isApproved, universityId, companyId);
     return ResponseEntity.ok(users);
   }
 

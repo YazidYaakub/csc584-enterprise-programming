@@ -32,9 +32,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
       SELECT * FROM (
         SELECT u.*, ROW_NUMBER() OVER (ORDER BY USER_ID) as ROW_NUM
         FROM INTERNTRACK.USERS u
-        WHERE (:role IS NULL OR u.ROLE = :role)
+        where u.ROLE != 'ADMIN'
+        AND (:role IS NULL OR u.ROLE = :role)
         AND (:universityId IS NULL OR u.UNIVERSITY_ID = :universityId)
         AND (:companyId IS NULL OR u.COMPANY_ID = :companyId)
+        AND (:isApproved IS NULL OR u.IS_APPROVED = :isApproved)
       ) sub
       WHERE sub.ROW_NUM BETWEEN :start AND :end
       """, nativeQuery = true)
@@ -42,6 +44,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
       @Param("start") Integer start,
       @Param("end") Integer end,
       @Param("role") String role,
+      @Param("isApproved") Integer isApproved,
       @Param("universityId") String universityId,
       @Param("companyId") String companyId);
 

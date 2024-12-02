@@ -36,6 +36,8 @@ export function Profile() {
     'university',
     'company',
     'isApproved',
+    user?.role === 'ADMIN' && 'contactNumber',
+    user?.role === 'ADMIN' && 'address',
     user?.role !== 'SUPERVISOR' && 'position',
     user?.role !== 'ADVISOR' && 'subject',
     user?.role !== 'STUDENT' && 'semester'
@@ -45,15 +47,15 @@ export function Profile() {
   if (error) return <ErrorFull message={error.message} />
 
   return (
-    <div className="flex flex-col items-center w-full space-y-4 p-4">
+    <div className="flex w-full flex-col items-center space-y-4 p-4">
       {user.imageLink ? (
         <img
           src={user.imageLink}
           alt={`${user.name} photo`}
-          className="rounded-full bg-secondary size-32 flex items-center justify-center object-cover"
+          className="flex size-32 items-center justify-center rounded-full bg-purple-200 object-cover"
         />
       ) : (
-        <div className="rounded-full bg-secondary size-32 flex items-center justify-center">
+        <div className="flex size-32 items-center justify-center rounded-full bg-purple-200">
           <span className="text-2xl font-bold text-white">
             {user.name.split(' ').length > 1
               ? user.name.split(' ')[0][0] + user.name.split(' ')[1][0]
