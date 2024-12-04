@@ -1,6 +1,7 @@
 package uitm.interntrack.service;
 
 import java.util.List;
+import java.sql.Timestamp;
 
 import org.springframework.stereotype.Service;
 
@@ -9,26 +10,35 @@ import uitm.interntrack.repository.CommentRepository;
 
 @Service
 public class CommentService {
+    private final CommentRepository commentRepository;
 
-  private final CommentRepository commentRepository;
+    public CommentService(CommentRepository commentRepository) {
+        this.commentRepository = commentRepository;
+    }
 
-  public CommentService(CommentRepository commentRepository) {
-    this.commentRepository = commentRepository;
-  }
+    public Comment createComment(Long activityId, Long userId, Comment comment) {
+        comment.setActivityId(activityId);
+        comment.setUserId(userId);
+        comment.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        comment.setAcknowledged(0); 
 
-  public Comment createComment(Comment comment) {
-    return this.commentRepository.save(comment);
-  }
+        return this.commentRepository.save(comment);
+    }
 
-  public List<Comment> getComments() {
-    return commentRepository.findAll();
-  }
+    public List<Comment> getComments(Long activityId) {
+        return commentRepository.findByActivityId(activityId);
+    }
 
-  public void deleteComment(Long id) {
-    commentRepository.deleteById(id);
-  }
+    public void deleteComment(Long commentId) {
+        commentRepository.deleteById(commentId);
+    }
 
-  public Comment updateComment(Long id, Comment comment) {
-    return commentRepository.save(comment);
-  }
+    public Comment updateComment(Long commentId, Comment comment) {
+        Comment existingComment = commentRepository.findById(commentId)
+            .orElseThrow(() -> new RuntimeException("Comment not found"));
+        existingComment.setComment(comment.getComment());
+        existingComment.setAcknowledged(comment.getAcknowledged());
+        
+        return commentRepository.save(existingComment);
+    }
 }

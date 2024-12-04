@@ -11,10 +11,20 @@ public class Grade {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long gradesId;
 
-    private String studentId;
+    private Long studentId;
     private String month;
-    private char grading;
-    private Timestamp timestamp;
+    private String grade;
+    private Timestamp createdAt;
+
+    public Grade() {
+    }
+
+    public Grade(Long studentId, String month, String grade) {
+        this.studentId = studentId;
+        this.month = month;
+        this.grade = grade;
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+    }
 
     public Long getGradesId() {
         return gradesId;
@@ -24,11 +34,11 @@ public class Grade {
         this.gradesId = gradesId;
     }
 
-    public String getStudentId() {
+    public Long getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(String studentId) {
+    public void setStudentId(Long studentId) {
         this.studentId = studentId;
     }
 
@@ -40,19 +50,19 @@ public class Grade {
         this.month = month;
     }
 
-    public char getGrading() {
-        return grading;
+    public String getGrade() {
+        return grade;
     }
 
-    public void setGrading(char grading) {
-        this.grading = grading;
+    public void setGrade(String grade) {
+        this.grade = grade;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 }

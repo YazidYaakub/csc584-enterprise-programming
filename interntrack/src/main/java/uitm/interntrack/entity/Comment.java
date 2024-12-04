@@ -17,6 +17,16 @@ public class Comment {
     private Long userId;
     private int acknowledged;
 
+    
+    public Comment() {
+    }
+    public Comment(Long activityId, Long userId, String comment) {
+        this.activityId = activityId;
+        this.userId = userId;
+        this.comment = comment;
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+        this.acknowledged = 0;
+    }
     public Long getCommentId() {
         return commentId;
     }

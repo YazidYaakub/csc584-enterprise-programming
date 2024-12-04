@@ -1,7 +1,9 @@
 package uitm.interntrack.service;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import uitm.interntrack.entity.University;
 import uitm.interntrack.repository.UniversityRepository;
 
@@ -22,13 +24,7 @@ public class UniversityService {
     return universityRepository.findAll();
   }
 
-  public void deleteUniversity(Long id) {
-    universityRepository.deleteById(id);
+  public University getUniversityById(Long id) {
+    return universityRepository.findById(id).orElse(null);
   }
-
-  public University updateUniversity(Long id, University university) {
-    return universityRepository.save(university);
-  }
-  
 }
-

@@ -1,44 +1,92 @@
 package uitm.interntrack.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import uitm.interntrack.entity.User;
+import uitm.interntrack.entity.User.UpdateUserDTO;
+import uitm.interntrack.entity.User.UserDTO;
 import uitm.interntrack.repository.UserRepository;
-
-import java.util.List;
 
 @Service
 public class UserService {
 
-  private final UserRepository userRepository;
+  @Autowired
+  private UserRepository userRepository;
 
-  public UserService(UserRepository userRepository) {
-    this.userRepository = userRepository;
+  @Autowired
+  private AuthService authService;
+
+  public UserDTO createUser(User user) {
+    user.setIsApproved(0);
+
+    return new UserDTO(userRepository.save(user));
   }
 
-  public User createUser(User user) {
-    return userRepository.save(user);
+  public Map<String, Object> getUsers(Integer page, Integer size, String role, String universityId, String companyId) {
+    Integer start = page * size + 1;
+    Integer end = start + size - 1;
+
+    List<User> users = userRepository.getUsers(start, end, role, universityId, companyId);
+    List<UserDTO> userDTOs = users.stream().map(UserDTO::new).toList();
+    Long totalCount = userRepository.countUsers(role);
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("data", userDTOs);
+    response.put("total", totalCount);
+    response.put("page", page);
+    response.put("size", size);
+
+    return response;
   }
 
-  public List<User> getAllUsers() {
-    return userRepository.findAll();
+  public UserDTO getUser(Long id) {
+    Optional<User> userOptional = userRepository.findById(id);
+    if (userOptional.isEmpty())
+      throw new ResponseStatusException(HttpStatus.NO_CONTENT, "User not found");
+
+    return new UserDTO(userOptional.get());
   }
-  public User updateUser(Long id, User user) {
-    User existingUser = userRepository.findById(id).orElse(null);
-    if (existingUser == null) {
-      return null;
+
+  public UserDTO updateUser(Long id, UpdateUserDTO updateUserDTO, String token) {
+    if (!authService.isAuthorised(token) || token == null) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
     }
-    existingUser.setName(user.getName());
-    return userRepository.save(existingUser);
-  }
 
-  @Transactional(readOnly = true)
-  public User getUser(Long id) {
-    return userRepository.findByIdWithReference(id).orElse(null);
+    Optional<User> userOptional = userRepository.findById(id);
+    if (userOptional.isEmpty())
+      throw new ResponseStatusException(HttpStatus.NO_CONTENT, "User not found");
+
+    User user = userOptional.get();
+    System.out.println(user.getPassword());
+
+    user.setName(updateUserDTO.getName());
+    user.setAddress(updateUserDTO.getAddress());
+    user.setContactNumber(updateUserDTO.getContactNumber());
+    user.setImageLink(updateUserDTO.getImageLink());
+    user.setSemester(updateUserDTO.getSemester());
+    user.setPosition(updateUserDTO.getPosition());
+    user.setSubject(updateUserDTO.getSubject());
+
+    if (updateUserDTO.getPassword() != null)
+      user.setPassword(updateUserDTO.getPassword());
+
+    userRepository.updateUser(id, updateUserDTO.getName(), updateUserDTO.getAddress(), updateUserDTO.getContactNumber(),
+        updateUserDTO.getImageLink(), updateUserDTO.getSemester(), updateUserDTO.getPosition(),
+        updateUserDTO.getSubject(), user.getPassword());
+
+    return new UserDTO(user);
   }
 
   public void deleteUser(Long id) {
-     userRepository.deleteById(id);
+    userRepository.deleteUser(id);
   }
+
 }

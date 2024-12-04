@@ -24,29 +24,29 @@ public class CommentController {
   }
 
   @PostMapping("/create")
-  public ResponseEntity<Comment> createComment(@RequestBody Comment comment) {
-    var targetComment = this.commentService.createComment(comment);
+  public ResponseEntity<Comment> createComment(@RequestParam Long activityId, @RequestParam Long userId, @RequestBody Comment comment) {
+    var targetComment = this.commentService.createComment(activityId, userId, comment);
     logger.info("Comment created: {}", targetComment);
     return ResponseEntity.ok(targetComment);
   }
 
-  @GetMapping("/")
-  public ResponseEntity<List<Comment>> getComments() {
-    var comments = commentService.getComments();
-    logger.info("Comments retrieved: {}", comments);
+  @GetMapping("/activity/{activityId}")
+  public ResponseEntity<List<Comment>> getComments(@PathVariable Long activityId) {
+    var comments = commentService.getComments(activityId);
+    logger.info("Comments retrieved for activity {}: {}", activityId, comments);
     return ResponseEntity.ok(comments);
   }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
-    commentService.deleteComment(id);
-    logger.info("Comment deleted: {}", id);
+  @DeleteMapping("/{commentId}")
+  public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
+    commentService.deleteComment(commentId);
+    logger.info("Comment deleted: {}", commentId);
     return ResponseEntity.noContent().build();
   }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<Comment> updateComment(@PathVariable Long id, @RequestBody Comment comment) {
-    Comment updatedComment = commentService.updateComment(id, comment);
+  @PutMapping("/{commentId}")
+  public ResponseEntity<Comment> updateComment(@PathVariable Long commentId, @RequestBody Comment comment) {
+    Comment updatedComment = commentService.updateComment(commentId, comment);
     logger.info("Comment updated: {}", updatedComment);
     return ResponseEntity.ok(updatedComment);
   }
