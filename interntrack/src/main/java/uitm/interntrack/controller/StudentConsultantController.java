@@ -45,4 +45,15 @@ public class StudentConsultantController {
     ) {
         return service.createStudentConsultant(studentId, advisorId, supervisorId);
     }
+
+    @PutMapping("/{id}")
+    public void modifyStudentConsultant(
+            @PathVariable Long id,
+            @RequestParam Long studentId,
+            @RequestParam Long advisorId,
+            @RequestParam Long supervisorId
+    ) {
+        // Call the service to perform the modification
+        service.modifyStudentConsultant(id, studentId, advisorId, supervisorId);
+    }
 }

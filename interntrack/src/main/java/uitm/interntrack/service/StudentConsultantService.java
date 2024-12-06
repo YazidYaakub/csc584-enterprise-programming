@@ -1,6 +1,7 @@
 package uitm.interntrack.service;
 
 import org.springframework.stereotype.Service;
+
 import uitm.interntrack.entity.StudentConsultant;
 import uitm.interntrack.repository.StudentConsultantRepository;
 import java.sql.Timestamp;
@@ -29,9 +30,24 @@ public class StudentConsultantService {
     }
 
     public StudentConsultant createStudentConsultant(Long studentId, Long advisorId, Long supervisorId) {
+        // Create a new StudentConsultant object with the provided data
+        StudentConsultant studentConsultant = StudentConsultant.builder()
+                .studentId(studentId)
+                .advisorId(advisorId)
+                .supervisorId(supervisorId)
+                .assignedAt(new Timestamp(System.currentTimeMillis())) // Auto-generate the assigned date
+                .build();
+    
+        // Save the StudentConsultant entity to the database
+        return repository.save(studentConsultant);
+    }
+    
+
+    public void modifyStudentConsultant(Long id, Long studentId, Long advisorId, Long supervisorId) {
+        // Update the assignedAt timestamp to the current time
         Timestamp assignedAt = new Timestamp(System.currentTimeMillis());
 
-        StudentConsultant studentConsultant = new StudentConsultant(studentId, advisorId, supervisorId, assignedAt);
-        return repository.save(studentConsultant);
+        // Use the repository's update method
+        repository.updateStudentConsultant(id, studentId, advisorId, supervisorId, assignedAt);
     }
 }

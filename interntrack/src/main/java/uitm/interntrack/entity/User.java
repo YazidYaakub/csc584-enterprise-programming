@@ -30,6 +30,7 @@ public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @Column(name = "USER_ID")
   private Long userId;
 
   private String name;
