@@ -18,6 +18,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class StudentConsultant {
 
+    // uncomment sequence here for sequence db generate
+    // @Id
+    // @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    // @Column(name = "STUDENT_CONSULTANT_ID")
+    // private Long studentConsultantId;
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_consultant_seq_gen")
     @SequenceGenerator(name = "student_consultant_seq_gen", sequenceName = "STUDENT_CONSULTANT_SEQUENCE", allocationSize = 1)
