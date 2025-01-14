@@ -53,3 +53,22 @@ npm run dev
 ### Database ERD
 
 ![Database](database.png)
+
+### Software Dependencies for this Project
+
+#### Integrated Development Environment (IDE)
+- **Core Developer IDE**: IntelliJ IDEA  
+- **Other Supported Editors**: Visual Studio Code (VS Code)  
+- **Additionally Supported**: Apache NetBeans, Eclipse, or any other suitable IDE for Java Spring Boot projects.
+
+#### Programming Language/Runtime Environment
+- **Programming Language**: Java  
+- **Runtime Environment**: Java Development Kit (JDK) 17  
+
+#### Database Connectivity
+- **Driver**: Oracle JDBC (`ojdbc8`)  
+- **Framework**: Spring Data JPA (Java Persistence API) (via `spring-boot-starter-data-jpa`)  
+- **ORM Tool**: Hibernate (`hibernate-core`, version 6.5.3.Final)  
+
+#### Application Server
+- The project runs on **Spring Boot's embedded application server**, specifically the **embedded Apache Tomcat** (default in Spring Boot).
