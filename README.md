@@ -2,6 +2,25 @@
 
 #### This system is to solve problem where supervisor and advisor cannot keep track of student's activity throughout their internship. By digitalising the log book activity which is required during internship duration, advisors from university, supervisors from students' chosen companies and student itself no longer need to keep a physical paper to keep track.
 
+### Software Dependencies for this Project
+
+#### Integrated Development Environment (IDE)
+- **Core Developer IDE**: IntelliJ IDEA  
+- **Other Supported Editors**: Visual Studio Code (VS Code)  
+- **Additionally Supported**: Apache NetBeans, Eclipse, or any other suitable IDE for Java Spring Boot projects.
+
+#### Programming Language/Runtime Environment
+- **Programming Language**: Java  
+- **Runtime Environment**: Java Development Kit (JDK) 17  
+
+#### Database Connectivity
+- **Driver**: Oracle JDBC (`ojdbc8`)  
+- **Framework**: Spring Data JPA (Java Persistence API) (via `spring-boot-starter-data-jpa`)  
+- **ORM Tool**: Hibernate (`hibernate-core`, version 6.5.3.Final)  
+
+#### Application Server
+- The project runs on **Spring Boot's embedded application server**, specifically the **embedded Apache Tomcat** (default in Spring Boot).
+  
 ### Database
 
 1. Go to the directory `interntrack/src/main/resources/db` and open the file `schema.sql` and `migration.sql`
@@ -54,21 +73,4 @@ npm run dev
 
 ![Database](database.png)
 
-### Software Dependencies for this Project
 
-#### Integrated Development Environment (IDE)
-- **Core Developer IDE**: IntelliJ IDEA  
-- **Other Supported Editors**: Visual Studio Code (VS Code)  
-- **Additionally Supported**: Apache NetBeans, Eclipse, or any other suitable IDE for Java Spring Boot projects.
-
-#### Programming Language/Runtime Environment
-- **Programming Language**: Java  
-- **Runtime Environment**: Java Development Kit (JDK) 17  
-
-#### Database Connectivity
-- **Driver**: Oracle JDBC (`ojdbc8`)  
-- **Framework**: Spring Data JPA (Java Persistence API) (via `spring-boot-starter-data-jpa`)  
-- **ORM Tool**: Hibernate (`hibernate-core`, version 6.5.3.Final)  
-
-#### Application Server
-- The project runs on **Spring Boot's embedded application server**, specifically the **embedded Apache Tomcat** (default in Spring Boot).
