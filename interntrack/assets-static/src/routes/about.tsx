@@ -101,7 +101,7 @@ export const About = () => {
 </div>
 
 
-        {/* Team ICT502 */}
+        {/* Team ICT502  */}
         <h3 style={{ fontWeight: 'bold', marginTop: '20px' }}>TEAM PROJECT ICT502</h3>
         <div
           style={{
@@ -152,3 +152,4 @@ export const About = () => {
     
   );
 };
+//end of update by rosmi
