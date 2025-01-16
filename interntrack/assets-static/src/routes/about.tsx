@@ -80,7 +80,7 @@ export const About = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        width: '150px', // Ensure each image has a fixed width
+        width: '150px', // Ensure each image has a fixed width, ok 
       }}
     >
       <img
