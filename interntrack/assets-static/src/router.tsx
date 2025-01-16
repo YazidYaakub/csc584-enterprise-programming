@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 
+
 import { About } from '@/routes/about'
 import { ActivityRoute } from '@/routes/activity'
 import { Admin } from '@/routes/admin'
@@ -24,12 +25,20 @@ export const router = createBrowserRouter([
     path: 'auth',
     element: <Auth />
   },
+
+    // Public routes
+    {
+      path: '/about',
+      element: <About />,
+    },
   {
     path: '/',
     element: <ProtectedRoute element={<Root />} />,
     errorElement: <NotFound />,
     children: [
-      { index: true, element: <About /> },
+      
+         // Make it public access
+      { index: true, element: <Navigate to="/about" /> }, // Default route
       // TODO: should protected by student consultant
       { path: 'activity/:userId', element: <ActivityRoute /> },
       // TODO: should protected by token
@@ -54,7 +63,9 @@ export const router = createBrowserRouter([
           { path: ':universityId', element: <University /> }
         ]
       },
-      { path: 'admin', element: <Admin /> }
+      //{ path: 'admin', element: <Admin /> }
+      { path: 'admin', element: <ProtectedRoute element={<Admin />} /> }
     ]
   }
+
 ])

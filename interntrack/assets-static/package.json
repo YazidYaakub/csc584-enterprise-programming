@@ -33,6 +33,7 @@
     "@tiptap/pm": "^2.10.2",
     "@tiptap/react": "^2.10.2",
     "@tiptap/starter-kit": "^2.10.2",
+    "assets-static": "file:",
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
