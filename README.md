@@ -1,69 +1,109 @@
 # InternTrack
 
-#### This system is to solve the problem where supervisors and advisors cannot keep track of students' activities throughout their internship. By digitalizing the logbook activity, which is required during the internship duration, advisors from the university, supervisors from students' chosen companies, and students themselves no longer need to keep physical paper records.
+**InternTrack** is an internship management system designed to enhance communication and collaboration between students, university advisors, and company supervisors. By replacing traditional paper logbooks with a digital solution, it simplifies activity tracking, provides real-time updates, and streamlines workflows for all stakeholders.
 
-### Software Dependencies
+---
 
-#### Integrated Development Environment (IDE)
-- **Core Developer IDE**: IntelliJ IDEA  
-- **Other Supported Editors**: Visual Studio Code (VS Code)  
+## Table of Contents
+1. [Project Description](#project-description)
+2. [Software Dependencies](#software-dependencies)
+3. [Database Setup](#database-setup)
+4. [Backend Setup](#backend-setup)
+5. [Frontend Setup](#frontend-setup)
+6. [UI Overview](#ui-overview)
+7. [Database ERD](#database-erd)
+8. [Team Project](#contributing)
+9. [Acknowledgement](#license)
+
+---
+
+## Project Description
+
+InternTrack addresses the challenge of tracking student grades during internships. The system benefits:
+- **University Advisors**: Monitor and evaluate student progress in real-time.
+- **Company Supervisors**: Provide structured feedback and approvals.
+- **Students**: Submit daily logs digitally and maintain activity records seamlessly.
+
+---
+
+## Software Dependencies
+
+### Integrated Development Environment (IDE)
+- **Core Developer IDE**: IntelliJ IDEA
+- **Other Supported Editors**: Visual Studio Code (VS Code)
 - **Additionally Supported**: Apache NetBeans, Eclipse, or any other suitable IDE for Java Spring Boot projects.
 
-#### Programming Language/Runtime Environment
-- **Programming Language**: Java  
-- **Runtime Environment**: Java Development Kit (JDK) 17  
+### Programming Language/Runtime Environment
+- **Programming Language**: Java
+- **Runtime Environment**: Java Development Kit (JDK) 17
 
-#### Database Connectivity
-- **Driver**: Oracle JDBC (`ojdbc8`)  
-- **Framework**: Spring Data JPA (Java Persistence API) (via `spring-boot-starter-data-jpa`)  
-- **ORM Tool**: Hibernate (`hibernate-core`, version 6.5.3.Final)  
+### Database Connectivity
+- **Driver**: Oracle JDBC (`ojdbc8`)
+- **Framework**: Spring Data JPA (Java Persistence API) (via `spring-boot-starter-data-jpa`)
+- **ORM Tool**: Hibernate (`hibernate-core`, version 6.5.3.Final)
 
-#### Application Server
+### Application Server
 - The project runs on **Spring Boot's embedded application server**, specifically the **embedded Apache Tomcat** (default in Spring Boot).
 
-### Database
+---
 
-1. Go to the directory `interntrack/src/main/resources/db` and open the file `schema.sql` and `migration.sql`.
-2. Copy the content of it and run it in Oracle SQL (`schema` first, then `migration`).
-3. Only run these SQL files if there are database changes or initial setup.
+## Database Setup
 
-### Backend
+Before setting up the database, ensure you have:
+- A valid Oracle database instance.
+- A user account with permissions to create tables and modify schema.
 
-###### To run the app locally, make a clean installation using Maven for the Java-side app. If you intend to use `.mvnw`, make sure the current working directory is in `interntrack` and contains `pom.xml`.
+To execute the SQL scripts:
+1. Go to the directory `interntrack/src/main/resources/db`.
+2. Open the files `schema.sql` and `migration.sql`.
+3. Execute the scripts in Oracle SQL, in the following order:
+   ```sql
+   @schema.sql
+   @migration.sql
 
-```bash
+---
+
+## Backend Setup
+
+1. To build and run the backend application:
+
+- Make a clean installation using Maven:
+
 mvn clean install
-# @
-../mvnw clean install
-```
-Also can use command> .\mvnw clean install
-
 ```bash
-mvn spring-boot:run
-# @
-../mvnw spring-boot:run
+./mvnw clean install   # For Unix/Linux
+.\mvnw clean install   # For Windows
 ```
-Also can use command> ./mvnw spring-boot:run
+2. Start the Spring Boot application:
 
-- Open http://localhost:8081 for viewing the website.
+mvn spring-boot:run
+```bash
+./mvnw spring-boot:run   # For Unix/Linux
+.\mvnw spring-boot:run   # For Windows
+```
+The application will be accessible at http://localhost:8081.
 
-### Frontend
+---
 
-###### To build the frontend, go to the directory of `assets/static` and install using Node.js.
+## Frontend Setup
 
+Ensure Node.js (version 16.x or above) is installed.
+
+1. Navigate to the frontend directory:
+```bash
+cd assets/static
+```
+2. Install dependencies and build the project:
 ```bash
 npm install
-npm run build
+npm run build   # For production
 ```
-
-###### To develop the frontend with hot reload:
-
+3. To develop with hot reload:
 ```bash
-npm install # if not installed yet or new packages added
 npm run dev
 ```
+Access the frontend at http://localhost:5173.
 
-- Open http://localhost:5173 to view the frontend app.
 
 ### UI Overview
 
@@ -73,4 +113,27 @@ npm run dev
 
 ![Database](database.png)
 
+---
 
+## Team Projects
+
+### TEAM PROJECT CSC584
+- **ROSMI BIN ABD RAZAK**
+- **MUHAMMAD HARITH IQBAL BIN MOHD HANIZUN**
+- **MOHAMAD ZAFIR BIN NADZRI**
+- **MOHAMAD TAUFIK BIN ABD RAHMAN**
+- **MOHAMMAD YAZID BIN AG MOHD YAAKUB**
+
+---
+
+### TEAM PROJECT ICT502
+- **ROSMI BIN ABD RAZAK**
+- **MUHAMMAD HARITH IQBAL BIN MOHD HANIZUN**
+- **MOHAMAD ZAFIR BIN NADZRI**
+- **MOHAMAD ZUBAIR AZIM**
+
+---
+
+## Acknowledgments
+
+We would like to express our sincere gratitude to the lecturers of CSC584 and ICT502 for their guidance and support during the project, as well as to all team members for their dedication and contributions to the success of this project.
