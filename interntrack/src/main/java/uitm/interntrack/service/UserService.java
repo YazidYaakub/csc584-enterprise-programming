@@ -48,7 +48,7 @@ public class UserService {
     return response;
   }
 
-  public UserDTO getUser(Long id) {
+  public UserDTO getUser(String id) {
     Optional<User> userOptional = userRepository.findById(id);
     if (userOptional.isEmpty())
       throw new ResponseStatusException(HttpStatus.NO_CONTENT, "User not found");
@@ -56,7 +56,7 @@ public class UserService {
     return new UserDTO(userOptional.get());
   }
 
-  public UserDTO updateUser(Long id, UpdateUserDTO updateUserDTO, String token) {
+  public UserDTO updateUser(String id, UpdateUserDTO updateUserDTO, String token) {
     if (!authService.isAuthorised(token) || token == null) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
     }
@@ -86,7 +86,7 @@ public class UserService {
     return new UserDTO(user);
   }
 
-  public void deleteUser(Long id) {
+  public void deleteUser(String id) {
     userRepository.deleteUser(id);
   }
 

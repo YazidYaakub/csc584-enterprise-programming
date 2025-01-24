@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "STUDENT_CONSULTANTS")
+@Table(name = "STUDENT_CONSULTANTS", schema = "INTERNTRACK")
 public class StudentConsultant {
 
 
@@ -13,32 +13,32 @@ public class StudentConsultant {
     @Column(name = "STUDENT_CONSULTANT_ID", columnDefinition = "VARCHAR(36)")
     private String studentConsultantId;
 
-    private Long studentId;
-    private Long advisorId;
-    private Long supervisorId;
+    private String studentId;
+    private String advisorId;
+    private String supervisorId;
     private Timestamp assignedAt;
 
-    public Long getStudentId() {
+    public String getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(Long studentId) {
+    public void setStudentId(String studentId) {
         this.studentId = studentId;
     }
 
-    public Long getAdvisorId() {
+    public String getAdvisorId() {
         return advisorId;
     }
 
-    public void setAdvisorId(Long advisorId) {
+    public void setAdvisorId(String advisorId) {
         this.advisorId = advisorId;
     }
 
-    public Long getSupervisorId() {
+    public String getSupervisorId() {
         return supervisorId;
     }
 
-    public void setSupervisorId(Long supervisorId) {
+    public void setSupervisorId(String supervisorId) {
         this.supervisorId = supervisorId;
     }
 

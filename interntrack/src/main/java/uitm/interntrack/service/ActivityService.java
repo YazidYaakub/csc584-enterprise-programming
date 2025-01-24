@@ -23,7 +23,7 @@ public class ActivityService {
     return activityRepository.save(activity);
   }
 
-  public Map<String, Object> getActivities(int page, int size, Long studentId, int month) {
+  public Map<String, Object> getActivities(int page, int size, String studentId, int month) {
     Integer start = page * size + 1;
     Integer end = start + size - 1;
 
@@ -39,12 +39,12 @@ public class ActivityService {
     return response;
   }
 
-  public Activity getActivity(Long id) {
+  public Activity getActivity(String id) {
     return activityRepository.findById(id).orElseThrow(() -> new RuntimeException("Activity not found"));
   }
 
   @Transactional
-  public Activity updateActivity(Long id, UpdateActivityDTO updateActivityDTO) {
+  public Activity updateActivity(String id, UpdateActivityDTO updateActivityDTO) {
     Optional<Activity> activity = activityRepository.findById(id);
 
     if (activity.isEmpty()) {
@@ -60,7 +60,7 @@ public class ActivityService {
     return activityRepository.findById(id).orElseThrow(() -> new RuntimeException("Activity not found"));
   }
 
-  public void deleteActivity(Long id) {
+  public void deleteActivity(String id) {
     activityRepository.deleteById(id);
   }
 }

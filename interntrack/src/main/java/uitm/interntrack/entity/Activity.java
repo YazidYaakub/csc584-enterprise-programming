@@ -12,13 +12,13 @@ public class Activity {
     @Column(name = "ACTIVITY_ID", columnDefinition = "VARCHAR(36)")
     private String activityId;
 
-    private Long studentId;
+    private String studentId;
     private String activityTitle;
 
     private String activityDescription;
     private Timestamp activityDate;
     private int isApproved;
-    private Long approvedById;
+    private String approvedById;
     private Timestamp approvedAt;
 
     @PrePersist
@@ -36,11 +36,11 @@ public class Activity {
         this.activityId = activityId;
     }
 
-    public Long getStudentId() {
+    public String getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(Long studentId) {
+    public void setStudentId(String studentId) {
         this.studentId = studentId;
     }
 
@@ -76,11 +76,11 @@ public class Activity {
         this.isApproved = isApproved;
     }
 
-    public Long getApprovedById() {
+    public String getApprovedById() {
         return approvedById;
     }
 
-    public void setApprovedById(Long approvedById) {
+    public void setApprovedById(String approvedById) {
         this.approvedById = approvedById;
     }
 
@@ -96,7 +96,7 @@ public class Activity {
         private String activityTitle;
         private String activityDescription;
         private int isApproved;
-        private Long approvedById;
+        private String approvedById;
         private Timestamp approvedAt;
 
         public String getActivityTitle() {
@@ -123,11 +123,11 @@ public class Activity {
             this.isApproved = isApproved;
         }
 
-        public Long getApprovedById() {
+        public String getApprovedById() {
             return approvedById;
         }
 
-        public void setApprovedById(Long approvedById) {
+        public void setApprovedById(String approvedById) {
             this.approvedById = approvedById;
         }
 

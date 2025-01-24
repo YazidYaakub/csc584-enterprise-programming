@@ -24,7 +24,7 @@ public class UniversityService {
     return universityRepository.findAll();
   }
 
-  public University getUniversityById(Long id) {
+  public University getUniversityById(String id) {
     return universityRepository.findById(id).orElse(null);
   }
 }
