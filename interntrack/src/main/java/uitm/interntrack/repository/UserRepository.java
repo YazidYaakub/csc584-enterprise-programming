@@ -14,7 +14,7 @@ import uitm.interntrack.entity.User;
 
 @Transactional
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, String> {
   @Query(value = """
       INSERT INTO INTERNTRACK.USERS (EMAIL, NAME, PASSWORD, ROLE, COMPANY_ID, UNIVERSITY_ID)
       """, nativeQuery = true)
@@ -26,7 +26,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
       LEFT JOIN INTERNTRACK.COMPANIES comp ON u.COMPANY_ID = comp.COMPANY_ID
       WHERE u.USER_ID = :userId
       """, nativeQuery = true)
-  Optional<User> getUser(@Param("userId") Long userId);
+  Optional<User> getUser(@Param("userId") String userId);
 
   @Query(value = """
       SELECT * FROM (
@@ -54,7 +54,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
       SET NAME = :name, ADDRESS = :address, CONTACT_NUMBER = :contactNumber, IMAGE_LINK = :imageLink, SEMESTER = :semester, POSITION = :position, SUBJECT = :subject, PASSWORD = :password
       WHERE USER_ID = :userId
       """, nativeQuery = true)
-  void updateUser(@Param("userId") Long userId, @Param("name") String name, @Param("address") String address,
+  void updateUser(@Param("userId") String userId, @Param("name") String name, @Param("address") String address,
       @Param("contactNumber") String contactNumber, @Param("imageLink") String imageLink,
       @Param("semester") Long semester, @Param("position") String position, @Param("subject") String subject,
       @Param("password") String password);
@@ -70,7 +70,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
       DELETE FROM INTERNTRACK.USERS
       WHERE USER_ID = :userId
       """, nativeQuery = true)
-  void deleteUser(@Param("userId") Long userId);
+  void deleteUser(@Param("userId") String userId);
 
   @Query(value = """
       SELECT u.* FROM INTERNTRACK.USERS u
@@ -89,7 +89,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
       LEFT JOIN INTERNTRACK.USERS supervisor ON supervisor.USER_ID = sc.SUPERVISOR_ID
       WHERE sc.STUDENT_ID = :studentId
       """, nativeQuery = true)
-  List<Object[]> getReferencesByStudent(@Param("studentId") Long studentId);
+  List<Object[]> getReferencesByStudent(@Param("studentId") String studentId);
 
   @Query(value = """
       SELECT
@@ -102,7 +102,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
       LEFT JOIN INTERNTRACK.USERS supervisor ON supervisor.USER_ID = sc.SUPERVISOR_ID
       WHERE sc.ADVISOR_ID = :advisorId
       """, nativeQuery = true)
-  List<Object[]> getReferencesByAdvisor(@Param("advisorId") Long advisorId);
+  List<Object[]> getReferencesByAdvisor(@Param("advisorId") String advisorId);
 
   @Query(value = """
       SELECT
@@ -115,5 +115,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
       LEFT JOIN INTERNTRACK.USERS supervisor ON supervisor.USER_ID = sc.SUPERVISOR_ID
       WHERE sc.SUPERVISOR_ID = :supervisorId
       """, nativeQuery = true)
-  List<Object[]> getReferencesBySupervisor(@Param("supervisorId") Long supervisorId);
+  List<Object[]> getReferencesBySupervisor(@Param("supervisorId") String supervisorId);
 }
