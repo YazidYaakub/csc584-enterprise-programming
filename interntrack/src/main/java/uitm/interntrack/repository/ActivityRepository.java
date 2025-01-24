@@ -1,4 +1,3 @@
-// ActivityRepository.java
 package uitm.interntrack.repository;
 
 import java.sql.Timestamp;

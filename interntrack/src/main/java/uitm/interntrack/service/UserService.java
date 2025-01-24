@@ -90,16 +90,4 @@ public class UserService {
     userRepository.deleteUser(id);
   }
 
-  public UserDTO approveUser(Long userId) {
-    User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-
-    if(user.getIsApproved() == 1) {
-        throw new ResponseStatusException(HttpStatus.CONFLICT, "User already approved"); // Use HttpStatus.CONFLICT
-    }
-    user.setIsApproved(1);
-    User savedUser = userRepository.save(user); 
-
-    return new UserDTO(savedUser);
-  }
 }
