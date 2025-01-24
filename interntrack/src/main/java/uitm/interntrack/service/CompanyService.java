@@ -24,7 +24,7 @@ public class CompanyService {
     return companyRepository.findAll();
   }
 
-  public Company getCompanyById(Long id) {
+  public Company getCompanyById(String id) {
     return companyRepository.findById(id).orElse(null);
   }
 

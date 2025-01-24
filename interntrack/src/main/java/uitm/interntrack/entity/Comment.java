@@ -8,28 +8,29 @@ import java.sql.Timestamp;
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long commentId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "COMMENT_ID", columnDefinition = "VARCHAR(36)")
+    private String commentId;
 
-    private Long activityId;
+    private String activityId;
     private String comment;
     private Timestamp createdAt;
-    private Long userId;
+    private String userId;
     private int acknowledged;
 
-    public Long getCommentId() {
+    public String getCommentId() {
         return commentId;
     }
 
-    public void setCommentId(Long commentId) {
+    public void setCommentId(String commentId) {
         this.commentId = commentId;
     }
 
-    public Long getActivityId() {
+    public String getActivityId() {
         return activityId;
     }
 
-    public void setActivityId(Long activityId) {
+    public void setActivityId(String activityId) {
         this.activityId = activityId;
     }
 
@@ -49,11 +50,11 @@ public class Comment {
         this.createdAt = createdAt;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

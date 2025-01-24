@@ -8,16 +8,17 @@ import java.sql.Timestamp;
 public class Activity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long activityId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ACTIVITY_ID", columnDefinition = "VARCHAR(36)")
+    private String activityId;
 
-    private Long studentId;
+    private String studentId;
     private String activityTitle;
 
     private String activityDescription;
     private Timestamp activityDate;
     private int isApproved;
-    private Long approvedById;
+    private String approvedById;
     private Timestamp approvedAt;
 
     @PrePersist
@@ -27,19 +28,19 @@ public class Activity {
         }
     }
 
-    public Long getActivityId() {
+    public String getActivityId() {
         return activityId;
     }
 
-    public void setActivityId(Long activityId) {
+    public void setActivityId(String activityId) {
         this.activityId = activityId;
     }
 
-    public Long getStudentId() {
+    public String getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(Long studentId) {
+    public void setStudentId(String studentId) {
         this.studentId = studentId;
     }
 
@@ -75,11 +76,11 @@ public class Activity {
         this.isApproved = isApproved;
     }
 
-    public Long getApprovedById() {
+    public String getApprovedById() {
         return approvedById;
     }
 
-    public void setApprovedById(Long approvedById) {
+    public void setApprovedById(String approvedById) {
         this.approvedById = approvedById;
     }
 
@@ -95,7 +96,7 @@ public class Activity {
         private String activityTitle;
         private String activityDescription;
         private int isApproved;
-        private Long approvedById;
+        private String approvedById;
         private Timestamp approvedAt;
 
         public String getActivityTitle() {
@@ -122,11 +123,11 @@ public class Activity {
             this.isApproved = isApproved;
         }
 
-        public Long getApprovedById() {
+        public String getApprovedById() {
             return approvedById;
         }
 
-        public void setApprovedById(Long approvedById) {
+        public void setApprovedById(String approvedById) {
             this.approvedById = approvedById;
         }
 

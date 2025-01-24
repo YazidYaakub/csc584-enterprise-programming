@@ -9,8 +9,9 @@ import jakarta.persistence.*;
 public class University {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long universityId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "UNIVERSITY_ID", columnDefinition = "VARCHAR(36)")
+    private String universityId; // UUID will be stored as a string in the database
 
     @Column(nullable = false)
     private String name;
@@ -27,11 +28,11 @@ public class University {
     @OneToMany(mappedBy = "university")
     private List<User> users;
 
-    public Long getUniversityId() {
+    public String getUniversityId() {
         return universityId;
     }
 
-    public void setId(Long universityId) {
+    public void setId(String universityId) {
         this.universityId = universityId;
     }
 
