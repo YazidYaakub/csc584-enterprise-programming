@@ -32,7 +32,7 @@ export const Company = z.object({
 export type Company = z.infer<typeof Company>
 
 export const User = z.object({
-  userId: z.number(),
+  userId: z.string(),
   name: z.string(),
   email: z.string().email(),
   role: z.enum(['STUDENT', 'SUPERVISOR', 'ADMIN', 'ADVISOR']),
