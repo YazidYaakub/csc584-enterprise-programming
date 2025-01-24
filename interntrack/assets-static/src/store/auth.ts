@@ -4,11 +4,11 @@ import { create } from 'zustand'
 import { User } from '@/schema/entity'
 
 const TokenSchema = z.object({
-  userId: z.number(),
+  userId: z.string(),
   name: z.string(),
   role: z.enum(['STUDENT', 'ADVISOR', 'SUPERVISOR', 'ADMIN']),
-  companyId: z.number().optional(),
-  universityId: z.number().optional(),
+  companyId: z.string().optional(),
+  universityId: z.string().optional(),
   exp: z.number(),
   iat: z.number(),
   iss: z.string()
