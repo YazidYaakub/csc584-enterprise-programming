@@ -29,8 +29,9 @@ import lombok.NoArgsConstructor;
 public class User {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  private Long userId;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "USER_ID", columnDefinition = "VARCHAR(36)")
+  private String userId; // UUID will be stored as a string in the database
 
   private String name;
 
@@ -56,10 +57,10 @@ public class User {
   private Timestamp updatedAt;
 
   @Column(nullable = true)
-  private Long companyId;
+  private String companyId;
 
   @Column(nullable = true)
-  private Long universityId;
+  private String universityId;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "universityId", insertable = false, updatable = false)
@@ -80,7 +81,7 @@ public class User {
   @AllArgsConstructor
   @Builder
   public static class UserDTO {
-    private Long userId;
+    private String userId;
     private String name;
     private String email;
     private String role;
@@ -90,8 +91,8 @@ public class User {
     private String contactNumber;
     private String imageLink;
     private String address;
-    private Long companyId;
-    private Long universityId;
+    private String companyId;
+    private String universityId;
     private Long isApproved;
     private Company company;
     private University university;

@@ -7,10 +7,13 @@ import java.sql.Timestamp;
 @Table(name = "STUDENT_CONSULTANTS")
 public class StudentConsultant {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long studentId;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "STUDENT_CONSULTANT_ID", columnDefinition = "VARCHAR(36)")
+    private String studentConsultantId;
+
+    private Long studentId;
     private Long advisorId;
     private Long supervisorId;
     private Timestamp assignedAt;
@@ -37,6 +40,14 @@ public class StudentConsultant {
 
     public void setSupervisorId(Long supervisorId) {
         this.supervisorId = supervisorId;
+    }
+
+    public String getStudentConsultantId() {
+        return studentConsultantId;
+    }
+
+    public void setStudentConsultantId(String studentConsultantId) {
+        this.studentConsultantId = studentConsultantId;
     }
 
     public Timestamp getAssignedAt() {

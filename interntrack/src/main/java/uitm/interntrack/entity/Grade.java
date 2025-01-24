@@ -8,19 +8,20 @@ import java.sql.Timestamp;
 public class Grade {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long gradesId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "GRADES_ID", columnDefinition = "VARCHAR(36)")
+    private String gradesId;
 
     private String studentId;
     private String month;
     private char grading;
     private Timestamp timestamp;
 
-    public Long getGradesId() {
+    public String getGradesId() {
         return gradesId;
     }
 
-    public void setGradesId(Long gradesId) {
+    public void setGradesId(String gradesId) {
         this.gradesId = gradesId;
     }
 

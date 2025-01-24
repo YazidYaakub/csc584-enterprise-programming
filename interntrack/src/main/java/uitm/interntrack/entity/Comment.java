@@ -8,8 +8,9 @@ import java.sql.Timestamp;
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long commentId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "COMMENT_ID", columnDefinition = "VARCHAR(36)")
+    private String commentId;
 
     private Long activityId;
     private String comment;
@@ -17,11 +18,11 @@ public class Comment {
     private Long userId;
     private int acknowledged;
 
-    public Long getCommentId() {
+    public String getCommentId() {
         return commentId;
     }
 
-    public void setCommentId(Long commentId) {
+    public void setCommentId(String commentId) {
         this.commentId = commentId;
     }
 

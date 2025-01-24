@@ -8,8 +8,9 @@ import java.sql.Timestamp;
 public class Activity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long activityId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ACTIVITY_ID", columnDefinition = "VARCHAR(36)")
+    private String activityId;
 
     private Long studentId;
     private String activityTitle;
@@ -27,11 +28,11 @@ public class Activity {
         }
     }
 
-    public Long getActivityId() {
+    public String getActivityId() {
         return activityId;
     }
 
-    public void setActivityId(Long activityId) {
+    public void setActivityId(String activityId) {
         this.activityId = activityId;
     }
 

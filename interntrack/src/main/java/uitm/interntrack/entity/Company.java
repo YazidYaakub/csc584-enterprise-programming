@@ -7,8 +7,9 @@ import jakarta.persistence.*;
 public class Company {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long companyId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "COMPANY_ID", columnDefinition = "VARCHAR(36)")
+    private String companyId; // UUID will be stored as a string in the database
 
     private String name;
     private String sector;
@@ -21,11 +22,11 @@ public class Company {
     private String contactNumber;
     private String logoLink;
 
-    public Long getCompanyId() {
+    public String getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(Long companyId) {
+    public void setCompanyId(String companyId) {
         this.companyId = companyId;
     }
 
