@@ -1,4 +1,3 @@
-// CompanyRepository.java
 package uitm.interntrack.repository;
 
 import org.springframework.data.domain.Page;
@@ -10,9 +9,6 @@ import org.springframework.data.repository.query.Param;
 import uitm.interntrack.entity.Company;
 
 public interface CompanyRepository extends JpaRepository<Company, Long> {
-
-  @Query(value = "SELECT * FROM Company WHERE role = :role",
-         countQuery = "SELECT count(*) FROM Company WHERE role = :role",
-         nativeQuery = true)
+  @Query(value = "SELECT * FROM Company WHERE role = :role", countQuery = "SELECT count(*) FROM Company WHERE role = :role", nativeQuery = true)
   Page<Company> getCompanies(@Param("role") String role, Pageable pageable);
 }
