@@ -2,6 +2,7 @@ package uitm.interntrack.entity;
 
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 @Entity
 @Table(name = "STUDENT_CONSULTANTS", schema = "INTERNTRACK")
@@ -9,7 +10,6 @@ public class StudentConsultant {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "STUDENT_CONSULTANT_ID", columnDefinition = "VARCHAR(36)")
     private String studentConsultantId;
 
@@ -17,6 +17,13 @@ public class StudentConsultant {
     private String advisorId;
     private String supervisorId;
     private Timestamp assignedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.studentConsultantId == null) {
+            this.studentConsultantId = UUID.randomUUID().toString();
+        }
+    }
 
     public String getStudentId() {
         return studentId;

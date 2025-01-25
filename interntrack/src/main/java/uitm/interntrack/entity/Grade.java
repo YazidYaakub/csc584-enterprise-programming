@@ -2,13 +2,13 @@ package uitm.interntrack.entity;
 
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 @Entity
 @Table(name = "GRADES", schema = "INTERNTRACK")
 public class Grade {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "GRADES_ID", columnDefinition = "VARCHAR(36)")
     private String gradesId;
 
@@ -16,6 +16,13 @@ public class Grade {
     private String month;
     private char grading;
     private Timestamp timestamp;
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.gradesId == null) {
+            this.gradesId = UUID.randomUUID().toString();
+        }
+    }
 
     public String getGradesId() {
         return gradesId;

@@ -2,13 +2,13 @@ package uitm.interntrack.entity;
 
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 @Entity
 @Table(name = "ACTIVITIES", schema = "INTERNTRACK")
 public class Activity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ACTIVITY_ID", columnDefinition = "VARCHAR(36)")
     private String activityId;
 
@@ -25,6 +25,9 @@ public class Activity {
     protected void onCreate() {
         if (activityDate == null) {
             activityDate = new Timestamp(System.currentTimeMillis());
+        }
+        if (this.activityId == null) {
+            this.activityId = UUID.randomUUID().toString();
         }
     }
 
