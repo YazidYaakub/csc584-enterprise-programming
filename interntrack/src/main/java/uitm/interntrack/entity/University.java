@@ -1,6 +1,7 @@
 package uitm.interntrack.entity;
 
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.persistence.*;
 
@@ -9,7 +10,6 @@ import jakarta.persistence.*;
 public class University {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "UNIVERSITY_ID", columnDefinition = "VARCHAR(36)")
     private String universityId; // UUID will be stored as a string in the database
 
@@ -27,6 +27,13 @@ public class University {
 
     @OneToMany(mappedBy = "university")
     private List<User> users;
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.universityId == null) {
+            this.universityId = UUID.randomUUID().toString();
+        }
+    }
 
     public String getUniversityId() {
         return universityId;

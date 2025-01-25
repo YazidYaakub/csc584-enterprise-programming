@@ -1,6 +1,7 @@
 package uitm.interntrack.entity;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -29,9 +30,10 @@ import lombok.NoArgsConstructor;
 public class User {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "USER_ID", columnDefinition = "VARCHAR(36)")
-  private String userId; // UUID will be stored as a string in the database
+  private String userId; 
+
+  
 
   private String name;
 
@@ -72,8 +74,12 @@ public class User {
 
   @PrePersist
   protected void onCreate() {
-    if (role == null)
+    if (role == null){
       role = "STUDENT";
+    }
+    if (this.userId == null) {
+        this.userId = UUID.randomUUID().toString(); // Generate a unique UUID
+    }
   }
 
   @Data
