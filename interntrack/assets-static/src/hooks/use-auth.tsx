@@ -13,7 +13,7 @@ export const useLogin = (
   const { getToken, token, setAuthenticated } = useAuthStore()
 
   return useMutation({
-    mutationFn: (loginInput: LoginInput) => api().post('auth/login', loginInput),
+    mutationFn: (loginInput: LoginInput) => api().post('/auth/login', loginInput),
     onSuccess: res => {
       localStorage.setItem('interntrack-token', res.data.token)
       if (getToken() && token) setAuthenticated()
