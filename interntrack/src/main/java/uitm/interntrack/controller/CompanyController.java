@@ -38,7 +38,7 @@ public class CompanyController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Company> getCompany(@PathVariable Long id) {
+  public ResponseEntity<Company> getCompany(@PathVariable String id) {
     Company company = companyService.getCompanyById(id);
     return ResponseEntity.ok(company);
   }

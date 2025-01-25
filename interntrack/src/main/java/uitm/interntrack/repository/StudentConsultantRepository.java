@@ -58,7 +58,7 @@ public interface StudentConsultantRepository extends JpaRepository<StudentConsul
         WHERE student_consultant_id = :id
     """, nativeQuery = true)
     void updateStudentConsultant(
-        @Param("id") Long id,
+        @Param("id") String id,
         @Param("studentId") String studentId,
         @Param("advisorId") String advisorId,
         @Param("supervisorId") String supervisorId,
