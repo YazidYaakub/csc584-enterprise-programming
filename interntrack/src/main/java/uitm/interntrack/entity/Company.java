@@ -1,5 +1,7 @@
 package uitm.interntrack.entity;
 
+import java.util.UUID;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -7,7 +9,6 @@ import jakarta.persistence.*;
 public class Company {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "COMPANY_ID", columnDefinition = "VARCHAR(36)")
     private String companyId; // UUID will be stored as a string in the database
 
@@ -21,6 +22,13 @@ public class Company {
     private String website;
     private String contactNumber;
     private String logoLink;
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.companyId == null) {
+            this.companyId = UUID.randomUUID().toString();
+        }
+    }
 
     public String getCompanyId() {
         return companyId;

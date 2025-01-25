@@ -2,13 +2,13 @@ package uitm.interntrack.entity;
 
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 @Entity
 @Table(name = "COMMENTS", schema = "INTERNTRACK")
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "COMMENT_ID", columnDefinition = "VARCHAR(36)")
     private String commentId;
 
@@ -17,6 +17,13 @@ public class Comment {
     private Timestamp createdAt;
     private String userId;
     private int acknowledged;
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.commentId == null) {
+            this.commentId = UUID.randomUUID().toString();
+        }
+    }
 
     public String getCommentId() {
         return commentId;
