@@ -15,7 +15,7 @@ services:
     image: wnameless/oracle-xe-11g-r2
     ports:
       - "1521:1521"
-      - "8080:8080"
+      - "8070:8070"
     environment:
       ORACLE_ALLOW_REMOTE: "true"
       ORACLE_DISABLE_ASYNCH_IO: "true"
