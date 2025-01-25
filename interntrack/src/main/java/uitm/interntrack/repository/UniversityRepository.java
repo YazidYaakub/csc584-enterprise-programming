@@ -11,7 +11,7 @@ import java.util.Optional;
 
 
 @Repository
-public interface UniversityRepository extends JpaRepository<University, Long> {
+public interface UniversityRepository extends JpaRepository<University, String> {
 
 //1. Query for createUniversity from @UniversityService.java
 @Query(value = """
@@ -31,5 +31,5 @@ public interface UniversityRepository extends JpaRepository<University, Long> {
     SELECT * FROM INTERNTRACK.UNIVERSITIES
     WHERE UNIVERSITY_ID = :universityId
     """, nativeQuery = true)
-  Optional<University> getUniversityById(@Param("universityId") Long universityId);
+  Optional<University> getUniversityById(@Param("universityId") String universityId);
 }

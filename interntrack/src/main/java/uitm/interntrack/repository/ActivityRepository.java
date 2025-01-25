@@ -24,7 +24,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
   List<Activity> getActivities(
       @Param("start") Integer start,
       @Param("end") Integer end,
-      @Param("studentId") Long studentId,
+      @Param("studentId") String studentId,
       @Param("month") int month);
 
   @Modifying
@@ -34,8 +34,8 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
           APPROVED_AT = :approvedAt, IS_APPROVED = :isApproved
       WHERE ACTIVITY_ID = :activityId
       """, nativeQuery = true)
-  void updateActivity(@Param("activityId") Long activityId, @Param("activityTitle") String activityTitle,
-      @Param("activityDescription") String activityDescription, @Param("approvedById") Long approvedById,
+  void updateActivity(@Param("activityId") String activityId, @Param("activityTitle") String activityTitle,
+      @Param("activityDescription") String activityDescription, @Param("approvedById") String approvedById,
       @Param("approvedAt") Timestamp approvedAt, @Param("isApproved") int isApproved);
 
   @Query(value = """
@@ -44,5 +44,5 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
       WHERE (:studentId IS NULL OR activity.STUDENT_ID = :studentId)
       AND (:month IS NULL OR EXTRACT(MONTH FROM activity.ACTIVITY_DATE) = :month)
       """, nativeQuery = true)
-  Long countActivities(@Param("studentId") Long studentId, @Param("month") int month);
+  Long countActivities(@Param("studentId") String studentId, @Param("month") int month);
 }

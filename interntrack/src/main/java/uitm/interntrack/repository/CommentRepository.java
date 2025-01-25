@@ -10,14 +10,14 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Repository
-public interface CommentRepository extends JpaRepository<Comment, Long> {
+public interface CommentRepository extends JpaRepository<Comment, String> {
 
     //1. Query for createComment from @CommentService.java  
     @Query(value = """
         INSERT INTO INTERNTRACK.COMMENTS (COMMENT_ID, COMMENT_CONTENT, COMMENT_DATE, COMMENT_AUTHOR_ID, COMMENT_ACTIVITY_ID)
         VALUES (:commentId, :commentContent, :commentDate, :commentAuthorId, :commentActivityId)
         """, nativeQuery = true)
-    Comment createComment(@Param("commentId") Long commentId, @Param("commentContent") String commentContent, @Param("commentDate") Timestamp commentDate, @Param("commentAuthorId") Long commentAuthorId, @Param("commentActivityId") Long commentActivityId);
+    Comment createComment(@Param("commentId") String commentId, @Param("commentContent") String commentContent, @Param("commentDate") Timestamp commentDate, @Param("commentAuthorId") Long commentAuthorId, @Param("commentActivityId") Long commentActivityId);
 
     //2. Query for getComments from @CommentService.java
     @Query(value = """

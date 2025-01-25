@@ -11,7 +11,7 @@ import uitm.interntrack.entity.Company;
 import java.util.List;
 import java.util.Optional;
 @Repository
-public interface CompanyRepository extends JpaRepository<Company, Long> {
+public interface CompanyRepository extends JpaRepository<Company, String> {
   // @Query(value = "SELECT * FROM Company WHERE role = :role", countQuery = "SELECT count(*) FROM Company WHERE role = :role", nativeQuery = true)
   // Page<Company> getCompanies(@Param("role") String role, Pageable pageable);
   //1. Query for createCompany from @CompanyService.java
@@ -19,7 +19,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
       INSERT INTO INTERNTRACK.COMPANIES (COMPANY_ID, COMPANY_NAME, COMPANY_ADDRESS, COMPANY_PHONE_NUMBER, COMPANY_EMAIL, COMPANY_WEBSITE)
       VALUES (:companyId, :companyName, :companyAddress, :companyPhoneNumber, :companyEmail, :companyWebsite)
       """, nativeQuery = true)
-  Company createCompany(@Param("companyId") Long companyId, @Param("companyName") String companyName, @Param("companyAddress") String companyAddress, @Param("companyPhoneNumber") String companyPhoneNumber, @Param("companyEmail") String companyEmail, @Param("companyWebsite") String companyWebsite);
+  Company createCompany(@Param("companyId") String companyId, @Param("companyName") String companyName, @Param("companyAddress") String companyAddress, @Param("companyPhoneNumber") String companyPhoneNumber, @Param("companyEmail") String companyEmail, @Param("companyWebsite") String companyWebsite);
 
   //2. Query for getCompanies from @CompanyService.java
   @Query(value = """
@@ -32,5 +32,5 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
       SELECT * FROM INTERNTRACK.COMPANIES
       WHERE COMPANY_ID = :companyId
       """, nativeQuery = true)
-  Optional<Company> getCompanyById(@Param("companyId") Long companyId);
+  Optional<Company> getCompanyById(@Param("companyId") String companyId);
 }

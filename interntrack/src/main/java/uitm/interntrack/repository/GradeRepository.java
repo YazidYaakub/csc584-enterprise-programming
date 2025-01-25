@@ -9,13 +9,13 @@ import uitm.interntrack.entity.Grade;
 import java.util.List;
 
 @Repository
-public interface GradeRepository extends JpaRepository<Grade, Long> {
+public interface GradeRepository extends JpaRepository<Grade, String> {
     //1. Query for createGrade from @GradeService.java
     @Query(value = """
         INSERT INTO INTERNTRACK.GRADES (GRADE_ID, GRADE_NAME, GRADE_VALUE)
         VALUES (:gradeId, :gradeName, :gradeValue)
         """, nativeQuery = true)
-    Grade createGrade(@Param("gradeId") Long gradeId, @Param("gradeName") String gradeName, @Param("gradeValue") Double gradeValue);
+    Grade createGrade(@Param("gradeId") String gradeId, @Param("gradeName") String gradeName, @Param("gradeValue") Double gradeValue);
 
     //2. Query for getGrades from @GradeService.java
     @Query(value = """

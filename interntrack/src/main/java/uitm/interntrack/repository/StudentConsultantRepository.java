@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 
 import java.util.List;
 
-public interface StudentConsultantRepository extends JpaRepository<StudentConsultant, Long> {
+public interface StudentConsultantRepository extends JpaRepository<StudentConsultant, String> {
 
     // 1. Get student consultants based on studentId, advisorId, or supervisorId
     @Query(value = """
@@ -19,9 +19,9 @@ public interface StudentConsultantRepository extends JpaRepository<StudentConsul
         AND (:supervisorId IS NULL OR supervisor_id = :supervisorId)
     """, nativeQuery = true)
     List<StudentConsultant> getStudentConsultants(
-        @Param("studentId") Long studentId,
-        @Param("advisorId") Long advisorId,
-        @Param("supervisorId") Long supervisorId
+        @Param("studentId") String studentId,
+        @Param("advisorId") String advisorId,
+        @Param("supervisorId") String supervisorId
     );
 
     // 2. Get student by userId
@@ -30,7 +30,7 @@ public interface StudentConsultantRepository extends JpaRepository<StudentConsul
     FROM StudentConsultant sc
     WHERE sc.studentId = :userId
     """)
-    List<StudentConsultant> getStudentByUserId(@Param("userId") Long userId);
+    List<StudentConsultant> getStudentByUserId(@Param("userId") String userId);
 
     // 3. Get advisor by userId
     @Query(value = """
@@ -38,7 +38,7 @@ public interface StudentConsultantRepository extends JpaRepository<StudentConsul
     FROM StudentConsultant sc
     WHERE sc.advisorId = :userId
     """)
-    List<StudentConsultant> getAdvisorByUserId(@Param("userId") Long userId);
+    List<StudentConsultant> getAdvisorByUserId(@Param("userId") String userId);
 
 
     // 4. Get supervisor by userId
@@ -47,7 +47,7 @@ public interface StudentConsultantRepository extends JpaRepository<StudentConsul
     FROM StudentConsultant sc
     WHERE sc.supervisorId = :userId
     """)
-    List<StudentConsultant> getSupervisorByUserId(@Param("userId") Long userId);
+    List<StudentConsultant> getSupervisorByUserId(@Param("userId") String userId);
 
     // Update StudentConsultant
     @Modifying
@@ -59,9 +59,9 @@ public interface StudentConsultantRepository extends JpaRepository<StudentConsul
     """, nativeQuery = true)
     void updateStudentConsultant(
         @Param("id") Long id,
-        @Param("studentId") Long studentId,
-        @Param("advisorId") Long advisorId,
-        @Param("supervisorId") Long supervisorId,
+        @Param("studentId") String studentId,
+        @Param("advisorId") String advisorId,
+        @Param("supervisorId") String supervisorId,
         @Param("assignedAt") Timestamp assignedAt
     );
 
@@ -71,5 +71,5 @@ public interface StudentConsultantRepository extends JpaRepository<StudentConsul
         FROM INTERNTRACK.STUDENT_CONSULTANTS
         WHERE student_id = :studentId
     """, nativeQuery = true)
-    Long countByStudentId(@Param("studentId") Long studentId);
+    Long countByStudentId(@Param("studentId") String studentId);
 }
