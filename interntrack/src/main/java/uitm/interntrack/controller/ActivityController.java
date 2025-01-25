@@ -36,14 +36,14 @@ public class ActivityController {
   public ResponseEntity<Map<String, Object>> getActivities(
       @RequestParam(defaultValue = "0") Integer page,
       @RequestParam(defaultValue = "10") Integer size,
-      @RequestParam(required = false) Long studentId,
+      @RequestParam(required = false) String studentId,
       @RequestParam(required = false) int month) {
     var activities = activityService.getActivities(page, size, studentId, month);
     return ResponseEntity.ok(activities);
   }
 
   @GetMapping("{id}")
-  public ResponseEntity<?> getActivity(@PathVariable Long id) {
+  public ResponseEntity<?> getActivity(@PathVariable String id) {
     Activity activity = activityService.getActivity(id);
 
     if (activity == null) {
@@ -54,7 +54,7 @@ public class ActivityController {
   }
 
   @PutMapping("{id}")
-  public ResponseEntity<Activity> updateActivity(@PathVariable Long id, @RequestBody UpdateActivityDTO activity) {
+  public ResponseEntity<Activity> updateActivity(@PathVariable String id, @RequestBody UpdateActivityDTO activity) {
 
     Activity targetActivity = activityService.getActivity(id);
 

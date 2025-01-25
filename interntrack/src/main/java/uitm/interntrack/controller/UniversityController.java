@@ -39,7 +39,7 @@ public class UniversityController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<University> getUniversity(@PathVariable Long id) {
+  public ResponseEntity<University> getUniversity(@PathVariable String id) {
     University university = universityService.getUniversityById(id);
     return ResponseEntity.ok(university);
   }

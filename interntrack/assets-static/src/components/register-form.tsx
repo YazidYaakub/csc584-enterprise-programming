@@ -25,39 +25,39 @@ export function RegisterForm() {
   // TODO: Replace with actual data
   const universities = [
     {
-      id: '1',
-      name: 'Stanford University'
+      id: 'a1b2c3d4-e5f6-7890-abcd-efghijklmbaa',
+      name: 'University Sains Malaysia'
     },
     {
-      id: '2',
-      name: 'Harvard University'
+      id: 'a1b2c3d4-e5f6-7890-abcd-efghijklmbab',
+      name: 'Universiti Malaya'
     },
     {
-      id: '3',
-      name: 'MIT'
+      id: 'a1b2c3d4-e5f6-7890-abcd-efghijklmbac',
+      name: 'Universiti Kebangsaan Malaysia'
     },
     {
-      id: '4',
-      name: 'UiTM'
+      id: 'a1b2c3d4-e5f6-7890-abcd-efghijklmbad',
+      name: 'Universiti Teknologi MARA'
     }
   ]
 
   const companies = [
     {
-      id: '1',
-      name: 'Google'
+      id: '1a2b3c4d-5e6f-7g8h-9i0j1k2l3aaa',
+      name: 'TM'
     },
     {
-      id: '2',
-      name: 'Facebook'
+      id: '1a2b3c4d-5e6f-7g8h-9i0j1k2l3aab',
+      name: 'Petronas'
     },
     {
-      id: '3',
-      name: 'Amazon'
+      id: '1a2b3c4d-5e6f-7g8h-9i0j1k2l3aac',
+      name: 'Astro'
     },
     {
-      id: '4',
-      name: 'Microsoft'
+      id: '1a2b3c4d-5e6f-7g8h-9i0j1k2l3aad',
+      name: 'Unifi'
     }
   ]
 
@@ -176,7 +176,7 @@ export function RegisterForm() {
                           <SelectContent>
                             {universities.map(university => (
                               <SelectItem key={university.id} value={university.id}>
-                                {university.name} - {university.id}
+                                {university.name}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -201,7 +201,7 @@ export function RegisterForm() {
                           <SelectContent>
                             {companies.map(company => (
                               <SelectItem key={company.id} value={company.id}>
-                                {company.name} - {company.id}
+                                {company.name}
                               </SelectItem>
                             ))}
                           </SelectContent>

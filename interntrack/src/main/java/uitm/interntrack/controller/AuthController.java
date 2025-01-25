@@ -61,7 +61,7 @@ public class AuthController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> getUser(@PathVariable Long id) {
+  public ResponseEntity<?> getUser(@PathVariable String id) {
     try {
       return ResponseEntity.ok(userService.getUser(id));
     } catch (ResponseStatusException e) {
@@ -70,7 +70,7 @@ public class AuthController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UpdateUserDTO user,
+  public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody UpdateUserDTO user,
       HttpServletRequest request) {
     String token = request.getHeader("Authorization");
 
