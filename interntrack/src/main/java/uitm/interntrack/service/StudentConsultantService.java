@@ -17,19 +17,19 @@ public class StudentConsultantService {
         this.repository = repository;
     }
 
-    public List<StudentConsultant> getStudentByUserId(Long userId) {
+    public List<StudentConsultant> getStudentByUserId(String userId) {
         return repository.getStudentByUserId(userId);
     }
 
-    public List<StudentConsultant> getAdvisorByUserId(Long userId) {
+    public List<StudentConsultant> getAdvisorByUserId(String userId) {
         return repository.getAdvisorByUserId(userId);
     }
 
-    public List<StudentConsultant> getSupervisorByUserId(Long userId) {
+    public List<StudentConsultant> getSupervisorByUserId(String userId) {
         return repository.getSupervisorByUserId(userId);
     }
 
-    public StudentConsultant createStudentConsultant(Long studentId, Long advisorId, Long supervisorId) {
+    public StudentConsultant createStudentConsultant(String studentId, String advisorId, String supervisorId) {
         // Create a new StudentConsultant object with the provided data
         StudentConsultant studentConsultant = StudentConsultant.builder()
                 .studentId(studentId)
@@ -43,7 +43,7 @@ public class StudentConsultantService {
     }
     
 
-    public void modifyStudentConsultant(Long id, Long studentId, Long advisorId, Long supervisorId) {
+    public void modifyStudentConsultant(String id, String studentId, String advisorId, String supervisorId) {
         // Update the assignedAt timestamp to the current time
         Timestamp assignedAt = new Timestamp(System.currentTimeMillis());
 
