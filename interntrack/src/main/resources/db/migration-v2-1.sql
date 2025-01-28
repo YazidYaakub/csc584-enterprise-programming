@@ -4,11 +4,11 @@ create table COMPANIES
         constraint PK_COMPANIES
             primary key,
     NAME           VARCHAR2(64) not null,
-    SECTOR         VARCHAR2(32),
-    LOCATION       VARCHAR2(64),
+    SECTOR         VARCHAR2(256),
+    LOCATION       VARCHAR2(256),
     CODE           VARCHAR2(16),
-    EMAIL          VARCHAR2(32),
-    WEBSITE        VARCHAR2(64),
+    EMAIL          VARCHAR2(256),
+    WEBSITE        VARCHAR2(256),
     LATITUDE       NUMBER(10, 6),
     LONGITUDE      NUMBER(10, 6),
     CONTACT_NUMBER VARCHAR2(32),
@@ -22,15 +22,15 @@ create table UNIVERSITIES
     UNIVERSITY_ID  VARCHAR2(36) not null
         constraint PK_UNIVERSITIES
             primary key,
-    NAME           VARCHAR2(64) not null
+    NAME           VARCHAR2(256) not null
         constraint UNIQUE_NAME
             unique,
-    LOCATION       VARCHAR2(64),
+    LOCATION       VARCHAR2(256),
     LATITUDE       NUMBER(10, 6),
     LONGITUDE      NUMBER(10, 6),
-    COURSES        VARCHAR2(32),
-    WEBSITE        VARCHAR2(32),
-    EMAIL          VARCHAR2(32),
+    COURSES        VARCHAR2(256),
+    WEBSITE        VARCHAR2(256),
+    EMAIL          VARCHAR2(256),
     CONTACT_NUMBER VARCHAR2(32),
     LOGO_LINK      VARCHAR2(512)
 )
@@ -42,13 +42,13 @@ create table USERS
     USER_ID        VARCHAR2(36) not null
         constraint PK_USERS
             primary key,
-    EMAIL          VARCHAR2(64) not null,
+    EMAIL          VARCHAR2(256) not null,
     PASSWORD       VARCHAR2(32) not null,
     ROLE           VARCHAR2(16)
         check (ROLE IN ('STUDENT', 'SUPERVISOR', 'ADVISOR', 'ADMIN')),
     CREATED_AT     TIMESTAMP(6) default CURRENT_TIMESTAMP,
     UPDATED_AT     TIMESTAMP(6) default CURRENT_TIMESTAMP,
-    NAME           VARCHAR2(32),
+    NAME           VARCHAR2(256),
     COMPANY_ID     VARCHAR2(36)
         constraint FK_COMPANY_ID
             references COMPANIES,
@@ -56,8 +56,8 @@ create table USERS
         constraint FK_UNIVERSITY_ID
             references UNIVERSITIES,
     SEMESTER       NUMBER(2),
-    SUBJECT        VARCHAR2(32),
-    POSITION       VARCHAR2(32),
+    SUBJECT        VARCHAR2(256),
+    POSITION       VARCHAR2(256),
     IMAGE_LINK     VARCHAR2(512),
     CONTACT_NUMBER VARCHAR2(32),
     IS_APPROVED    NUMBER(1),
