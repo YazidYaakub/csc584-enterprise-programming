@@ -23,4 +23,18 @@ public class GradeService {
   public List<Grade> getGrades() {
     return gradeRepository.findAll();
   }
+
+  public Grade getStudentByMonth(String studentId, String month) {
+    return gradeRepository.getStudentByMonth(studentId, month);
+  }
+
+  public Grade insertStudentGrade(String studentId, String month, char grading) {
+    Grade grade = Grade.builder()
+        .grading(grading)
+        .month(month)
+        .studentId(studentId)
+        .build();
+
+    return gradeRepository.save(grade);
+  }
 }

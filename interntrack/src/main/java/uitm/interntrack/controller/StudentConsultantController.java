@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/student-consultants")
+@CrossOrigin(origins = "*")
 public class StudentConsultantController {
 
     private final StudentConsultantService service;
@@ -29,7 +30,6 @@ public class StudentConsultantController {
         return service.getAdvisorByUserId(userId);
     }
 
-
     // Endpoint to get supervisors by userId
     @GetMapping("/supervisors/{userId}")
     public List<StudentConsultant> getSupervisorByUserId(@PathVariable String userId) {
@@ -41,8 +41,7 @@ public class StudentConsultantController {
     public StudentConsultant createStudentConsultant(
             @RequestParam String studentId,
             @RequestParam String advisorId,
-            @RequestParam String supervisorId
-    ) {
+            @RequestParam String supervisorId) {
         return service.createStudentConsultant(studentId, advisorId, supervisorId);
     }
 
@@ -51,8 +50,7 @@ public class StudentConsultantController {
             @PathVariable String id,
             @RequestParam String studentId,
             @RequestParam String advisorId,
-            @RequestParam String supervisorId
-    ) {
+            @RequestParam String supervisorId) {
         // Call the service to perform the modification
         service.modifyStudentConsultant(id, studentId, advisorId, supervisorId);
     }

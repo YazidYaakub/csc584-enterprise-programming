@@ -21,3 +21,7 @@ export const grades = [
   { value: 'E', label: 'E - Poor' },
   { value: 'F', label: 'F - Fail' }
 ]
+
+export function convertToShortform(name: string) {
+  return name.substring(0, 3).toUpperCase()
+}

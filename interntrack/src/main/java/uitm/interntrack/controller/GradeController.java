@@ -1,10 +1,15 @@
 package uitm.interntrack.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import uitm.interntrack.entity.Grade;
 import uitm.interntrack.service.GradeService;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/grade")
@@ -17,9 +22,17 @@ public class GradeController {
     this.gradeService = gradeService;
   }
 
-  @PostMapping("/create")
-  public ResponseEntity<Grade> createGrade(@RequestBody Grade grade) {
-    var savedGrade = gradeService.createGrade(grade);
-    return ResponseEntity.ok(savedGrade);
+  @GetMapping()
+  public Grade getStudentGrade(@RequestParam String studentId, @RequestParam String month) {
+    return gradeService.getStudentByMonth(studentId, month);
+  }
+
+  @PostMapping
+  public ResponseEntity<Grade> insertStudentGrade(
+      @RequestParam String studentId,
+      @RequestParam String month,
+      @RequestParam char grade) {
+    gradeService.insertStudentGrade(studentId, month, grade);
+    return ResponseEntity.ok().build();
   }
 }

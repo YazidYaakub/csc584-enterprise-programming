@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const University = z.object({
-  universityId: z.number(),
+  universityId: z.string(),
   name: z.string(),
   location: z.string(),
   latitude: z.number(),
@@ -16,7 +16,7 @@ export const University = z.object({
 export type University = z.infer<typeof University>
 
 export const Company = z.object({
-  companyId: z.number(),
+  companyId: z.string(),
   name: z.string(),
   sector: z.string().nullable(),
   location: z.string().nullable(),
@@ -36,9 +36,9 @@ export const User = z.object({
   name: z.string(),
   email: z.string().email(),
   role: z.enum(['STUDENT', 'SUPERVISOR', 'ADMIN', 'ADVISOR']),
-  companyId: z.number().nullable(),
+  companyId: z.string().nullable(),
   company: Company.nullable(),
-  universityId: z.number().nullable(),
+  universityId: z.string().nullable(),
   university: University.nullable(),
   semester: z.number().nullable(),
   position: z.string().nullable(),

@@ -22,7 +22,6 @@ import uitm.interntrack.entity.User.UserDTO;
 import uitm.interntrack.service.AuthService;
 import uitm.interntrack.service.UserService;
 
-// TODO: migrate name to user controller
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")

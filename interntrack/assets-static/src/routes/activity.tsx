@@ -1,20 +1,9 @@
 import { useState } from 'react'
 import { FaUserGraduate, FaUserTie } from 'react-icons/fa'
 import { useParams } from 'react-router-dom'
-import {
-  ArchiveX,
-  Edit,
-  Eye,
-  FilePen,
-  Loader2,
-  MessageCircle,
-  MoreHorizontal,
-  Plus,
-  Trash
-} from 'lucide-react'
+import { ArchiveX, Edit, Eye, FilePen, Loader2, MoreHorizontal, Plus, Trash } from 'lucide-react'
 import { toast } from 'sonner'
 
-import { ActivityComment } from '@/components/activity-comment'
 import { ActivityUpdateDialog } from '@/components/activity-update-dialog'
 import { ErrorFull } from '@/components/error-full'
 import { GradeUser } from '@/components/grade-user'
@@ -33,7 +22,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import {
   Dialog,
   DialogContent,
@@ -72,14 +60,35 @@ import {
   usePaginatedActivity,
   useUpdateActivity
 } from '@/hooks/use-activity'
+import { useGrade } from '@/hooks/use-grade'
+import { useStudentConsultantStudent } from '@/hooks/use-student-consultant'
 import { useUser } from '@/hooks/use-user'
-import { supervisor } from '@/lib/dummy-data'
-import { months } from '@/lib/months'
+import { convertToShortform, months } from '@/lib/months'
 import { Activity, UpdateActivitySchema } from '@/schema/activity'
 import { useActivityStore } from '@/store/activity'
 import { useAuthStore } from '@/store/auth'
 
 // TODO: check if user is advisor then can approve the activity month
+
+function AdvisorName({ userId }: { userId: string }) {
+  const { data } = useUser(['user', 'advisor', userId], userId)
+
+  return (
+    <span>
+      {data?.name} - {data?.company?.name}
+    </span>
+  )
+}
+
+function SupervisorName({ userId }: { userId: string }) {
+  const { data } = useUser(['user', 'supervisor', userId], userId)
+
+  return (
+    <span>
+      {data?.name} - {data?.university?.name}
+    </span>
+  )
+}
 
 export function ActivityRoute() {
   const { openUpdateActivity, selectedMonth, setOpenUpdateActivity, setSelectedMonth } =
@@ -94,6 +103,17 @@ export function ActivityRoute() {
   const [deleteActivityTarget, setDeleteActivityTarget] = useState<Activity>()
   const [openGrading, setOpenGrading] = useState(false)
 
+  const { data: gradeMonth } = useGrade(
+    ['grade', selectedMonth, userId],
+    userId as string,
+    convertToShortform(months[Number(selectedMonth) - 1])
+  )
+
+  const { data: consultant } = useStudentConsultantStudent(
+    ['student-consultant', userId],
+    'students',
+    userId
+  )
   const { data: user } = useUser(['user', 'student', userId], userId)
   const {
     data: activities,
@@ -121,7 +141,7 @@ export function ActivityRoute() {
   function onCreateActivity() {
     if (!user || !token) return
 
-    if (!(user.userId !== token.userId)) {
+    if (user.userId !== token.userId) {
       toast.error('Not authorized to create activity log')
       return
     }
@@ -140,7 +160,7 @@ export function ActivityRoute() {
       activityTitle: activityTitle,
       activityDescription: activityContent,
       studentId: user.userId,
-      approvedById: supervisor.id
+      approvedById: consultant[0]?.supervisorId
     })
   }
 
@@ -157,7 +177,7 @@ export function ActivityRoute() {
       ...activity,
       isApproved: activity.isApproved === 1 ? 0 : 1,
       approvedAt: activity.isApproved === 1 ? null : new Date().toISOString(),
-      approvedById: supervisor.id
+      approvedById: consultant[0]?.supervisorId
     })
 
     if (!success) {
@@ -195,18 +215,47 @@ export function ActivityRoute() {
               <Plus /> Activity Log
             </Button>
           )}
-          <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {months.map((month, index) => (
-                <SelectItem key={month} value={(index + 1).toString()}>
-                  {month}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="flex items-center space-x-2">
+            <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {months.map((month, index) => (
+                  <SelectItem key={month} value={(index + 1).toString()}>
+                    {month}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {gradeMonth && (
+              <span className="inline-flex items-center space-x-1 whitespace-nowrap rounded bg-gray-50 px-2 font-semibold">
+                <span>Graded</span>
+                {(() => {
+                  const gradeColors: Record<string, string> = {
+                    A: 'text-green-500',
+                    B: 'text-lime-500',
+                    C: 'text-yellow-500',
+                    D: 'text-orange-500',
+                    E: 'text-amber-500',
+                    F: 'text-red-500'
+                  }
+                  return (
+                    <span className={gradeColors[gradeMonth.grading] || 'text-gray-500'}>
+                      {gradeMonth.grading}
+                    </span>
+                  )
+                })()}
+                <span>on</span>
+                <span>
+                  {new Intl.DateTimeFormat('en-MY', {
+                    dateStyle: 'medium',
+                    timeStyle: 'short'
+                  }).format(new Date(gradeMonth.timestamp))}
+                </span>
+              </span>
+            )}
+          </div>
         </div>
         <Card className="flex flex-col items-start">
           <TooltipProvider>
@@ -215,9 +264,9 @@ export function ActivityRoute() {
                 <Button variant="link" className="dark:text-white">
                   <FaUserTie />
                   <span className="flex items-center space-x-1">
-                    <span className="text-sm font-semibold">Abdul Hakim</span>
-                    <span>-</span>
-                    <span className="text-xs">Recogine Technology</span>
+                    <span className="text-sm font-semibold">
+                      <SupervisorName userId={consultant?.[0]?.supervisorId} />
+                    </span>
                   </span>
                 </Button>
               </TooltipTrigger>
@@ -232,9 +281,9 @@ export function ActivityRoute() {
                 <Button variant="link" className="dark:text-white">
                   <FaUserGraduate />
                   <div className="flex items-center space-x-1">
-                    <span className="text-sm font-semibold">Abdul Hakim</span>
-                    <span>-</span>
-                    <span className="text-xs">UiTM Shah Alam</span>
+                    <span className="text-sm font-semibold">
+                      <AdvisorName userId={consultant?.[0]?.advisorId} />
+                    </span>
                   </div>{' '}
                 </Button>
               </TooltipTrigger>
@@ -249,7 +298,6 @@ export function ActivityRoute() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead />
               <TableHead>Activity Title</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Approval Status</TableHead>
@@ -261,79 +309,65 @@ export function ActivityRoute() {
           </TableHeader>
           <TableBody>
             {activities.data.map(activity => (
-              <Collapsible key={activity.activityId} asChild>
-                <>
-                  <TableRow className="cursor-pointer">
-                    <TableCell>
-                      <CollapsibleTrigger asChild>
-                        <Button variant="outline" size="icon">
-                          <MessageCircle />
-                        </Button>
-                      </CollapsibleTrigger>
-                    </TableCell>
-                    <TableCell>{activity.activityTitle}</TableCell>
-                    <TableCell>
-                      {new Intl.DateTimeFormat('en-MY').format(new Date(activity.activityDate))}
-                    </TableCell>
-                    <TableCell>
-                      {activity.isApproved === 1 ? (
-                        <span className="rounded bg-green-100 px-2 font-semibold text-green-500">
-                          {activity.approvedAt
-                            ? new Intl.DateTimeFormat('en-MY').format(new Date(activity.approvedAt))
-                            : 'N/A'}
-                        </span>
-                      ) : (
-                        <span className="rounded bg-orange-100 px-2 font-semibold text-orange-500">
-                          Pending
-                        </span>
-                      )}
-                    </TableCell>
-                    {token?.role === 'SUPERVISOR' && (
-                      <TableCell className="text-center">
-                        <Checkbox
-                          checked={activity.isApproved === 1}
-                          onCheckedChange={() => onApproveActivity(activity)}
-                        />
-                      </TableCell>
-                    )}
-                    <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button size="icon" variant="ghost">
-                            <MoreHorizontal />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            onClick={e => e.stopPropagation()}
-                            onSelect={() => onOpenActivity(activity, 'view')}
-                            className="focus:bg-blue-50 focus:text-blue-500"
-                          >
-                            <Eye /> View
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={e => e.stopPropagation()}
-                            onSelect={() => onOpenActivity(activity, 'edit')}
-                            className="focus:bg-yellow-50 focus:text-yellow-500"
-                          >
-                            <Edit /> Edit
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={e => e.stopPropagation()}
-                            onSelect={() => onConfirmationDelete(activity)}
-                            className="focus:bg-red-100 focus:text-red-500"
-                          >
-                            <Trash /> Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                  <CollapsibleContent asChild>
-                    <ActivityComment activityId={activity.activityId} />
-                  </CollapsibleContent>
-                </>
-              </Collapsible>
+              <TableRow className="cursor-pointer">
+                <TableCell>{activity.activityTitle}</TableCell>
+                <TableCell>
+                  {new Intl.DateTimeFormat('en-MY').format(new Date(activity.activityDate))}
+                </TableCell>
+                <TableCell>
+                  {activity.isApproved === 1 ? (
+                    <span className="rounded bg-green-100 px-2 font-semibold text-green-500">
+                      {activity.approvedAt
+                        ? new Intl.DateTimeFormat('en-MY').format(new Date(activity.approvedAt))
+                        : 'N/A'}
+                    </span>
+                  ) : (
+                    <span className="rounded bg-orange-100 px-2 font-semibold text-orange-500">
+                      Pending
+                    </span>
+                  )}
+                </TableCell>
+                {token?.role === 'SUPERVISOR' && (
+                  <TableCell className="text-center">
+                    <Checkbox
+                      checked={activity.isApproved === 1}
+                      onCheckedChange={() => onApproveActivity(activity)}
+                    />
+                  </TableCell>
+                )}
+                <TableCell className="text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button size="icon" variant="ghost">
+                        <MoreHorizontal />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        onClick={e => e.stopPropagation()}
+                        onSelect={() => onOpenActivity(activity, 'view')}
+                        className="focus:bg-blue-50 focus:text-blue-500"
+                      >
+                        <Eye /> View
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={e => e.stopPropagation()}
+                        onSelect={() => onOpenActivity(activity, 'edit')}
+                        className="focus:bg-yellow-50 focus:text-yellow-500"
+                      >
+                        <Edit /> Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={e => e.stopPropagation()}
+                        onSelect={() => onConfirmationDelete(activity)}
+                        className="focus:bg-red-100 focus:text-red-500"
+                      >
+                        <Trash /> Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
             ))}
             {activities.data.length === 0 && (
               <TableRow>
@@ -354,51 +388,14 @@ export function ActivityRoute() {
           </TableBody>
         </Table>
       </div>
-      {/* <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="font-medium">Name</TableHead>
-            <TableHead className="font-medium">Link</TableHead>
-            <TableHead className="font-medium">Views</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {activities
-            ? activities.data.map(link => (
-                <Collapsible key={link.activityDate} asChild>
-                  <>
-                    <TableRow>
-                      <TableCell>{link.activityTitle}</TableCell>
-                      <TableCell>{link.activityTitle}</TableCell>
-                      <TableCell>
-                        {link.activityTitle}
-                        <CollapsibleTrigger asChild>
-                          <Eye />
-                        </CollapsibleTrigger>
-                      </TableCell>
-                    </TableRow>
-                    <CollapsibleContent asChild>
-                      <TableRow key={link.activityTitle}>
-                        <TableCell>{link.activityTitle}</TableCell>
-                        <TableCell>{link.activityTitle}</TableCell>
-                        <TableCell>
-                          <Eye />
-                        </TableCell>
-                      </TableRow>
-                    </CollapsibleContent>
-                  </>
-                </Collapsible>
-              ))
-            : null}
-        </TableBody>
-      </Table> */}
-      {/* TODO: only shows if this month is not graded yet and only if its the student consultant */}
       {token?.role === 'ADVISOR' && (
         <div className="flex w-full flex-1 items-end justify-end">
           <div className="bottom-4 right-4">
-            <Button onClick={() => setOpenGrading(true)}>
-              <FilePen /> Grade {user?.name}
-            </Button>
+            {!gradeMonth && (
+              <Button onClick={() => setOpenGrading(true)}>
+                <FilePen /> Grade {user?.name}
+              </Button>
+            )}
           </div>
         </div>
       )}

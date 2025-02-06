@@ -1,7 +1,7 @@
 import { TableCell, TableRow } from './ui/table'
 
 type ActivityCommentProps = {
-  activityId: number
+  activityId: string
 }
 
 export function ActivityComment({ activityId }: ActivityCommentProps) {

@@ -12,8 +12,8 @@ export const useCreateUser = (message: string, callback?: () => object | void) =
     mutationFn: (data: RegisterInput) => {
       const body = {
         ...data,
-        universityId: Number(data.universityId),
-        companyId: Number(data.companyId)
+        universityId: data.universityId,
+        companyId: data.companyId
       }
 
       return api().post('auth/register', body)
@@ -32,8 +32,8 @@ export const usePaginatedUsers = (
     page?: number
     size?: number
     role?: 'STUDENT' | 'ADVISOR' | 'SUPERVISOR'
-    universityId?: number | null
-    companyId?: number | null
+    universityId?: string | null
+    companyId?: string | null
     isApproved?: 1 | 0
   }
 ) => {
@@ -47,7 +47,7 @@ export const usePaginatedUsers = (
   })
 }
 
-export const useUser = (queryKey: unknown[], id: string | number | undefined) => {
+export const useUser = (queryKey: unknown[], id: string | undefined) => {
   return useQuery<User>({
     queryKey,
     queryFn: async () => {
@@ -58,7 +58,7 @@ export const useUser = (queryKey: unknown[], id: string | number | undefined) =>
   })
 }
 
-export const useUpdateUser = (userId: number, message: string, callback?: () => object | void) => {
+export const useUpdateUser = (userId: string, message: string, callback?: () => object | void) => {
   const queryClient = useQueryClient()
 
   return useMutation({

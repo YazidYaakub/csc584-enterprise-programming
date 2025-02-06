@@ -28,13 +28,13 @@ export function University() {
 
   const { data: advisors } = usePaginatedUsers(
     ['advisor', universityId ?? 'university', 'advisor-table'],
-    { role: 'ADVISOR', universityId: Number(universityId) }
+    { role: 'ADVISOR', universityId: universityId }
   )
   const { data: students } = usePaginatedUsers(
     ['student', universityId ?? 'university', 'student-table'],
-    { role: 'STUDENT', universityId: Number(universityId) }
+    { role: 'STUDENT', universityId: universityId }
   )
-  const { data: university, isPending, error } = useUniversity(['university'], Number(universityId))
+  const { data: university, isPending, error } = useUniversity(['university'], universityId)
 
   const [map, setMap] = useState<google.maps.Map | null>(null)
 

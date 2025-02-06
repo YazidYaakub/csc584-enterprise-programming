@@ -1,10 +1,13 @@
+import { useForm } from 'react-hook-form'
 import { DialogProps } from '@radix-ui/react-dialog'
 
-import { grades, months } from '@/lib/months'
+import { useCreateGrade } from '@/hooks/use-grade'
+import { convertToShortform, grades, months } from '@/lib/months'
 import { User } from '@/schema/entity'
 import { useActivityStore } from '@/store/activity'
 import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import {
   Table,
@@ -21,30 +24,63 @@ type GradeUserProps = DialogProps & {
 }
 
 export function GradeUser(props: GradeUserProps) {
-  const { user } = props
+  const { user, ...rest } = props
 
   const { selectedMonth } = useActivityStore()
 
+  const form = useForm({
+    defaultValues: {
+      grade: 'A'
+    }
+  })
+
+  const gradeStudent = useCreateGrade('Grade submitted successfully', () => form.reset())
+
+  function onSubmit(data: { grade: string }) {
+    console.log(data)
+    gradeStudent.mutate({
+      studentId: user.userId,
+      grade: data.grade,
+      month: convertToShortform(months[Number(selectedMonth) - 1])
+    })
+  }
+
   return (
-    <Dialog {...props}>
+    <Dialog {...rest}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
             Grade {user.name} for {months[Number(selectedMonth) - 1]}
           </DialogTitle>
         </DialogHeader>
-        <Select defaultValue="A">
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {grades.map(grade => (
-              <SelectItem key={grade.value} value={grade.value}>
-                {grade.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Form {...form}>
+          <form id="grade-form" onSubmit={form.handleSubmit(onSubmit)}>
+            <FormField
+              control={form.control}
+              name="grade"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Grade</FormLabel>
+                  <Select defaultValue={field.value} onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {grades.map(grade => (
+                        <SelectItem key={grade.value} value={grade.value}>
+                          {grade.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
         <Table>
           <TableCaption>Grading guide</TableCaption>
           <TableHeader>
@@ -97,7 +133,9 @@ export function GradeUser(props: GradeUserProps) {
           </TableBody>
         </Table>
         <DialogFooter>
-          <Button>Submit Grade</Button>
+          <Button type="submit" form="grade-form">
+            Submit Grade
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

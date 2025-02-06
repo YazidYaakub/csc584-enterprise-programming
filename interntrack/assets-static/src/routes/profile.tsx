@@ -137,7 +137,7 @@ export function Profile() {
                 <CardTitle>Company</CardTitle>
               </CardHeader>
               <CardContent>
-                <CompanyCardContent companyId="1" />
+                <CompanyCardContent companyId={user.companyId} />
               </CardContent>
             </Card>
           </Link>

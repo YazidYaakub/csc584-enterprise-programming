@@ -29,15 +29,15 @@ export function Company() {
   const { data: supervisors } = usePaginatedUsers(
     ['supervisor', companyId ?? 'company', 'company-supervisor-table'],
     {
-      companyId: Number(companyId),
+      companyId: companyId,
       role: 'SUPERVISOR'
     }
   )
   const { data: students } = usePaginatedUsers(
     ['student', companyId ?? 'company', 'company-student-table'],
-    { companyId: Number(companyId), role: 'STUDENT' }
+    { companyId: companyId, role: 'STUDENT' }
   )
-  const { data: company, isPending, error } = useCompany(['company'], Number(companyId))
+  const { data: company, isPending, error } = useCompany(['company'], companyId)
 
   const [map, setMap] = useState<google.maps.Map | null>(null)
 

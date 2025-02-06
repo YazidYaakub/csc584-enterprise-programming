@@ -43,7 +43,7 @@ export function UpdateUserForm(props: UpdateUserFormProps) {
     }
   })
 
-  const updateUser = useUpdateUser(Number(token?.userId), 'Profile updated successfully')
+  const updateUser = useUpdateUser(token?.userId as string, 'Profile updated successfully')
 
   function onSubmit(data: UpdateUserInput) {
     if (password) {

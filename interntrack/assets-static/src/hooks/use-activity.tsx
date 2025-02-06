@@ -65,7 +65,7 @@ export const useDeleteActivity = (
   const { selectedMonth } = useActivityStore()
 
   return useMutation({
-    mutationFn: (activityId: number) => api().delete(`activity/${activityId}`),
+    mutationFn: (activityId: string) => api().delete(`activity/${activityId}`),
     onSuccess: () => {
       toast.success(message)
       queryClient.invalidateQueries({ queryKey: ['activity', selectedMonth] })

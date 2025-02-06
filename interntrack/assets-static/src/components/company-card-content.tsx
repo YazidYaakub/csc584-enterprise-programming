@@ -25,11 +25,7 @@ export function CompanyCardContent(props: CompanyCardContentProps) {
   return (
     <div className="flex flex-col space-y-4">
       <div className="flex items-center justify-center">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png"
-          alt={` logo`}
-          className="h-32"
-        />
+        <img src={company?.logoLink} alt={` logo`} className="h-32" />
       </div>
       <span className="text-lg font-semibold">{company?.name}</span>
       <div className="flex space-x-2">
